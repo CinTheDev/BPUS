@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Quelldateien">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Headerdateien">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Ressourcendateien">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Ressourcendateien\Image">
+      <UniqueIdentifier>{ebc6326a-fbb2-4ba4-94f5-d134ef8a6bc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ressourcendateien\utils">
+      <UniqueIdentifier>{8db73151-9dc9-43cf-993e-04ed0027256b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="win32_platform.cpp">
+      <Filter>Ressourcendateien</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer.cpp">
+      <Filter>Ressourcendateien</Filter>
+    </ClCompile>
+    <ClCompile Include="platform_common.cpp">
+      <Filter>Ressourcendateien</Filter>
+    </ClCompile>
+    <ClCompile Include="game.cpp">
+      <Filter>Ressourcendateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Image.cpp">
+      <Filter>Ressourcendateien\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="utils.cpp">
+      <Filter>Ressourcendateien\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="vector.cpp">
+      <Filter>Ressourcendateien\utils</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Image.h">
+      <Filter>Ressourcendateien\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Ressourcendateien\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image_write.h">
+      <Filter>Ressourcendateien\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="vector.h">
+      <Filter>Ressourcendateien\utils</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
