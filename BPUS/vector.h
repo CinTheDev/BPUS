@@ -1,3 +1,4 @@
+#pragma once
 struct Vector2 {
 	double x;
 	double y;
@@ -10,6 +11,7 @@ struct Vector2 {
 	void normalize();
 };
 
+#pragma once
 struct Vector3 {
 	double x;
 	double y;

@@ -13,11 +13,8 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Ressourcendateien\Image">
-      <UniqueIdentifier>{ebc6326a-fbb2-4ba4-94f5-d134ef8a6bc6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ressourcendateien\utils">
-      <UniqueIdentifier>{8db73151-9dc9-43cf-993e-04ed0027256b}</UniqueIdentifier>
+    <Filter Include="Headerdateien\Image">
+      <UniqueIdentifier>{86c62006-7b22-49bf-b816-26bd43f5a7fa}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -33,28 +30,40 @@
     <ClCompile Include="game.cpp">
       <Filter>Ressourcendateien</Filter>
     </ClCompile>
+    <ClCompile Include="vector.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
     <ClCompile Include="Image.cpp">
-      <Filter>Ressourcendateien\Image</Filter>
+      <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="utils.cpp">
-      <Filter>Ressourcendateien\utils</Filter>
+      <Filter>Ressourcendateien</Filter>
     </ClCompile>
-    <ClCompile Include="vector.cpp">
-      <Filter>Ressourcendateien\utils</Filter>
+    <ClCompile Include="Object.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Object_Manager.cpp">
+      <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="vector.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
     <ClInclude Include="Image.h">
-      <Filter>Ressourcendateien\Image</Filter>
+      <Filter>Headerdateien\Image</Filter>
     </ClInclude>
     <ClInclude Include="stb_image.h">
-      <Filter>Ressourcendateien\Image</Filter>
+      <Filter>Headerdateien\Image</Filter>
     </ClInclude>
     <ClInclude Include="stb_image_write.h">
-      <Filter>Ressourcendateien\Image</Filter>
+      <Filter>Headerdateien\Image</Filter>
     </ClInclude>
-    <ClInclude Include="vector.h">
-      <Filter>Ressourcendateien\utils</Filter>
+    <ClInclude Include="Object.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Object_Manager.h">
+      <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

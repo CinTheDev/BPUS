@@ -13,6 +13,7 @@ typedef unsigned long long u64;
 #define global_variable static
 #define internal static
 
+#pragma once
 inline int
 clamp(int min, int val, int max) {
 	if (val < min) return min;

@@ -1,0 +1,12 @@
+﻿  Image.cpp
+  Object.cpp
+  vector.cpp
+  win32_platform.cpp
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\BaseObject.cpp(41,2): warning C4091: "static ": Ignoriert auf der linken Seite von "BaseObject", wenn keine Variable deklariert wurde
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\BaseObject.cpp(25,21): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\BaseObject.cpp(37,21): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\BaseObject.cpp(38,92): warning C4244: "Argument": Konvertierung von "int" in "float", möglicher Datenverlust
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\BaseObject.cpp(38,78): warning C4244: "Argument": Konvertierung von "double" in "int", möglicher Datenverlust
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\BaseObject.cpp(38,54): warning C4244: "Argument": Konvertierung von "double" in "int", möglicher Datenverlust
+win32_platform.obj : error LNK2001: Nicht aufgelöstes externes Symbol ""private: static class std::vector<class Object *,class std::allocator<class Object *> > BaseObject::objects" (?objects@BaseObject@@0V?$vector@PAVObject@@V?$allocator@PAVObject@@@std@@@std@@A)".
+C:\Users\CinKM4D\source\repos\BPUS\Release\BPUS.exe : fatal error LNK1120: 1 nicht aufgelöste Externe

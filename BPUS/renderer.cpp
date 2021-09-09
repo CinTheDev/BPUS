@@ -1,3 +1,5 @@
+#include "Object_Manager.h"
+
 internal void
 draw_background(u32 color) {
 	unsigned int* pixel = (u32*)renderState.memory;
@@ -54,16 +56,22 @@ draw_rect(float x, float y, float halfsize_x, float halfsize_y, u32 color) {
 	draw_rect_pixel(x0, y0, x1, y1, color);
 }
 
-#include "Image.h"
-
 internal void
-draw_image(Image image, int offset_x, int offset_y, float scale) {
-	for (int y = offset_y; y < floor((double)image.h * (double)scale) + offset_y; y++) {
+draw_image(Image* image, int offset_x, int offset_y, float scale) {
+	for (int y = offset_y; y < floor((double)image->h * (double)scale) + offset_y; y++) {
 		if (y >= renderState.height || y <= 0) continue;
 		u32* pixel = (u32*)renderState.memory + offset_x + y * renderState.width;
-		for (int x = offset_x; x < floor((double)image.w * (double)scale) + offset_x; x++) {
+		for (int x = offset_x; x < floor((double)image->w * (double)scale) + offset_x; x++) {
 			if (x >= renderState.width || x <= 0) *pixel++;
-			else *pixel++ = image.getPixel(floor((x - offset_x) / scale), floor((y - offset_y) / scale));
+			else *pixel++ = image->getPixel(floor((x - offset_x) / scale), floor((y - offset_y) / scale));
 		}
+	}
+}
+
+internal void
+draw_objects() {
+	for (int i = 0; i < Obj_M::objects.size(); i++) {
+		Object* o = Obj_M::objects[i];
+		draw_image(o->image, o->position.x, o->position.y, o->size);
 	}
 }
