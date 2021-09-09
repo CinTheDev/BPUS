@@ -16,6 +16,15 @@
     <Filter Include="Headerdateien\Image">
       <UniqueIdentifier>{86c62006-7b22-49bf-b816-26bd43f5a7fa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\Object">
+      <UniqueIdentifier>{7229b318-474a-47fe-92cf-3abee3f51ac3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\utils">
+      <UniqueIdentifier>{8c3ef3a5-68c0-4401-8ca3-315935c19012}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\Object">
+      <UniqueIdentifier>{2ea664d6-ae08-402e-8b19-1aeda7673950}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="win32_platform.cpp">
@@ -40,16 +49,16 @@
       <Filter>Ressourcendateien</Filter>
     </ClCompile>
     <ClCompile Include="Object.cpp">
-      <Filter>Quelldateien</Filter>
+      <Filter>Quelldateien\Object</Filter>
     </ClCompile>
     <ClCompile Include="Object_Manager.cpp">
-      <Filter>Quelldateien</Filter>
+      <Filter>Quelldateien\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object_behavior.cpp">
+      <Filter>Ressourcendateien</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="vector.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="Image.h">
       <Filter>Headerdateien\Image</Filter>
     </ClInclude>
@@ -60,10 +69,13 @@
       <Filter>Headerdateien\Image</Filter>
     </ClInclude>
     <ClInclude Include="Object.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>Headerdateien\Object</Filter>
     </ClInclude>
     <ClInclude Include="Object_Manager.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>Headerdateien\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="vector.h">
+      <Filter>Headerdateien\utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

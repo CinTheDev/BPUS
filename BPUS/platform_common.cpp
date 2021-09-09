@@ -1,8 +1,10 @@
+#pragma once
 struct ButtonState {
 	bool isdown;
 	bool changed;
 };
 
+#pragma once
 enum {
 	BUTTON_UP,
 	BUTTON_LEFT,
@@ -16,6 +18,7 @@ enum {
 	BUTTON_COUNT, // last item
 };
 
+#pragma once
 struct Input {
 	ButtonState buttons[BUTTON_COUNT];
 };

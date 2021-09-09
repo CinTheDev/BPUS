@@ -10,5 +10,7 @@ public:
 	static void create(Object* obj);
 
 	static void destroy(Object* obj);
+
+	static void objects_update(Input* input, float dt);
 };
 

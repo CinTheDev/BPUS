@@ -7,6 +7,13 @@
 #include <stdexcept>
 //#include <math.h>
 
+Image::Image() {
+	w = 0;
+	h = 0;
+	channels = 0;
+	data = new uint8_t[0];
+}
+
 Image::Image(const char* filename) {
 	if (read(filename)) {
 		size = w * h * channels;
