@@ -42,7 +42,7 @@ draw_image_pixel(Image* image, Vector2Int offset, float scale) {
 		u32* pixel = (u32*)renderState.memory + offset.x + y * renderState.width;
 		for (int x = offset.x; x < floor((double)image->w * (double)scale) + offset.x; x++) {
 			if (x >= renderState.width || x <= 0) *pixel++;
-			else *pixel++ = image->getPixel(floor((x - offset.x) / scale), floor((y - offset.y) / scale));
+			else *(pixel++) = image->getPixel((int)floor((x - offset.x) / scale), (int)floor((y - offset.y) / scale));
 		}
 	}
 }
@@ -53,8 +53,8 @@ Vector2 campos(0, 0);
 internal void
 draw_rect(Vector2 p, Vector2 size, u32 color) {
 	p -= campos;
-	Vector2Int p0(floor(p.x), floor(p.y));
-	Vector2Int p1(floor(p.x + size.x), floor(p.y + size.y));
+	Vector2Int p0((int)floor(p.x), (int)floor(p.y));
+	Vector2Int p1((int)floor(p.x + size.x), (int)floor(p.y + size.y));
 
 	draw_rect_pixel(p0, p1, color);
 }
@@ -62,8 +62,8 @@ draw_rect(Vector2 p, Vector2 size, u32 color) {
 internal void
 draw_cir(Vector2 p, Vector2 size, u32 color) {
 	p -= campos;
-	Vector2Int p0(floor(p.x), floor(p.y));
-	Vector2Int p1(floor(p.x + size.x), floor(p.y + size.y));
+	Vector2Int p0((int)floor(p.x), (int)floor(p.y));
+	Vector2Int p1((int)floor(p.x + size.x), (int)floor(p.y + size.y));
 
 	draw_cir_pixel(p0, p1, color);
 }
@@ -71,9 +71,9 @@ draw_cir(Vector2 p, Vector2 size, u32 color) {
 internal void
 draw_tri(Vector2 p0, Vector2 p1, Vector2 p2, u32 color) {
 	p0, p1, p2 -= campos;
-	Vector2Int p0_1(floor(p0.x), floor(p0.y));
-	Vector2Int p1_1(floor(p1.x), floor(p1.y));
-	Vector2Int p2_1(floor(p2.x), floor(p2.y));
+	Vector2Int p0_1((int)floor(p0.x), (int)floor(p0.y));
+	Vector2Int p1_1((int)floor(p1.x), (int)floor(p1.y));
+	Vector2Int p2_1((int)floor(p2.x), (int)floor(p2.y));
 
 	draw_tri_pixel(p0_1, p1_1, p2_1, color);
 }
