@@ -6,8 +6,8 @@ Object* obj2;
 
 internal void
 init() {
-	obj = new Object(Vector2(0, 0), &test, 1.f, &Obj_INIT::empty, &Obj_UPD::baseobject);
-	obj2 = new Object(Vector2(500, 0), &test, 1.f, &Obj_INIT::empty, &Obj_UPD::empty);
+	obj = new Obj::Baseobject(Vector2(0, 0), &test, 1.f);
+	obj2 = new Obj::Baseobject(Vector2(500, 0), &test, 1.f);
 	Obj_M::create(obj);
 	Obj_M::create(obj2);
 }

@@ -14,15 +14,16 @@ public:
 	Vector2 position;
 	Image* image;
 	float size;
-	void (*init)(Object* ths);
-	void (*update)(Object* ths, Input* input, float dt);
 
-	Object(void (*init)(Object* ths), void (*update)(Object* ths, Input* input, float dt));
-	Object(Vector2 pos, Image* img, float s, void (*init)(Object* ths), void (*update)(Object* ths, Input* input, float dt));
+	Object();
+	Object(Vector2 pos, Image* img, float s);
 	~Object();
 
 	bool operator==(const Object& o) {
 		if (*this == o) return true;
 		return false;
 	}
+
+	virtual void init();
+	virtual void update(Input* input, float dt);
 };
