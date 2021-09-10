@@ -17,4 +17,3 @@ public:
 
 	static void objects_update(Input* input, float dt);
 };
-

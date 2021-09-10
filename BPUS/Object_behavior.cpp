@@ -48,8 +48,10 @@ namespace Obj{
 
 	inline void Baseobject::init() {}
 	inline void Baseobject::update(Input* input, float dt) {
-		if (isdown(BUTTON_UP)) size *= 1.01f;
-		if (isdown(BUTTON_DOWN)) size *= 0.99f;
+		if (isdown(BUTTON_UP)) campos.y += 50.f * dt;
+		if (isdown(BUTTON_DOWN)) campos.y -= 50.f * dt;
+		if (isdown(BUTTON_LEFT)) campos.x -= 50.f * dt;
+		if (isdown(BUTTON_RIGHT)) campos.x += 50.f * dt;
 
 		if (isdown(BUTTON_W)) position.y += 200. * (double)dt;
 		if (isdown(BUTTON_A)) position.x -= 200. * (double)dt;

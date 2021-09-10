@@ -16,6 +16,11 @@ Object::~Object() {
 	position.~Vector2();
 }
 
+bool Object::operator==(const Object& o) {
+	if (*this == o) return true;
+	return false;
+}
+
 void Object::init() {}
 
 void Object::update(Input* input, float dt) {}
