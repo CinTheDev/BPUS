@@ -20,3 +20,25 @@ clamp(int min, int val, int max) {
 	if (val > max) return max;
 	return val;
 }
+
+inline int
+min3(int a, int b, int c) {
+	if (a < b) {
+		if (a < c) return a;
+	}
+	else {
+		if (b < c) return b;
+	}
+	return c;
+}
+
+inline int
+max3(int a, int b, int c) {
+	if (a > b) {
+		if (a > c) return a;
+	}
+	else {
+		if (b > c) return b;
+	}
+	return c;
+}

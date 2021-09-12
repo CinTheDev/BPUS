@@ -58,7 +58,7 @@ namespace Obj{
 		if (isdown(BUTTON_S)) position.y -= 200. * (double)dt;
 		if (isdown(BUTTON_D)) position.x += 200. * (double)dt;
 
-		if (pressed(BUTTON_1)) {
+		if (pressed(BUTTON_F)) {
 			Object* obj = new Bullet(position, image, 0.3f);
 			Obj_M::create(obj);
 		}

@@ -26,13 +26,69 @@ draw_rect_pixel(Vector2Int p0, Vector2Int p1, u32 color) {
 }
 
 internal void
-draw_cir_pixel(Vector2Int p0, Vector2Int p1, u32 color) {
-	// For later
+draw_cir_pixel(Vector2Int p, int radius, u32 color) {
+	for (int y = p.y - radius; y < p.y + radius; y++) {
+		if (y >= renderState.height || y <= 0) continue;
+		u32* pixel = (u32*)renderState.memory + (p.x - radius) + y * renderState.width;
+		for (int x = p.x - radius; x < p.x + radius; x++) {
+			Vector2Int l = Vector2Int(x, y) - p;
+			if (l.length() > radius || (x >= renderState.width || x <= 0)) pixel++;
+			else *pixel++ = color;
+		}
+	}
+}
+
+// Formula from https://math.stackexchange.com/questions/432902/how-to-get-the-radius-of-an-ellipse-at-a-specific-angle-by-knowing-its-semi-majo
+// Also performance is terrible
+bool inside_oval(Vector2Int l, Vector2Int axis) {
+	double angle = atan2(l.y, l.x);
+	double nom = axis.x * axis.y;
+	double den = sqrt(pow(axis.x, 2) * pow(sin(angle), 2) + pow(axis.y, 2) * pow(cos(angle), 2));
+	double r = nom / den;
+	return l.length() <= r;
+}
+
+internal void
+draw_oval_pixel(Vector2Int p, Vector2Int radius, u32 color) {
+	for (int y = p.y - radius.y; y < p.y + radius.y; y++) {
+		if (y >= renderState.height || y <= 0) continue;
+		u32* pixel = (u32*)renderState.memory + p.x + y * renderState.width;
+		for (int x = p.x - radius.x; x < p.x + radius.x; x++) {
+			Vector2Int l = Vector2Int(x, y) - p;
+			if (inside_oval(l, radius) && !(x >= renderState.width || x <= 0)) *pixel++ = color;
+			else pixel++;
+		}
+	}
+}
+
+// sign_tri and draw_tri_pixel from https://stackoverflow.com/questions/2049582/how-to-determine-if-a-point-is-in-a-2d-triangle
+int sign_tri(Vector2Int p0, Vector2Int p1, Vector2Int p2) {
+	return (p0.x - p2.x) * (p1.y - p2.y) - (p1.x - p2.x) * (p0.y - p2.y);
 }
 
 internal void
 draw_tri_pixel(Vector2Int p0, Vector2Int p1, Vector2Int p2, u32 color) {
-	// For later
+	int sy = min3(p0.y, p1.y, p2.y), by = max3(p0.y, p1.y, p2.y);
+	int sx = min3(p0.x, p1.x, p2.x), bx = max3(p0.x, p1.x, p2.x);
+
+	int d1, d2, d3;
+	bool has_neg, has_pos;
+
+	for (int y = sy; y < by; y++) {
+		if (y >= renderState.height || y <= 0) continue;
+		u32* pixel = (u32*)renderState.memory + sx + y * renderState.width;
+		for (int x = sx; x < bx; x++) {
+			d1 = sign_tri(Vector2Int(x, y), p0, p1);
+			d2 = sign_tri(Vector2Int(x, y), p1, p2);
+			d3 = sign_tri(Vector2Int(x, y), p2, p0);
+
+			has_neg = (d1 < 0) || (d2 < 0) || (d3 < 0);
+			has_pos = (d1 > 0) || (d2 > 0) || (d3 > 0);
+
+			if (!(has_neg && has_pos) && !(x >= renderState.width || x <= 0)) *pixel++ = color;
+			else pixel++;
+		}
+	}
 }
 
 internal void
@@ -60,17 +116,26 @@ draw_rect(Vector2 p, Vector2 size, u32 color) {
 }
 
 internal void
-draw_cir(Vector2 p, Vector2 size, u32 color) {
+draw_cir(Vector2 p, int radius, u32 color) {
 	p -= campos;
 	Vector2Int p0((int)floor(p.x), (int)floor(p.y));
-	Vector2Int p1((int)floor(p.x + size.x), (int)floor(p.y + size.y));
 
-	draw_cir_pixel(p0, p1, color);
+	draw_cir_pixel(p0, radius, color);
+}
+
+internal void
+draw_oval(Vector2 p, Vector2Int size, u32 color) {
+	p -= campos;
+	Vector2Int p0((int)floor(p.x), (int)floor(p.y));
+
+	draw_oval_pixel(p0, size, color);
 }
 
 internal void
 draw_tri(Vector2 p0, Vector2 p1, Vector2 p2, u32 color) {
-	p0, p1, p2 -= campos;
+	p0 -= campos;
+	p1 -= campos;
+	p2 -= campos;
 	Vector2Int p0_1((int)floor(p0.x), (int)floor(p0.y));
 	Vector2Int p1_1((int)floor(p1.x), (int)floor(p1.y));
 	Vector2Int p2_1((int)floor(p2.x), (int)floor(p2.y));
