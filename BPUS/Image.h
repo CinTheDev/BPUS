@@ -26,6 +26,4 @@ struct Image {
 	ImageType getFileType(const char* filename);
 
 	unsigned int getPixel(int x, int y, unsigned int color);
-
-	Image& grayscale();
 };

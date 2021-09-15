@@ -15,7 +15,7 @@ void Obj_M::remove(Object* obj) {
 void Obj_M::destroy(Object* obj, int index) {
 	remove_obj.erase(remove_obj.begin() + index);
 
-	for (int i = 0; i < objects.size(); i++) {
+	for (unsigned int i = 0; i < objects.size(); i++) {
 		if (objects[i] == obj) {
 			objects.erase(objects.begin() + i);
 			break;
@@ -27,12 +27,12 @@ void Obj_M::destroy(Object* obj, int index) {
 
 void Obj_M::objects_update(Input* input, float dt) {
 	// Call update for every object
-	for (int i = 0; i < objects.size(); i++) {
+	for (unsigned int i = 0; i < objects.size(); i++) {
 		objects[i]->update(input, (double)dt);
 	}
 
 	// Destroy every object that has been flagged
-	for (int i = 0; i < remove_obj.size(); i++) {
+	for (unsigned int i = 0; i < remove_obj.size(); i++) {
 		Object* o = remove_obj[i];
 		destroy(o, i);
 	}

@@ -98,7 +98,7 @@ unsigned int Image::getPixel(int x, int y, u32 color) {
 
 	if (channels > 3) {
 		double a = 1 - ((double)data[index + 3] / 0xFF);
-		u32 colors[3];
+		u32 colors[3] = {};
 		u32 temp = color;
 
 		for (int i = 2; i >= 0; i--) {
@@ -116,17 +116,4 @@ unsigned int Image::getPixel(int x, int y, u32 color) {
 	u32 result = (rgb[0] << 16) | (rgb[1] << 8) | (rgb[2] << 0);
 
 	return result;
-}
-
-Image& Image::grayscale() {
-	if (channels < 3) {
-		throw std::exception("Number of channels cannot be lower than 3");
-	}
-	else {
-		for (int i = 0; i < size; i += channels) {
-			int gray = 0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2];
-			memset(data + i, gray, 3);
-		}
-	}
-	return *this;
 }

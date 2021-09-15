@@ -45,17 +45,3 @@ max3(int a, int b, int c) {
 	}
 	return c;
 }
-
-#pragma once
-inline u32
-max2(u32 a, u32 b) {
-	if (a > b) return a;
-	return b;
-}
-
-#pragma once
-inline u32
-difference(u32 a, u32 b) {
-	if (a > b) return a - b;
-	return b - a;
-}

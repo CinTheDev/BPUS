@@ -48,7 +48,7 @@ draw_cir_pixel(Vector2Int p, int radius, u32 color) {
 // Also performance is terrible
 bool inside_oval(Vector2Int l, Vector2Int axis) {
 	double angle = atan2(l.y, l.x);
-	double nom = axis.x * axis.y;
+	double nom = (double)axis.x * (double)axis.y;
 	double den = sqrt(pow(axis.x, 2) * pow(sin(angle), 2) + pow(axis.y, 2) * pow(cos(angle), 2));
 	double r = nom / den;
 	return l.length() <= r;
@@ -103,7 +103,7 @@ draw_image_pixel(Image* image, Vector2Int offset, float scale) {
 		if (y >= renderState.height || y <= 0) continue;
 		u32* pixel = (u32*)renderState.memory + offset.x + y * renderState.width;
 		for (int x = offset.x; x < floor((double)image->w * (double)scale) + offset.x; x++) {
-			if (x >= renderState.width || x <= 0) *pixel++;
+			if (x >= renderState.width || x <= 0) pixel++;
 			else *pixel++ = image->getPixel((int)floor((x - offset.x) / scale), (int)floor((y - offset.y) / scale), *pixel);
 		}
 	}
