@@ -5,7 +5,7 @@
 #include "stb_image.h"
 #include "stb_image_write.h"
 #include <stdexcept>
-//#include <math.h>
+#include "utils.cpp"
 
 Image::Image() {
 	w = 0;
@@ -87,16 +87,34 @@ bool Image::write(const char* filename) {
 	return succes != 0;
 }
 
-unsigned int Image::getPixel(int x, int y) {
-	unsigned int r, g, b;
-
+unsigned int Image::getPixel(int x, int y, u32 color) {
 	int index = size - w * channels - y * channels * w + x * channels;
 
-	r = (unsigned int)data[index];
-	g = (unsigned int)data[index + 1];
-	b = (unsigned int)data[index + 2];
+	u32 rgb[] = {
+		(u32)data[index],
+		(u32)data[index + 1],
+		(u32)data[index + 2],
+	};
 
-	unsigned int result = (r << 16) | (g << 8) | (b << 0);
+	if (channels > 3) {
+		double a = 1 - ((double)data[index + 3] / 0xFF);
+		u32 colors[3];
+		u32 temp = color;
+
+		for (int i = 2; i >= 0; i--) {
+			colors[i] = temp % 256;
+			temp /= 256;
+		}
+		for (int i = 0; i < 3; i++) {
+			u32 d = difference(rgb[i], colors[i]);
+			d = (u32)floor((double)d * a);
+			if (rgb[i] > colors[i]) rgb[i] -= d;
+			else rgb[i] += d;
+		}
+		
+	}
+
+	u32 result = (rgb[0] << 16) | (rgb[1] << 8) | (rgb[2] << 0);
 
 	return result;
 }

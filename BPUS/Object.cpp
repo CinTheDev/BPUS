@@ -23,4 +23,4 @@ bool Object::operator==(const Object& o) {
 
 void Object::init() {}
 
-void Object::update(Input* input, float dt) {}
+void Object::update(Input* input, double dt) {}

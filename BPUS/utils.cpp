@@ -1,4 +1,5 @@
 #include <math.h>
+#include <string>
 #include "vector.h"
 
 typedef char s8;
@@ -21,6 +22,7 @@ clamp(int min, int val, int max) {
 	return val;
 }
 
+#pragma once
 inline int
 min3(int a, int b, int c) {
 	if (a < b) {
@@ -32,6 +34,7 @@ min3(int a, int b, int c) {
 	return c;
 }
 
+#pragma once
 inline int
 max3(int a, int b, int c) {
 	if (a > b) {
@@ -41,4 +44,18 @@ max3(int a, int b, int c) {
 		if (b > c) return b;
 	}
 	return c;
+}
+
+#pragma once
+inline u32
+max2(u32 a, u32 b) {
+	if (a > b) return a;
+	return b;
+}
+
+#pragma once
+inline u32
+difference(u32 a, u32 b) {
+	if (a > b) return a - b;
+	return b - a;
 }

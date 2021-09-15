@@ -15,13 +15,13 @@ namespace Obj{
 
 		void init() override;
 
-		void update(Input* input, float dt) override;
+		void update(Input* input, double dt) override;
 	};
 
 	{...}
 
 	inline void [Name]::init() {}
-	inline void [Name]::update(Input* input, float dt) {}
+	inline void [Name]::update(Input* input, double dt) {}
 
 	*/
 
@@ -30,7 +30,7 @@ namespace Obj{
 
 		void init() override;
 
-		void update(Input* input, float dt) override;
+		void update(Input* input, double dt) override;
 	};
 
 	class Bullet : public Object {
@@ -40,23 +40,23 @@ namespace Obj{
 
 		void init() override;
 
-		void update(Input* input, float dt) override;
+		void update(Input* input, double dt) override;
 	};
 
 #pragma endregion
 #pragma region Functions
 
 	inline void Baseobject::init() {}
-	inline void Baseobject::update(Input* input, float dt) {
-		if (isdown(BUTTON_UP)) campos.y += 50.f * dt;
-		if (isdown(BUTTON_DOWN)) campos.y -= 50.f * dt;
-		if (isdown(BUTTON_LEFT)) campos.x -= 50.f * dt;
-		if (isdown(BUTTON_RIGHT)) campos.x += 50.f * dt;
+	inline void Baseobject::update(Input* input, double dt) {
+		if (isdown(BUTTON_UP)) campos.y += 50. * dt;
+		if (isdown(BUTTON_DOWN)) campos.y -= 50. * dt;
+		if (isdown(BUTTON_LEFT)) campos.x -= 50. * dt;
+		if (isdown(BUTTON_RIGHT)) campos.x += 50. * dt;
 
-		if (isdown(BUTTON_W)) position.y += 200. * (double)dt;
-		if (isdown(BUTTON_A)) position.x -= 200. * (double)dt;
-		if (isdown(BUTTON_S)) position.y -= 200. * (double)dt;
-		if (isdown(BUTTON_D)) position.x += 200. * (double)dt;
+		if (isdown(BUTTON_W)) position.y += 200. * dt;
+		if (isdown(BUTTON_A)) position.x -= 200. * dt;
+		if (isdown(BUTTON_S)) position.y -= 200. * dt;
+		if (isdown(BUTTON_D)) position.x += 200. * dt;
 
 		if (pressed(BUTTON_F)) {
 			Object* obj = new Bullet(position, image, 0.3f);
@@ -65,12 +65,12 @@ namespace Obj{
 	}
 
 	inline void Bullet::init() {}
-	inline void Bullet::update(Input* input, float dt) {
+	inline void Bullet::update(Input* input, double dt) {
 		if (i > 100) {
 			Obj_M::remove(this);
 			return;
 		}
-		position.y += 20.f * dt;
+		position.y += 20. * dt;
 		i++;
 	}
 

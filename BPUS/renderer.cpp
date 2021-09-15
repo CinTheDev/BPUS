@@ -10,6 +10,12 @@ draw_background(u32 color) {
 	}
 }
 
+bool outside_screen(Vector2 p, Vector2 size) {
+	if (p.x > renderState.width || p.x + size.x < 0) return true;
+	if (p.y > renderState.height || p.y + size.y < 0) return true;
+	return false;
+}
+
 internal void
 draw_rect_pixel(Vector2Int p0, Vector2Int p1, u32 color) {
 	p0.x = clamp(0, p0.x, renderState.width);
@@ -98,7 +104,7 @@ draw_image_pixel(Image* image, Vector2Int offset, float scale) {
 		u32* pixel = (u32*)renderState.memory + offset.x + y * renderState.width;
 		for (int x = offset.x; x < floor((double)image->w * (double)scale) + offset.x; x++) {
 			if (x >= renderState.width || x <= 0) *pixel++;
-			else *(pixel++) = image->getPixel((int)floor((x - offset.x) / scale), (int)floor((y - offset.y) / scale));
+			else *pixel++ = image->getPixel((int)floor((x - offset.x) / scale), (int)floor((y - offset.y) / scale), *pixel);
 		}
 	}
 }
@@ -146,6 +152,7 @@ draw_tri(Vector2 p0, Vector2 p1, Vector2 p2, u32 color) {
 internal void
 draw_image(Image* image, Vector2 p, float scale) {
 	p -= campos;
+	if (outside_screen(p, Vector2(image->w, image->h))) return;
 	draw_image_pixel(image, Vector2Int((int)floor(p.x), (int)floor(p.y)), scale);
 }
 

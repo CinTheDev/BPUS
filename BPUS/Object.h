@@ -17,5 +17,5 @@ public:
 	bool operator==(const Object& o);
 
 	virtual void init();
-	virtual void update(Input* input, float dt);
+	virtual void update(Input* input, double dt);
 };

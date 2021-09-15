@@ -28,7 +28,7 @@ void Obj_M::destroy(Object* obj, int index) {
 void Obj_M::objects_update(Input* input, float dt) {
 	// Call update for every object
 	for (int i = 0; i < objects.size(); i++) {
-		objects[i]->update(input, dt);
+		objects[i]->update(input, (double)dt);
 	}
 
 	// Destroy every object that has been flagged
