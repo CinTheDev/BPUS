@@ -106,10 +106,9 @@ unsigned int Image::getPixel(int x, int y, u32 color) {
 			temp /= 256;
 		}
 		for (int i = 0; i < 3; i++) {
-			u32 d = difference(rgb[i], colors[i]);
-			d = (u32)floor((double)d * a);
-			if (rgb[i] > colors[i]) rgb[i] -= d;
-			else rgb[i] += d;
+			int d = rgb[i] - colors[i];
+			d = (int)floor((double)d * a);
+			rgb[i] -= d;
 		}
 		
 	}
