@@ -8,6 +8,8 @@ private:
 	static std::vector<Object*> remove_obj;
 
 	static void destroy(Object* obj, int index);
+
+	static void lstupdate();
 public:
 	static std::vector<Object*> objects;
 

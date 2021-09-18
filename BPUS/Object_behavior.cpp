@@ -25,6 +25,14 @@ namespace Obj{
 
 	*/
 
+	class Empty : public Object {
+		using Object::Object;
+
+		void init() override;
+
+		void update(Input* input, double dt) override;
+	};
+
 	class Baseobject : public Object {
 		using Object::Object;
 
@@ -45,6 +53,9 @@ namespace Obj{
 
 #pragma endregion
 #pragma region Functions
+
+	inline void Empty::init() {}
+	inline void Empty::update(Input* input, double dt) {}
 
 	inline void Baseobject::init() {}
 	inline void Baseobject::update(Input* input, double dt) {

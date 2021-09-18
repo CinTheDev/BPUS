@@ -8,9 +8,11 @@ Object* obj2;
 
 internal void
 init() {
-	//obj = new Obj::Baseobject(Vector2(0, 0), &test, 1.f);
+	obj = new Obj::Empty(Vector2(0, 0), &test, 1.f);
+	obj->z = 1;
 	obj2 = new Obj::Baseobject(Vector2(500, 0), &alphatest, 1.f);
-	//Obj_M::create(obj);
+	obj2->z = 0;
+	Obj_M::create(obj);
 	Obj_M::create(obj2);
 }
 

@@ -7,14 +7,17 @@ class Object
 {
 public:
 	Vector2 position;
-	Image* image;
 	float size;
+
+	Image* image;
+	int z;
 
 	Object();
 	Object(Vector2 pos, Image* img, float s);
 	~Object();
 
 	bool operator==(const Object& o);
+	bool operator!=(const Object& o);
 
 	virtual void init();
 	virtual void update(Input* input, double dt);
