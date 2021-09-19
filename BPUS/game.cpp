@@ -20,13 +20,12 @@ internal void
 simulate(Input* input, float dt) {
 	draw_background(0x000011);
 
-	Obj_M::objects_update(input, dt);
-
 	draw_rect(Vector2(300, 100), Vector2(100, 300), 0xAA0055);
 	draw_tri(Vector2(100, 100), Vector2(200, 150), Vector2(180, 250), 0x00AA55);
 	draw_cir(Vector2(300, 100), 50, 0x55AA00);
 	draw_text(Vector2(500, 200), "The Quick Brown Fox Jumps Over The Lazy Dog\nTHE QUICK BROWN FOX JUMPS OVER THE LAZY DOG\nthe quick brown fox jumps over the lazy dog", 2.5f);
-	//draw_oval(Vector2(400, 100), Vector2Int(50, 100), 0x5500AA);
 
 	draw_objects();
+
+	Obj_M::objects_update(input, dt);
 }
