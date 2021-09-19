@@ -149,6 +149,47 @@ draw_tri(Vector2 p0, Vector2 p1, Vector2 p2, u32 color) {
 	draw_tri_pixel(p0_1, p1_1, p2_1, color);
 }
 
+#include "font.cpp"
+
+internal void
+draw_text(Vector2 pos, const char* text, float scale) {
+	float org_y = pos.y;
+	float org_org_x = pos.x;
+
+	while (*text) {
+		const char** a_letter = letters[*text - ' '];
+		float org_x = pos.x;
+		int width = 0;
+
+		if (*text == 10) {
+			pos.x = org_org_x - scale * 2;
+			org_x = pos.x;
+			org_y -= scale * 10.f;
+			pos.y = org_y;
+		}
+		else {
+			for (int i = 0; i < 7; i++) {
+				int _width = 0;
+				const char* row = a_letter[i];
+				while (*row) {
+					if (*row == '0') {
+						draw_rect(Vector2(pos.x, pos.y), Vector2(scale, scale), 0xFFFFFF);
+					}
+					pos.x += scale;
+					_width++;
+					row++;
+				}
+				pos.y -= scale;
+				width = max(width, _width);
+				pos.x = org_x;
+			}
+		}
+		text++;
+		pos.x += width * scale + scale * 1.75f;
+		pos.y = org_y;
+	}
+}
+
 internal void
 draw_image(Image* image, Vector2 p, float scale) {
 	p -= campos;
