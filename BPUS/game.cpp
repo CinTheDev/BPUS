@@ -1,3 +1,4 @@
+Image empty(0, 0, 0);
 Image test("test2.jpg");
 Image alphatest("test3.png");
 
@@ -8,6 +9,10 @@ Object* obj2;
 
 internal void
 init() {
+	// Camera
+	camera = new Obj::Camera(Vector2(0, 0), &empty, 1.f);
+	Obj_M::create(camera);
+
 	//obj = new Obj::Empty(Vector2(0, 0), &test, 1.f);
 	//obj->z = 1;
 	obj2 = new Obj::Baseobject(Vector2(500, 0), &alphatest, 1.f);

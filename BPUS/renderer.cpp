@@ -1,5 +1,7 @@
 #include "Object_Manager.h"
 
+Object* camera;
+
 internal void
 draw_background(u32 color) {
 	unsigned int* pixel = (u32*)renderState.memory;
@@ -110,11 +112,10 @@ draw_image_pixel(Image* image, Vector2Int offset, float scale) {
 }
 
 global_variable float renderScale = 0.01f;
-Vector2 campos(0, 0);
 
 internal void
 draw_rect(Vector2 p, Vector2 size, u32 color) {
-	p -= campos;
+	p -= camera->position;
 	Vector2Int p0((int)floor(p.x), (int)floor(p.y));
 	Vector2Int p1((int)floor(p.x + size.x), (int)floor(p.y + size.y));
 
@@ -123,7 +124,7 @@ draw_rect(Vector2 p, Vector2 size, u32 color) {
 
 internal void
 draw_cir(Vector2 p, int radius, u32 color) {
-	p -= campos;
+	p -= camera->position;
 	Vector2Int p0((int)floor(p.x), (int)floor(p.y));
 
 	draw_cir_pixel(p0, radius, color);
@@ -131,7 +132,7 @@ draw_cir(Vector2 p, int radius, u32 color) {
 
 internal void
 draw_oval(Vector2 p, Vector2Int size, u32 color) {
-	p -= campos;
+	p -= camera->position;
 	Vector2Int p0((int)floor(p.x), (int)floor(p.y));
 
 	draw_oval_pixel(p0, size, color);
@@ -139,9 +140,9 @@ draw_oval(Vector2 p, Vector2Int size, u32 color) {
 
 internal void
 draw_tri(Vector2 p0, Vector2 p1, Vector2 p2, u32 color) {
-	p0 -= campos;
-	p1 -= campos;
-	p2 -= campos;
+	p0 -= camera->position;
+	p1 -= camera->position;
+	p2 -= camera->position;
 	Vector2Int p0_1((int)floor(p0.x), (int)floor(p0.y));
 	Vector2Int p1_1((int)floor(p1.x), (int)floor(p1.y));
 	Vector2Int p2_1((int)floor(p2.x), (int)floor(p2.y));
@@ -192,7 +193,7 @@ draw_text(Vector2 pos, const char* text, float scale) {
 
 internal void
 draw_image(Image* image, Vector2 p, float scale) {
-	p -= campos;
+	p -= camera->position;
 	if (outside_screen(p, Vector2(image->w, image->h))) return;
 	draw_image_pixel(image, Vector2Int((int)floor(p.x), (int)floor(p.y)), scale);
 }
