@@ -87,8 +87,6 @@ namespace Obj{
 			Object* obj = new Bullet(position, image, 0.3f);
 			Obj_M::create(obj);
 		}
-
-		draw_text(position, "Yes", 10.f);
 	}
 
 	inline void Bullet::init() {}

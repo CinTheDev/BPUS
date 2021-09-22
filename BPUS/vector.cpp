@@ -15,6 +15,7 @@ Vector2::Vector2(double x, double y) {
 
 Vector2::~Vector2() {}
 
+#pragma region operators
 Vector2 Vector2::operator+(const Vector2& vec) {
 	return Vector2(x + vec.x, y + vec.y);
 }
@@ -51,6 +52,7 @@ bool Vector2::operator!=(const Vector2& vec) {
 	if (this != &vec) return true;
 	return false;
 }
+#pragma endregion
 
 double Vector2::length() {
 	return sqrt(x * x + y * y);

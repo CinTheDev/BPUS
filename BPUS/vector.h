@@ -1,3 +1,5 @@
+#include <string>
+
 #pragma once
 struct Vector2 {
 	double x;
@@ -51,6 +53,7 @@ struct Vector2Int {
 
 	double length();
 	Vector2 todouble();
+	const char* debug();
 };
 
 #pragma once

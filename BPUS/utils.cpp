@@ -1,5 +1,4 @@
 #include <math.h>
-#include <string>
 #include "vector.h"
 
 typedef char s8;
