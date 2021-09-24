@@ -20,7 +20,8 @@ struct Vector2 {
 	bool operator==(const Vector2& vec);
 	bool operator!=(const Vector2& vec);
 
-	double length();
+	double len();
+	double sqrlen();
 	Vector2 normalized();
 	void normalize();
 };
@@ -51,9 +52,9 @@ struct Vector2Int {
 	bool operator==(const Vector2Int& vec);
 	bool operator!=(const Vector2Int& vec);
 
-	double length();
+	double len();
+	double sqrlen();
 	Vector2 todouble();
-	const char* debug();
 };
 
 #pragma once
@@ -66,7 +67,8 @@ struct Vector3 {
 	Vector3(double x, double y, double z);
 	~Vector3();
 
-	double length();
+	double len();
+	double sqrlen();
 	Vector3 normalized();
 	void normalize();
 };
@@ -81,6 +83,7 @@ struct Vector3Int {
 	Vector3Int(int x, int y, int z);
 	~Vector3Int();
 
-	double length();
+	double len();
+	double sqrlen();
 	Vector3 todouble();
 };

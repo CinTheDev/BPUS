@@ -54,19 +54,23 @@ bool Vector2::operator!=(const Vector2& vec) {
 }
 #pragma endregion
 
-double Vector2::length() {
+double Vector2::len() {
 	return sqrt(x * x + y * y);
 }
 
+double Vector2::sqrlen() {
+	return x * x + y * y;
+}
+
 Vector2 Vector2::normalized() {
-	double X = x / length();
-	double Y = y / length();
+	double X = x / len();
+	double Y = y / len();
 	return Vector2(X, Y);
 }
 
 void Vector2::normalize() {
-	x /= length();
-	y /= length();
+	x /= len();
+	y /= len();
 }
 
 // Vector2Int
@@ -82,6 +86,8 @@ Vector2Int::Vector2Int(int x, int y) {
 }
 
 Vector2Int::~Vector2Int() {}
+
+#pragma region operators
 
 Vector2Int Vector2Int::operator+(const Vector2Int& vec) {
 	return Vector2Int(x + vec.x, y + vec.y);
@@ -112,18 +118,6 @@ void Vector2Int::operator/=(const Vector2Int& vec) {
 	y /= vec.y;
 }
 
-/*Vector2Int Vector2Int::operator+(const Vector2& vec) {
-	return Vector2Int(x + floor(vec.x), y + floor(vec.y));
-}
-Vector2Int Vector2Int::operator-(const Vector2& vec) {
-	return Vector2Int(x - floor(vec.x), y - floor(vec.y));
-}
-Vector2Int Vector2Int::operator*(const Vector2& vec) {
-	return Vector2Int(x * floor(vec.x), y * floor(vec.y));
-}
-Vector2Int Vector2Int::operator/(const Vector2& vec) {
-	return Vector2Int(x / floor(vec.x), y / floor(vec.y));
-}*/
 bool Vector2Int::operator==(const Vector2Int& vec) {
 	if (this == &vec) return true;
 	return false;
@@ -133,8 +127,14 @@ bool Vector2Int::operator!=(const Vector2Int& vec) {
 	return false;
 }
 
-double Vector2Int::length() {
+#pragma endregion
+
+double Vector2Int::len() {
 	return sqrt((double)x * (double)x + (double)y * (double)y);
+}
+
+double Vector2Int::sqrlen() {
+	return (double)x * (double)x + (double)y * (double)y;
 }
 
 Vector2 Vector2Int::todouble() {
@@ -157,21 +157,25 @@ Vector3::Vector3(double x, double y, double z) {
 
 Vector3::~Vector3() {}
 
-double Vector3::length() {
+double Vector3::len() {
 	return sqrt(x * x + y * y + z * z);
 }
 
+double Vector3::sqrlen() {
+	return x * x + y * y + z * z;
+}
+
 Vector3 Vector3::normalized() {
-	double X = x / length();
-	double Y = y / length();
-	double Z = z / length();
+	double X = x / len();
+	double Y = y / len();
+	double Z = z / len();
 	return Vector3(X, Y, Z);
 }
 
 void Vector3::normalize() {
-	x /= length();
-	y /= length();
-	z /= length();
+	x /= len();
+	y /= len();
+	z /= len();
 }
 
 // Vector3Int
@@ -190,8 +194,12 @@ Vector3Int::Vector3Int(int x, int y, int z) {
 
 Vector3Int::~Vector3Int() {}
 
-double Vector3Int::length() {
+double Vector3Int::len() {
 	return sqrt((double)x * (double)x + (double)y * (double)y + (double)z * (double)z);
+}
+
+double Vector3Int::sqrlen() {
+	return (double)x * (double)x + (double)y * (double)y + (double)z * (double)z;
 }
 
 Vector3 Vector3Int::todouble() {

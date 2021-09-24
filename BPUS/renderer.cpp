@@ -40,7 +40,7 @@ draw_cir_pixel(Vector2Int p, int radius, u32 color) {
 		u32* pixel = (u32*)renderState.memory + (p.x - radius) + y * renderState.width;
 		for (int x = p.x - radius; x < p.x + radius; x++) {
 			Vector2Int l = Vector2Int(x, y) - p;
-			if (l.length() > radius || (x >= renderState.width || x <= 0)) pixel++;
+			if (l.sqrlen() > radius*radius || (x >= renderState.width || x <= 0)) pixel++;
 			else *pixel++ = color;
 		}
 	}
@@ -53,7 +53,7 @@ bool inside_oval(Vector2Int l, Vector2Int axis) {
 	double nom = (double)axis.x * (double)axis.y;
 	double den = sqrt(pow(axis.x, 2) * pow(sin(angle), 2) + pow(axis.y, 2) * pow(cos(angle), 2));
 	double r = nom / den;
-	return l.length() <= r;
+	return l.sqrlen() <= r*r;
 }
 
 internal void
