@@ -24,6 +24,7 @@ struct Vector2 {
 	double sqrlen();
 	Vector2 normalized();
 	void normalize();
+	void rotate(float angle);
 };
 
 #pragma once

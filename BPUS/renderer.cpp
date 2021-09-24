@@ -18,6 +18,12 @@ bool outside_screen(Vector2 p, Vector2 size) {
 	return false;
 }
 
+bool outside_screen(Vector2 p) {
+	if (p.x <= 0 || p.x >= renderState.width) return true;
+	if (p.y <= 0 || p.y >= renderState.height) return true;
+	return false;
+}
+
 internal void
 draw_rect_pixel(Vector2Int p0, Vector2Int p1, u32 color) {
 	p0.x = clamp(0, p0.x, renderState.width);
@@ -99,19 +105,32 @@ draw_tri_pixel(Vector2Int p0, Vector2Int p1, Vector2Int p2, u32 color) {
 	}
 }
 
+void set_pixel(Vector2Int pos, Vector2Int pix, Image* img, float rotation, Vector2Int pivot) {
+	Vector2 rot = pos.todouble() - pivot.todouble();
+	rot.rotate(rotation);
+	Vector2 point = pivot.todouble() + rot;
+	Vector2Int pointint(floor(point.x), floor(point.y));
+
+	if (outside_screen(pointint.todouble())) return;
+
+	u32* pixel = (u32*)renderState.memory + pointint.x + pointint.y * renderState.width;
+	*pixel = img->getPixel(pix.x, pix.y, *pixel);
+}
+
 internal void
-draw_image_pixel(Image* image, Vector2Int offset, float scale) {
-	for (int y = offset.y; y < floor((double)image->h * (double)scale) + offset.y; y++) {
-		if (y >= renderState.height || y <= 0) continue;
-		u32* pixel = (u32*)renderState.memory + offset.x + y * renderState.width;
-		for (int x = offset.x; x < floor((double)image->w * (double)scale) + offset.x; x++) {
-			if (x >= renderState.width || x <= 0) pixel++;
-			else *pixel++ = image->getPixel((int)floor((x - offset.x) / scale), (int)floor((y - offset.y) / scale), *pixel);
+draw_image_pixel(Image* image, Vector2Int offset, float scale, float rotation, Vector2Int pivot) {
+	int height = floor((double)image->h * (double)scale);
+	int width = floor((double)image->w * (double)scale);
+	for (int y = offset.y; y < height + offset.y; y++) {
+
+		for (int x = offset.x; x < width + offset.x; x++) {
+			int px = floor((x - offset.x) / scale);
+			int py = floor((y - offset.y) / scale);
+
+			set_pixel(Vector2Int(x, y), Vector2Int(px, py), image, rotation, pivot);
 		}
 	}
 }
-
-global_variable float renderScale = 0.01f;
 
 internal void
 draw_rect(Vector2 p, Vector2 size, u32 color) {
@@ -192,16 +211,25 @@ draw_text(Vector2 pos, const char* text, float scale) {
 }
 
 internal void
-draw_image(Image* image, Vector2 p, float scale) {
+draw_image(Image* image, Vector2 p, float scale, float rotation, Vector2 pivot) {
 	p -= camera->position;
 	if (outside_screen(p, Vector2(image->w, image->h))) return;
-	draw_image_pixel(image, Vector2Int((int)floor(p.x), (int)floor(p.y)), scale);
+	Vector2Int pivint((int)floor(pivot.x), (int)floor(pivot.y));
+	draw_image_pixel(image, Vector2Int((int)floor(p.x), (int)floor(p.y)), scale, rotation, pivint);
+}
+
+internal void
+draw_image(Object o) {
+	o.position -= camera->position;
+	if (outside_screen(o.position, Vector2(o.image->w, o.image->h))) return;
+	Vector2Int pivint((int)floor(o.getPivAbs().x), (int)floor(o.getPivAbs().y));
+	draw_image_pixel(o.image, Vector2Int((int)floor(o.position.x), (int)floor(o.position.y)), o.size, o.rotation, pivint);
 }
 
 internal void
 draw_objects() {
 	for (unsigned int i = 0; i < Obj_M::objects.size(); i++) {
-		Object* o = Obj_M::objects[i];
-		draw_image(o->image, o->position, o->size);
+		Object o = *Obj_M::objects[i];
+		draw_image(o);
 	}
 }

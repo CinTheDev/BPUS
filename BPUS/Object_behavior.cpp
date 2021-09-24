@@ -51,16 +51,6 @@ namespace Obj{
 		void update(Input* input, double dt) override;
 	};
 
-	class Bullet : public Object {
-		using Object::Object;
-
-		int i = 0;
-
-		void init() override;
-
-		void update(Input* input, double dt) override;
-	};
-
 #pragma endregion
 #pragma region Functions
 
@@ -83,20 +73,11 @@ namespace Obj{
 		if (isdown(BUTTON_S)) position.y -= 200. * dt;
 		if (isdown(BUTTON_D)) position.x += 200. * dt;
 
-		if (pressed(BUTTON_F)) {
-			Object* obj = new Bullet(position, image, 0.3f);
-			Obj_M::create(obj);
-		}
-	}
+		if (isdown(BUTTON_Q)) rotation += 1 * dt;
+		if (isdown(BUTTON_E)) rotation -= 1 * dt;
 
-	inline void Bullet::init() {}
-	inline void Bullet::update(Input* input, double dt) {
-		if (i > 100) {
-			Obj_M::remove(this);
-			return;
-		}
-		position.y += 20. * dt;
-		i++;
+		if (isdown(BUTTON_NUMPAD_8)) size += 2 * dt;
+		if (isdown(BUTTON_NUMPAD_2)) size -= 2 * dt;
 	}
 
 #pragma endregion

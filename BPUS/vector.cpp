@@ -73,6 +73,12 @@ void Vector2::normalize() {
 	y /= len();
 }
 
+void Vector2::rotate(float angle) {
+	double _x = x;
+	x = _x * cos(angle) - y * sin(angle);
+	y = _x * sin(angle) + y * cos(angle);
+}
+
 // Vector2Int
 
 Vector2Int::Vector2Int() {

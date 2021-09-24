@@ -31,10 +31,10 @@ simulate(Input* input, float dt) {
 	draw_text(Vector2(500, 200), "The Quick Brown Fox Jumps Over The Lazy Dog\nTHE QUICK BROWN FOX JUMPS OVER THE LAZY DOG\nthe quick brown fox jumps over the lazy dog", 2.5f);
 
 	// Debug
-	std::string s = "x: " + std::to_string(camera->position.x) + "; y: " + std::to_string(camera->position.y);
+	std::string s = "Rotation: " + std::to_string(obj2->rotation);
 	draw_text(camera->position + Vector2(5, 20), s.c_str(), 2.f);
 
-	draw_objects();
-
 	Obj_M::objects_update(input, dt);
+
+	draw_objects();
 }
