@@ -213,7 +213,7 @@ draw_text(Vector2 pos, const char* text, float scale) {
 internal void
 draw_image(Image* image, Vector2 p, float scale, float rotation, Vector2 pivot) {
 	p -= camera->position;
-	if (outside_screen(p, Vector2(image->w, image->h))) return;
+	if (outside_screen(p, Vector2(image->w * scale, image->h * scale))) return;
 	Vector2Int pivint((int)floor(pivot.x), (int)floor(pivot.y));
 	draw_image_pixel(image, Vector2Int((int)floor(p.x), (int)floor(p.y)), scale, rotation, pivint);
 }
@@ -221,7 +221,7 @@ draw_image(Image* image, Vector2 p, float scale, float rotation, Vector2 pivot) 
 internal void
 draw_image(Object o) {
 	o.position -= camera->position;
-	if (outside_screen(o.position, Vector2(o.image->w, o.image->h))) return;
+	if (outside_screen(o.position, Vector2(o.image->w * o.size, o.image->h * o.size))) return;
 	Vector2Int pivint((int)floor(o.getPivAbs().x), (int)floor(o.getPivAbs().y));
 	draw_image_pixel(o.image, Vector2Int((int)floor(o.position.x), (int)floor(o.position.y)), o.size, o.rotation, pivint);
 }
