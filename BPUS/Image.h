@@ -1,12 +1,12 @@
+#pragma once
+
 #include <stdint.h>
 #include <cstdio>
 
-#pragma once
 enum ImageType {
 	PNG, BMP, JPG, TGA
 };
 
-#pragma once
 struct Image {
 	uint8_t* data = NULL;
 	size_t size = 0;

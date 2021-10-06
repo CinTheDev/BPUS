@@ -1,8 +1,9 @@
+#pragma once
+
 #include "utils.cpp"
 #include "Image.h"
 #include "platform_common.cpp"
 
-#pragma once
 class Object
 {
 public:

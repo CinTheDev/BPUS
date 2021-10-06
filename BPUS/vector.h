@@ -1,6 +1,7 @@
+#pragma once
+
 #include <string>
 
-#pragma once
 struct Vector2 {
 	double x;
 	double y;
@@ -27,7 +28,6 @@ struct Vector2 {
 	void rotate(float angle);
 };
 
-#pragma once
 struct Vector2Int {
 	int x;
 	int y;
@@ -58,7 +58,6 @@ struct Vector2Int {
 	Vector2 todouble();
 };
 
-#pragma once
 struct Vector3 {
 	double x;
 	double y;
@@ -74,7 +73,6 @@ struct Vector3 {
 	void normalize();
 };
 
-#pragma once
 struct Vector3Int {
 	int x;
 	int y;

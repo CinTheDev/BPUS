@@ -1,3 +1,5 @@
+#pragma once
+
 #include <math.h>
 #include "vector.h"
 
@@ -13,7 +15,6 @@ typedef unsigned long long u64;
 #define global_variable static
 #define internal static
 
-#pragma once
 inline int
 clamp(int min, int val, int max) {
 	if (val < min) return min;
@@ -21,7 +22,6 @@ clamp(int min, int val, int max) {
 	return val;
 }
 
-#pragma once
 inline int
 min3(int a, int b, int c) {
 	if (a < b) {
@@ -33,7 +33,6 @@ min3(int a, int b, int c) {
 	return c;
 }
 
-#pragma once
 inline int
 max3(int a, int b, int c) {
 	if (a > b) {

@@ -1,7 +1,8 @@
+#pragma once
+
 #include <vector>
 #include "Object.h"
 
-#pragma once
 static class Obj_M
 {
 private:

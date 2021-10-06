@@ -58,7 +58,7 @@
       <Filter>Ressourcendateien</Filter>
     </ClCompile>
     <ClCompile Include="font.cpp">
-      <Filter>Ressourcendateien</Filter>
+      <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,8 +1,9 @@
+#pragma once
+
 #define isdown(b) input -> buttons[b].isdown
 #define pressed(b) (input -> buttons[b].isdown && input -> buttons[b].changed)
 #define released(b) (!input -> buttons[b].isdown && input -> buttons[b].changed)
 
-#pragma once
 namespace Obj{
 #pragma region Declarations
 

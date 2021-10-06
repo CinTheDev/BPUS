@@ -1,4 +1,5 @@
 #pragma once
+
 const char* letters[][7] = {
 	" ",
 	" ",
