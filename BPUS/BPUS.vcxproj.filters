@@ -39,14 +39,8 @@
     <ClCompile Include="game.cpp">
       <Filter>Ressourcendateien</Filter>
     </ClCompile>
-    <ClCompile Include="vector.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="Image.cpp">
       <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="utils.cpp">
-      <Filter>Ressourcendateien</Filter>
     </ClCompile>
     <ClCompile Include="Object.cpp">
       <Filter>Quelldateien\Object</Filter>
@@ -58,6 +52,12 @@
       <Filter>Ressourcendateien</Filter>
     </ClCompile>
     <ClCompile Include="font.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="utils.cpp">
+      <Filter>Ressourcendateien</Filter>
+    </ClCompile>
+    <ClCompile Include="vector.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <math.h>
 #include "vector.h"
 
 typedef char s8;
