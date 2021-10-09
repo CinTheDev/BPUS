@@ -2,7 +2,7 @@
 
 Object* camera;
 
-internal void
+static void
 draw_background(u32 color) {
 	unsigned int* pixel = (u32*)renderState.memory;
 	for (int y = 0; y < renderState.height; y++) {
@@ -24,7 +24,7 @@ bool outside_screen(Vector2 p) {
 	return false;
 }
 
-internal void
+static void
 draw_rect_pixel(Vector2Int p0, Vector2Int p1, u32 color) {
 	p0.x = clamp(0, p0.x, renderState.width);
 	p1.x = clamp(0, p1.x, renderState.width);
@@ -39,7 +39,7 @@ draw_rect_pixel(Vector2Int p0, Vector2Int p1, u32 color) {
 	}
 }
 
-internal void
+static void
 draw_cir_pixel(Vector2Int p, int radius, u32 color) {
 	for (int y = p.y - radius; y < p.y + radius; y++) {
 		if (y >= renderState.height || y <= 0) continue;
@@ -62,7 +62,7 @@ bool inside_oval(Vector2Int l, Vector2Int axis) {
 	return l.sqrlen() <= r*r;
 }
 
-internal void
+static void
 draw_oval_pixel(Vector2Int p, Vector2Int radius, u32 color) {
 	for (int y = p.y - radius.y; y < p.y + radius.y; y++) {
 		if (y >= renderState.height || y <= 0) continue;
@@ -80,7 +80,7 @@ int sign_tri(Vector2Int p0, Vector2Int p1, Vector2Int p2) {
 	return (p0.x - p2.x) * (p1.y - p2.y) - (p1.x - p2.x) * (p0.y - p2.y);
 }
 
-internal void
+static void
 draw_tri_pixel(Vector2Int p0, Vector2Int p1, Vector2Int p2, u32 color) {
 	int sy = min3(p0.y, p1.y, p2.y), by = max3(p0.y, p1.y, p2.y);
 	int sx = min3(p0.x, p1.x, p2.x), bx = max3(p0.x, p1.x, p2.x);
@@ -117,7 +117,7 @@ void set_pixel(Vector2Int pos, Vector2Int pix, Image* img, float rotation, Vecto
 	*pixel = img->getPixel(pix.x, pix.y, *pixel);
 }
 
-internal void
+static void
 draw_image_pixel(Image* image, Vector2Int offset, float scale, float rotation, Vector2Int pivot) {
 	int height = floor((double)image->h * (double)scale);
 	int width = floor((double)image->w * (double)scale);
@@ -132,7 +132,7 @@ draw_image_pixel(Image* image, Vector2Int offset, float scale, float rotation, V
 	}
 }
 
-internal void
+static void
 draw_rect(Vector2 p, Vector2 size, u32 color) {
 	p -= camera->position;
 	Vector2Int p0((int)floor(p.x), (int)floor(p.y));
@@ -141,7 +141,7 @@ draw_rect(Vector2 p, Vector2 size, u32 color) {
 	draw_rect_pixel(p0, p1, color);
 }
 
-internal void
+static void
 draw_cir(Vector2 p, int radius, u32 color) {
 	p -= camera->position;
 	Vector2Int p0((int)floor(p.x), (int)floor(p.y));
@@ -149,7 +149,7 @@ draw_cir(Vector2 p, int radius, u32 color) {
 	draw_cir_pixel(p0, radius, color);
 }
 
-internal void
+static void
 draw_oval(Vector2 p, Vector2Int size, u32 color) {
 	p -= camera->position;
 	Vector2Int p0((int)floor(p.x), (int)floor(p.y));
@@ -157,7 +157,7 @@ draw_oval(Vector2 p, Vector2Int size, u32 color) {
 	draw_oval_pixel(p0, size, color);
 }
 
-internal void
+static void
 draw_tri(Vector2 p0, Vector2 p1, Vector2 p2, u32 color) {
 	p0 -= camera->position;
 	p1 -= camera->position;
@@ -171,7 +171,7 @@ draw_tri(Vector2 p0, Vector2 p1, Vector2 p2, u32 color) {
 
 #include "font.cpp"
 
-internal void
+static void
 draw_text(Vector2 pos, const char* text, float scale) {
 	float org_y = pos.y;
 	float org_org_x = pos.x;
@@ -210,7 +210,7 @@ draw_text(Vector2 pos, const char* text, float scale) {
 	}
 }
 
-internal void
+static void
 draw_image(Image* image, Vector2 p, float scale, float rotation, Vector2 pivot) {
 	p -= camera->position;
 	if (outside_screen(p, Vector2(image->w * scale, image->h * scale))) return;
@@ -218,7 +218,7 @@ draw_image(Image* image, Vector2 p, float scale, float rotation, Vector2 pivot) 
 	draw_image_pixel(image, Vector2Int((int)floor(p.x), (int)floor(p.y)), scale, rotation, pivint);
 }
 
-internal void
+static void
 draw_image(Object o) {
 	o.position -= camera->position;
 	if (outside_screen(o.position, Vector2(o.image->w * o.size, o.image->h * o.size))) return;
@@ -226,7 +226,7 @@ draw_image(Object o) {
 	draw_image_pixel(o.image, Vector2Int((int)floor(o.position.x), (int)floor(o.position.y)), o.size, o.rotation, pivint);
 }
 
-internal void
+static void
 draw_objects() {
 	for (unsigned int i = 0; i < Obj_M::objects.size(); i++) {
 		Object o = *Obj_M::objects[i];

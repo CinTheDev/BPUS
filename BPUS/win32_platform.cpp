@@ -1,3 +1,4 @@
+#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include "utils.cpp"
 
@@ -79,7 +80,7 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 		performanceFrequency = (float)perf.QuadPart;
 	}
 
-	init();
+	BPUS_Game* game = new BPUS_Game();
 
 	while (running) {
 		// Input
@@ -174,7 +175,7 @@ input.buttons[b].isdown = isdown;\
 		}
 
 		//Simulate
-		simulate(&input, deltatime);
+		game->update(&input, deltatime);
 
 		//Render
 		StretchDIBits(hdc, 0, 0, renderState.width, renderState.height, 0, 0, renderState.width, renderState.height, renderState.memory, &renderState.bitmapinfo, DIB_RGB_COLORS, SRCCOPY);
