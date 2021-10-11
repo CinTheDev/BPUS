@@ -80,5 +80,8 @@
     <ClInclude Include="vector.h">
       <Filter>Headerdateien\utils</Filter>
     </ClInclude>
+    <ClInclude Include="h_vector.h">
+      <Filter>Headerdateien\utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "vector.h"
 #include <math.h>
 
@@ -10,7 +12,7 @@ Vector2::Vector2(double x, double y) {
 	this->y = y;
 }
 
-//Vector2::~Vector2() {}
+Vector2::~Vector2() {}
 
 #pragma region operators
 Vector2 Vector2::operator+(const Vector2& vec) {

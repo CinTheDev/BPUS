@@ -44,8 +44,7 @@ public:
 				case(GameMsg::Client_Accpepted): {
 					olc::net::message<GameMsg> msg;
 					msg.header.id = GameMsg::ClientRegisterWithServer;
-					//descPlayer.pos = Vector2(3.f, 3.f);
-					//descPlayer.pos = { 3.f, 3.f };
+					descPlayer.pos = Vector2(3.f, 3.f);
 					descPlayer.posX = 3.f;
 					descPlayer.posY = 3.f;
 					msg << descPlayer;

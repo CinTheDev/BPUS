@@ -8,7 +8,7 @@ struct Vector2 {
 
 	Vector2();
 	Vector2(double x, double y);
-	//~Vector2();
+	~Vector2();
 
 	Vector2 operator+(const Vector2& vec);
 	Vector2 operator-(const Vector2& vec);
