@@ -3,17 +3,14 @@
 
 // Vector2
 
-Vector2::Vector2() {
-	x = 0.;
-	y = 0.;
-}
+Vector2::Vector2() : x(0), y(0) {}
 
 Vector2::Vector2(double x, double y) {
 	this->x = x;
 	this->y = y;
 }
 
-Vector2::~Vector2() {}
+//Vector2::~Vector2() {}
 
 #pragma region operators
 Vector2 Vector2::operator+(const Vector2& vec) {
@@ -28,31 +25,37 @@ Vector2 Vector2::operator*(const Vector2& vec) {
 Vector2 Vector2::operator/(const Vector2& vec) {
 	return Vector2(x / vec.x, y / vec.y);
 }
-void Vector2::operator+=(const Vector2& vec) {
+Vector2& Vector2::operator+=(const Vector2& vec) {
 	x += vec.x;
 	y += vec.y;
+	return *this;
 }
-void Vector2::operator-=(const Vector2& vec) {
+Vector2& Vector2::operator-=(const Vector2& vec) {
 	x -= vec.x;
 	y -= vec.y;
+	return *this;
 }
-void Vector2::operator*=(const Vector2& vec) {
+Vector2& Vector2::operator*=(const Vector2& vec) {
 	x *= vec.x;
 	y *= vec.y;
+	return *this;
 }
-void Vector2::operator/=(const Vector2& vec) {
+Vector2& Vector2::operator/=(const Vector2& vec) {
 	x /= vec.x;
 	y /= vec.y;
+	return *this;
 }
 bool Vector2::operator==(const Vector2& vec) {
-	if (this == &vec) return true;
-	return false;
+	return (this == &vec);
 }
 bool Vector2::operator!=(const Vector2& vec) {
-	if (this != &vec) return true;
-	return false;
+	return (this != &vec);
 }
 #pragma endregion
+
+std::string Vector2::str() {
+	return "(x: " + std::to_string(x) + "; y: " + std::to_string(y) + ")";
+}
 
 double Vector2::len() {
 	return sqrt(x * x + y * y);
@@ -63,6 +66,8 @@ double Vector2::sqrlen() {
 }
 
 Vector2 Vector2::normalized() {
+	//double X = x * fastInvSqr(x * x + y * y);
+	//double Y = y * fastInvSqr(x * x + y * y);
 	double X = x / len();
 	double Y = y / len();
 	return Vector2(X, Y);
@@ -77,6 +82,21 @@ void Vector2::rotate(float angle) {
 	double _x = x;
 	x = _x * cos(angle) - y * sin(angle);
 	y = _x * sin(angle) + y * cos(angle);
+}
+
+// For testing purposes
+float Vector2::fastInvSqr(float n) {
+	const float threehalfs = 1.5f;
+	float y = n;
+
+	long i = *(long*)&y;
+
+	i = 0x5F3759DF - (i >> 1);
+	y = *(float*)&i;
+
+	y = y * (threehalfs - ((n * 0.5f) * y * y));
+
+	return y;
 }
 
 // Vector2Int

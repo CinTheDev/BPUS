@@ -124,7 +124,7 @@ namespace olc
 				return msg;
 			}
 
-			// Pulls any POD-like data form the message buffer
+			// Pulls any POD-like data from the message buffer
 			template<typename DataType>
 			friend message<T>& operator >> (message<T>& msg, DataType& data)
 			{

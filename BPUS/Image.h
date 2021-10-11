@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include <cstdio>
+#include "utils.cpp"
 
 enum ImageType {
 	PNG, BMP, JPG, TGA

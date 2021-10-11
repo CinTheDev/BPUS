@@ -8,24 +8,28 @@ struct Vector2 {
 
 	Vector2();
 	Vector2(double x, double y);
-	~Vector2();
+	//~Vector2();
 
 	Vector2 operator+(const Vector2& vec);
 	Vector2 operator-(const Vector2& vec);
 	Vector2 operator*(const Vector2& vec);
 	Vector2 operator/(const Vector2& vec);
-	void operator+=(const Vector2& vec);
-	void operator-=(const Vector2& vec);
-	void operator*=(const Vector2& vec);
-	void operator/=(const Vector2& vec);
+	Vector2& operator+=(const Vector2& vec);
+	Vector2& operator-=(const Vector2& vec);
+	Vector2& operator*=(const Vector2& vec);
+	Vector2& operator/=(const Vector2& vec);
 	bool operator==(const Vector2& vec);
 	bool operator!=(const Vector2& vec);
 
+	std::string str();
 	double len();
 	double sqrlen();
 	Vector2 normalized();
 	void normalize();
 	void rotate(float angle);
+
+private:
+	float fastInvSqr(float n);
 };
 
 struct Vector2Int {

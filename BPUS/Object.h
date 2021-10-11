@@ -1,6 +1,6 @@
 #pragma once
 
-#include "utils.cpp"
+//#include "utils.cpp"
 #include "Image.h"
 #include "platform_common.cpp"
 
