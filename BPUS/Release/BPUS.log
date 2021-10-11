@@ -1,12 +1,27 @@
 ﻿  Image.cpp
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\stb_image.h(1,17): warning C4083: "(" erwartet; Bezeichner "disable" gefunden
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\stb_image_write.h(1,17): warning C4083: "(" erwartet; Bezeichner "disable" gefunden
   Object.cpp
-  vector.cpp
+  Object_Manager.cpp
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\Object_Manager.h(22,2): warning C4091: "static ": Ignoriert auf der linken Seite von "Obj_M", wenn keine Variable deklariert wurde
   win32_platform.cpp
-C:\Users\CinKM4D\source\repos\BPUS\BPUS\BaseObject.cpp(41,2): warning C4091: "static ": Ignoriert auf der linken Seite von "BaseObject", wenn keine Variable deklariert wurde
-C:\Users\CinKM4D\source\repos\BPUS\BPUS\BaseObject.cpp(25,21): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
-C:\Users\CinKM4D\source\repos\BPUS\BPUS\BaseObject.cpp(37,21): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
-C:\Users\CinKM4D\source\repos\BPUS\BPUS\BaseObject.cpp(38,92): warning C4244: "Argument": Konvertierung von "int" in "float", möglicher Datenverlust
-C:\Users\CinKM4D\source\repos\BPUS\BPUS\BaseObject.cpp(38,78): warning C4244: "Argument": Konvertierung von "double" in "int", möglicher Datenverlust
-C:\Users\CinKM4D\source\repos\BPUS\BPUS\BaseObject.cpp(38,54): warning C4244: "Argument": Konvertierung von "double" in "int", möglicher Datenverlust
-win32_platform.obj : error LNK2001: Nicht aufgelöstes externes Symbol ""private: static class std::vector<class Object *,class std::allocator<class Object *> > BaseObject::objects" (?objects@BaseObject@@0V?$vector@PAVObject@@V?$allocator@PAVObject@@@std@@@std@@A)".
-C:\Users\CinKM4D\source\repos\BPUS\Release\BPUS.exe : fatal error LNK1120: 1 nicht aufgelöste Externe
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\Object_Manager.h(22,2): warning C4091: "static ": Ignoriert auf der linken Seite von "Obj_M", wenn keine Variable deklariert wurde
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\renderer.cpp(112,43): warning C4244: "Argument": Konvertierung von "double" in "int", möglicher Datenverlust
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\renderer.cpp(112,27): warning C4244: "Argument": Konvertierung von "double" in "int", möglicher Datenverlust
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\renderer.cpp(122,13): warning C4244: "Initialisierung": Konvertierung von "double" in "int", möglicher Datenverlust
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\renderer.cpp(123,12): warning C4244: "Initialisierung": Konvertierung von "double" in "int", möglicher Datenverlust
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\renderer.cpp(127,11): warning C4244: "Initialisierung": Konvertierung von "double" in "int", möglicher Datenverlust
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\renderer.cpp(128,11): warning C4244: "Initialisierung": Konvertierung von "double" in "int", möglicher Datenverlust
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\renderer.cpp(176,14): warning C4244: "Initialisierung": Konvertierung von "double" in "float", möglicher Datenverlust
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\renderer.cpp(177,18): warning C4244: "Initialisierung": Konvertierung von "double" in "float", möglicher Datenverlust
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\renderer.cpp(181,15): warning C4244: "Initialisierung": Konvertierung von "double" in "float", möglicher Datenverlust
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\renderer.cpp(186,15): warning C4244: "=": Konvertierung von "double" in "float", möglicher Datenverlust
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\Object_behavior.cpp(77,43): warning C4244: "+=": Konvertierung von "double" in "float", möglicher Datenverlust
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\Object_behavior.cpp(78,43): warning C4244: "-=": Konvertierung von "double" in "float", möglicher Datenverlust
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\Object_behavior.cpp(80,46): warning C4244: "+=": Konvertierung von "double" in "float", möglicher Datenverlust
+C:\Users\CinKM4D\source\repos\BPUS\BPUS\Object_behavior.cpp(81,46): warning C4244: "-=": Konvertierung von "double" in "float", möglicher Datenverlust
+  Code wird generiert.
+  Previous IPDB not found, fall back to full compilation.
+  All 3026 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Codegenerierung ist abgeschlossen.
+  BPUS.vcxproj -> C:\Users\CinKM4D\source\repos\BPUS\Release\BPUS.exe
