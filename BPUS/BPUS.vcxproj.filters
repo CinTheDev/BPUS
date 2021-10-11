@@ -57,9 +57,6 @@
     <ClCompile Include="utils.cpp">
       <Filter>Ressourcendateien</Filter>
     </ClCompile>
-    <ClCompile Include="vector.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Image.h">
@@ -76,9 +73,6 @@
     </ClInclude>
     <ClInclude Include="Object_Manager.h">
       <Filter>Headerdateien\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="vector.h">
-      <Filter>Headerdateien\utils</Filter>
     </ClInclude>
     <ClInclude Include="h_vector.h">
       <Filter>Headerdateien\utils</Filter>

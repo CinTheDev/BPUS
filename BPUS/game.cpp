@@ -20,12 +20,12 @@ private:
 public:
 	BPUS_Game() {
 		// Camera
-		camera = new Obj::Camera(Vector2(0, 0), &empty, 1.f);
+		camera = new Obj::Camera(h_Vector2(0, 0), &empty, 1.f);
 		Obj_M::create(camera);
 
-		//obj = new Obj::Empty(Vector2(0, 0), &test, 1.f);
+		//obj = new Obj::Empty(h_Vector2(0, 0), &test, 1.f);
 		//obj->z = 1;
-		obj2 = new Obj::Baseobject(Vector2(500, 0), &alphatest, 1.f);
+		obj2 = new Obj::Baseobject(h_Vector2(500, 0), &alphatest, 1.f);
 		obj2->z = 0;
 		//Obj_M::create(obj);
 		Obj_M::create(obj2);
@@ -44,7 +44,7 @@ public:
 				case(GameMsg::Client_Accpepted): {
 					olc::net::message<GameMsg> msg;
 					msg.header.id = GameMsg::ClientRegisterWithServer;
-					descPlayer.pos = Vector2(3.f, 3.f);
+					descPlayer.pos = h_Vector2(3.f, 3.f);
 					descPlayer.posX = 3.f;
 					descPlayer.posY = 3.f;
 					msg << descPlayer;
@@ -93,18 +93,18 @@ public:
 		// Render
 		draw_background(0x000011);
 
-		draw_rect(Vector2(300, 100), Vector2(100, 300), 0xAA0055);
-		draw_tri(Vector2(100, 100), Vector2(200, 150), Vector2(180, 250), 0x00AA55);
-		draw_cir(Vector2(300, 100), 50, 0x55AA00);
-		draw_text(Vector2(500, 200), "The Quick Brown Fox Jumps Over The Lazy Dog\nTHE QUICK BROWN FOX JUMPS OVER THE LAZY DOG\nthe quick brown fox jumps over the lazy dog", 2.5f);
+		draw_rect(h_Vector2(300, 100), h_Vector2(100, 300), 0xAA0055);
+		draw_tri(h_Vector2(100, 100), h_Vector2(200, 150), h_Vector2(180, 250), 0x00AA55);
+		draw_cir(h_Vector2(300, 100), 50, 0x55AA00);
+		draw_text(h_Vector2(500, 200), "The Quick Brown Fox Jumps Over The Lazy Dog\nTHE QUICK BROWN FOX JUMPS OVER THE LAZY DOG\nthe quick brown fox jumps over the lazy dog", 2.5f);
 
 		// Debug
-		Vector2 v(3, 4);
-		Vector2 v_norm = v;
+		h_Vector2 v(3, 4);
+		h_Vector2 v_norm = v;
 		v_norm.normalize();
-		Vector2 v_fast = v.normalized();
+		h_Vector2 v_fast = v.normalized();
 		std::string s = v.str() + v_norm.str() + v_fast.str();
-		draw_text(camera->position + Vector2(5, 20), s.c_str(), 2.f);
+		draw_text(camera->position + h_Vector2(5, 20), s.c_str(), 2.f);
 
 		draw_objects();
 

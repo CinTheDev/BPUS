@@ -7,18 +7,18 @@
 class Object
 {
 public:
-	Vector2 position;
-	Vector2 pivot;
+	h_Vector2 position;
+	h_Vector2 pivot;
 	float rotation;
 	float size;
 
 	Image* image;
 	int z;
 
-	Object(Vector2 pos, Image* img, float s, float r);
-	Object(Vector2 pos, Image* img, float s);
-	Object(Vector2 pos, Image* img);
-	Object(Vector2 pos);
+	Object(h_Vector2 pos, Image* img, float s, float r);
+	Object(h_Vector2 pos, Image* img, float s);
+	Object(h_Vector2 pos, Image* img);
+	Object(h_Vector2 pos);
 	Object();
 	~Object();
 
@@ -26,7 +26,7 @@ public:
 	bool operator!=(const Object& o);
 
 	void centerPivot();
-	Vector2 getPivAbs();
+	h_Vector2 getPivAbs();
 
 	virtual void init();
 	virtual void update(Input* input, double dt);
