@@ -74,7 +74,7 @@
     <ClInclude Include="Object_Manager.h">
       <Filter>Headerdateien\Object</Filter>
     </ClInclude>
-    <ClInclude Include="h_vector.h">
+    <ClInclude Include="hvector.h">
       <Filter>Headerdateien\utils</Filter>
     </ClInclude>
   </ItemGroup>

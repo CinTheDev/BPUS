@@ -189,7 +189,7 @@
     <ClCompile Include="win32_platform.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="h_vector.h" />
+    <ClInclude Include="hvector.h" />
     <ClInclude Include="Image.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>

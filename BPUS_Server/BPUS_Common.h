@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstdint>
-#include "../BPUS/h_vector.h"
+#include "../BPUS/hvector.h"
 
 #include "../NetCommon/net.h"
 
@@ -23,7 +23,7 @@ struct sPlayerDesc {
 	uint32_t nUniqueID = 0;
 	uint32_t nSpriteID = 0;
 
-	h_Vector2 pos;
+	Vector2 pos;
 	float posX;
 	float posY;
 };
