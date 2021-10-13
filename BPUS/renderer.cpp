@@ -2,6 +2,8 @@
 
 Object* camera;
 
+#pragma region Screen functions
+
 static void
 draw_background(u32 color) {
 	unsigned int* pixel = (u32*)renderState.memory;
@@ -23,6 +25,10 @@ bool outside_screen(Vector2 p) {
 	if (p.y <= 0 || p.y >= renderState.height) return true;
 	return false;
 }
+
+#pragma endregion
+
+#pragma region Pixel renderers
 
 static void
 draw_rect_pixel(Vector2Int p0, Vector2Int p1, u32 color) {
@@ -132,6 +138,10 @@ draw_image_pixel(Image* image, Vector2Int offset, float scale, float rotation, V
 	}
 }
 
+#pragma endregion
+
+#pragma region Shapes
+
 static void
 draw_rect(Vector2 p, Vector2 size, u32 color) {
 	p -= camera->position;
@@ -168,6 +178,10 @@ draw_tri(Vector2 p0, Vector2 p1, Vector2 p2, u32 color) {
 
 	draw_tri_pixel(p0_1, p1_1, p2_1, color);
 }
+
+#pragma endregion
+
+#pragma region Text
 
 #include "font.cpp"
 
@@ -210,6 +224,10 @@ draw_text(Vector2 pos, const char* text, float scale) {
 	}
 }
 
+#pragma endregion
+
+#pragma region Images
+
 static void
 draw_image(Image* image, Vector2 p, float scale, float rotation, Vector2 pivot) {
 	p -= camera->position;
@@ -225,6 +243,10 @@ draw_image(Object o) {
 	Vector2Int pivint((int)floor(o.getPivAbs().x), (int)floor(o.getPivAbs().y));
 	draw_image_pixel(o.image, Vector2Int((int)floor(o.position.x), (int)floor(o.position.y)), o.size, o.rotation, pivint);
 }
+
+#pragma endregion
+
+#pragma region Convinience
 
 static void
 draw_objects() {
@@ -245,3 +267,5 @@ render() {
 
 	draw_objects();
 }
+
+#pragma endregion
