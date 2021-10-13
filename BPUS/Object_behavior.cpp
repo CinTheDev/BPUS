@@ -36,13 +36,23 @@ namespace Obj{
 	};
 
 	class Camera : public Object {
+	public:
 		using Object::Object;
+
+		float zoom = 1;
 
 		void update(Input* input, double dt) override {
 			if (isdown(BUTTON_UP)) position.y += 50. * dt;
 			if (isdown(BUTTON_DOWN)) position.y -= 50. * dt;
 			if (isdown(BUTTON_LEFT)) position.x -= 50. * dt;
 			if (isdown(BUTTON_RIGHT)) position.x += 50. * dt;
+
+			if (isdown(BUTTON_SHIFT)) zoom += 1 * dt;
+			if (isdown(BUTTON_CTRL)) zoom -= 1 * dt;
+		}
+
+		Vector2Int middleOfScreen() {
+			return Vector2Int(renderState.width / 2, renderState.height / 2);
 		}
 	};
 

@@ -2,12 +2,12 @@ Image empty(0, 0, 0);
 Image test("test2.jpg");
 Image alphatest("test3.png");
 
-#include "Object_behavior.cpp"
+
 //#include "../BPUS_Server/BPUS_Common.h"
 //#include <unordered_map>
 
-Object* obj;
-Object* obj2;
+Obj::Empty* obj;
+Obj::Baseobject* obj2;
 
 class BPUS_Game{
 private:

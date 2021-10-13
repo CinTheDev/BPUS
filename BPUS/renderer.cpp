@@ -1,6 +1,7 @@
 #include "Object_Manager.h"
+#include "Object_behavior.cpp"
 
-Object* camera;
+Obj::Camera* camera;
 
 #pragma region Screen functions
 
@@ -20,7 +21,7 @@ bool outside_screen(Vector2 p, Vector2 size) {
 	return false;
 }
 
-bool outside_screen(Vector2 p) {
+bool outside_screen(Vector2Int p) {
 	if (p.x <= 0 || p.x >= renderState.width) return true;
 	if (p.y <= 0 || p.y >= renderState.height) return true;
 	return false;
@@ -117,7 +118,7 @@ void set_pixel(Vector2Int pos, Vector2Int pix, Image* img, float rotation, Vecto
 	Vector2 point = pivot.todouble() + rot;
 	Vector2Int pointint(floor(point.x), floor(point.y));
 
-	if (outside_screen(pointint.todouble())) return;
+	if (outside_screen(pointint)) return;
 
 	u32* pixel = (u32*)renderState.memory + pointint.x + pointint.y * renderState.width;
 	*pixel = img->getPixel(pix.x, pix.y, *pixel);
@@ -142,25 +143,33 @@ draw_image_pixel(Image* image, Vector2Int offset, float scale, float rotation, V
 
 #pragma region Shapes
 
+static Vector2Int
+camOperations(Vector2 point) {
+	point -= camera->position;
+	Vector2 point_diff = (point - camera->middleOfScreen().todouble()) * camera->zoom;
+	point = camera->middleOfScreen().todouble() + point_diff;
+
+	return Vector2Int((int)floor(point.x), (int)floor(point.y));
+}
+
 static void
 draw_rect(Vector2 p, Vector2 size, u32 color) {
-	p -= camera->position;
-	Vector2Int p0((int)floor(p.x), (int)floor(p.y));
-	Vector2Int p1((int)floor(p.x + size.x), (int)floor(p.y + size.y));
+	Vector2Int p0 = camOperations(p);
+	Vector2Int p1 = camOperations(p + size);
 
 	draw_rect_pixel(p0, p1, color);
 }
 
 static void
 draw_cir(Vector2 p, int radius, u32 color) {
-	p -= camera->position;
-	Vector2Int p0((int)floor(p.x), (int)floor(p.y));
+	Vector2Int p0 = camOperations(p);
 
-	draw_cir_pixel(p0, radius, color);
+	draw_cir_pixel(p0, radius * camera->zoom, color);
 }
 
 static void
 draw_oval(Vector2 p, Vector2Int size, u32 color) {
+	// Didn't feel like implementing camera operations
 	p -= camera->position;
 	Vector2Int p0((int)floor(p.x), (int)floor(p.y));
 
@@ -169,12 +178,9 @@ draw_oval(Vector2 p, Vector2Int size, u32 color) {
 
 static void
 draw_tri(Vector2 p0, Vector2 p1, Vector2 p2, u32 color) {
-	p0 -= camera->position;
-	p1 -= camera->position;
-	p2 -= camera->position;
-	Vector2Int p0_1((int)floor(p0.x), (int)floor(p0.y));
-	Vector2Int p1_1((int)floor(p1.x), (int)floor(p1.y));
-	Vector2Int p2_1((int)floor(p2.x), (int)floor(p2.y));
+	Vector2Int p0_1 = camOperations(p0);
+	Vector2Int p1_1 = camOperations(p1);
+	Vector2Int p2_1 = camOperations(p2);
 
 	draw_tri_pixel(p0_1, p1_1, p2_1, color);
 }
@@ -230,18 +236,18 @@ draw_text(Vector2 pos, const char* text, float scale) {
 
 static void
 draw_image(Image* image, Vector2 p, float scale, float rotation, Vector2 pivot) {
-	p -= camera->position;
-	if (outside_screen(p, Vector2(image->w * scale, image->h * scale))) return;
-	Vector2Int pivint((int)floor(pivot.x), (int)floor(pivot.y));
-	draw_image_pixel(image, Vector2Int((int)floor(p.x), (int)floor(p.y)), scale, rotation, pivint);
+
+	Vector2Int pos = camOperations(p);
+	Vector2Int pivint = camOperations(pivot);
+
+	if (outside_screen(pos.todouble(), Vector2(image->w * scale * camera->zoom, image->h * scale * camera->zoom))) return;
+	
+	draw_image_pixel(image, pos, scale * camera->zoom, rotation, pivint);
 }
 
 static void
 draw_image(Object o) {
-	o.position -= camera->position;
-	if (outside_screen(o.position, Vector2(o.image->w * o.size, o.image->h * o.size))) return;
-	Vector2Int pivint((int)floor(o.getPivAbs().x), (int)floor(o.getPivAbs().y));
-	draw_image_pixel(o.image, Vector2Int((int)floor(o.position.x), (int)floor(o.position.y)), o.size, o.rotation, pivint);
+	draw_image(o.image, o.position, o.size, o.rotation, o.getPivAbs());
 }
 
 #pragma endregion

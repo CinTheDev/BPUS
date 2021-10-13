@@ -13,11 +13,15 @@ struct Vector2 {
 	Vector2 operator+(const Vector2& vec) { return Vector2(x + vec.x, y + vec.y); }
 	Vector2 operator-(const Vector2& vec) { return Vector2(x - vec.x, y - vec.y); }
 	Vector2 operator*(const Vector2& vec) { return Vector2(x * vec.x, y * vec.y); }
+	Vector2 operator*(const double& c) { return Vector2(x * c, y * c); }
 	Vector2 operator/(const Vector2& vec) { return Vector2(x / vec.x, y / vec.y); }
+	Vector2 operator/(const double& c) { return Vector2(x / c, y / c); }
 	Vector2& operator+=(const Vector2& vec) { x += vec.x; y += vec.y; return *this;	}
 	Vector2& operator-=(const Vector2& vec) { x -= vec.x; y -= vec.y; return *this; }
 	Vector2& operator*=(const Vector2& vec) { x *= vec.x; y *= vec.y; return *this; }
+	Vector2& operator*=(const double& c) { x *= c; y *= c; return *this; }
 	Vector2& operator/=(const Vector2& vec) { x /= vec.x; y /= vec.y; return *this; }
+	Vector2& operator/=(const double& c) { x /= c; y /= c; return *this; }
 	bool operator==(const Vector2& vec) { return (this == &vec); }
 	bool operator!=(const Vector2& vec) { return (this != &vec); }
 
@@ -53,11 +57,15 @@ struct Vector2Int {
 	Vector2Int operator+(const Vector2Int& vec) { return Vector2Int(x + vec.x, y + vec.y); }
 	Vector2Int operator-(const Vector2Int& vec) { return Vector2Int(x - vec.x, y - vec.y); }
 	Vector2Int operator*(const Vector2Int& vec) { return Vector2Int(x * vec.x, y * vec.y); }
+	Vector2Int operator*(const int& c) { return Vector2Int(x * c, y * c); }
 	Vector2Int operator/(const Vector2Int& vec) { return Vector2Int(x / vec.x, y / vec.y); }
+	Vector2Int operator/(const int& c) { return Vector2Int(x * c, y * c); }
 	Vector2Int& operator+=(const Vector2Int& vec) { x += vec.x; y += vec.y; return *this; }
 	Vector2Int& operator-=(const Vector2Int& vec) { x -= vec.x; y -= vec.y; return *this; }
 	Vector2Int& operator*=(const Vector2Int& vec) { x *= vec.x; y *= vec.y; return *this; }
+	Vector2Int& operator*=(const int& c) { x *= c; y *= c; return *this; }
 	Vector2Int& operator/=(const Vector2Int& vec) { x /= vec.x; y /= vec.y; return *this; }
+	Vector2Int& operator/=(const int& c) { x /= c; y /= c; return *this; }
 	bool operator==(const Vector2Int& vec) { return (this == &vec); }
 	bool operator!=(const Vector2Int& vec) { return (this != &vec); }
 
