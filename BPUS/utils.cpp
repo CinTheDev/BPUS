@@ -20,6 +20,13 @@ clamp(int min, int val, int max) {
 	return val;
 }
 
+inline float
+clampf(float min, float val, float max) {
+	if (val < min) return min;
+	if (val > max) return max;
+	return val;
+}
+
 inline int
 min3(int a, int b, int c) {
 	if (a < b) {

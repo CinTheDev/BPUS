@@ -146,7 +146,7 @@ draw_image_pixel(Image* image, Vector2Int offset, float scale, float rotation, V
 static Vector2Int
 camOperations(Vector2 point) {
 	point -= camera->position;
-	Vector2 point_diff = (point - camera->middleOfScreen().todouble()) * camera->zoom;
+	Vector2 point_diff = (point - camera->middleOfScreen().todouble()) * camera->getZoom();
 	point = camera->middleOfScreen().todouble() + point_diff;
 
 	return Vector2Int((int)floor(point.x), (int)floor(point.y));
@@ -164,7 +164,7 @@ static void
 draw_cir(Vector2 p, int radius, u32 color) {
 	Vector2Int p0 = camOperations(p);
 
-	draw_cir_pixel(p0, radius * camera->zoom, color);
+	draw_cir_pixel(p0, radius * camera->getZoom(), color);
 }
 
 static void
@@ -240,9 +240,9 @@ draw_image(Image* image, Vector2 p, float scale, float rotation, Vector2 pivot) 
 	Vector2Int pos = camOperations(p);
 	Vector2Int pivint = camOperations(pivot);
 
-	if (outside_screen(pos.todouble(), Vector2(image->w * scale * camera->zoom, image->h * scale * camera->zoom))) return;
+	if (outside_screen(pos.todouble(), Vector2(image->w * scale * camera->getZoom(), image->h * scale * camera->getZoom()))) return;
 	
-	draw_image_pixel(image, pos, scale * camera->zoom, rotation, pivint);
+	draw_image_pixel(image, pos, scale * camera->getZoom(), rotation, pivint);
 }
 
 static void

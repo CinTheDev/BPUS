@@ -39,20 +39,31 @@ namespace Obj{
 	public:
 		using Object::Object;
 
+	private:
 		float zoom = 1;
 
+	public:
 		void update(Input* input, double dt) override {
 			if (isdown(BUTTON_UP)) position.y += 50. * dt;
 			if (isdown(BUTTON_DOWN)) position.y -= 50. * dt;
 			if (isdown(BUTTON_LEFT)) position.x -= 50. * dt;
 			if (isdown(BUTTON_RIGHT)) position.x += 50. * dt;
 
-			if (isdown(BUTTON_SHIFT)) zoom += 1 * dt;
-			if (isdown(BUTTON_CTRL)) zoom -= 1 * dt;
+			if (isdown(BUTTON_SHIFT)) setZoom(zoom + 1 * dt);
+			if (isdown(BUTTON_CTRL)) setZoom(zoom - 1 * dt);
+		}
+
+		// Setter
+		void setZoom(float value) {
+			zoom = clampf(0.f, value, INFINITY);
+		}
+		// Getter
+		float getZoom() {
+			return zoom;
 		}
 
 		Vector2Int middleOfScreen() {
-			return Vector2Int(renderState.width / 2, renderState.height / 2);
+			return Vector2Int(renderState.width >> 1, renderState.height >> 1);
 		}
 	};
 
