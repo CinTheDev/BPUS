@@ -89,8 +89,10 @@ int sign_tri(Vector2Int p0, Vector2Int p1, Vector2Int p2) {
 
 static void
 draw_tri_pixel(Vector2Int p0, Vector2Int p1, Vector2Int p2, u32 color) {
-	int sy = min3(p0.y, p1.y, p2.y), by = max3(p0.y, p1.y, p2.y);
-	int sx = min3(p0.x, p1.x, p2.x), bx = max3(p0.x, p1.x, p2.x);
+	int a[] = {p0.x, p1.x, p2.x};
+	int b[] = { p0.y, p1.y, p2.y };
+	int sx = min_array(a, sizeof(a) / sizeof(*a)), bx = max_array(a, sizeof(a) / sizeof(*a));
+	int sy = min_array(b, sizeof(b) / sizeof(*b)), by = max_array(b, sizeof(b) / sizeof(*b));
 
 	int d1, d2, d3;
 	bool has_neg, has_pos;

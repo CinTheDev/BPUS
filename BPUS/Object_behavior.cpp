@@ -55,7 +55,7 @@ namespace Obj{
 
 		// Setter
 		void setZoom(float value) {
-			zoom = clampf(0.f, value, INFINITY);
+			zoom = clamp(0.f, value, INFINITY);
 		}
 		// Getter
 		float getZoom() {

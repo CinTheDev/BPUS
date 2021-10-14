@@ -44,6 +44,9 @@ public:
 		// Render
 		render();
 
+		// Debug
+
+
 		//sendData();
 	}
 
