@@ -89,8 +89,12 @@ bool Image::write(const char* filename) {
 	return succes != 0;
 }
 
-unsigned int Image::getPixel(int x, int y, u32 color) {
-	int index = size - w * channels - y * channels * w + x * channels;
+u32 Image::getPixel(int x, int y, u32 color) {
+	return getPixel(Vector2Int(x, y), color);
+}
+
+u32 Image::getPixel(Vector2Int p, u32 color) {
+	int index = size - w * channels - p.y * channels * w + p.x * channels;
 
 	u32 rgb[] = {
 		(u32)data[index],
@@ -112,7 +116,7 @@ unsigned int Image::getPixel(int x, int y, u32 color) {
 			d = (int)floor((double)d * a);
 			rgb[i] -= d;
 		}
-		
+
 	}
 
 	u32 result = (rgb[0] << 16) | (rgb[1] << 8) | (rgb[2] << 0);

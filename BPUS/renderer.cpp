@@ -114,29 +114,26 @@ draw_tri_pixel(Vector2Int p0, Vector2Int p1, Vector2Int p2, u32 color) {
 	}
 }
 
-void set_pixel(Vector2Int pos, Vector2Int pix, Image* img, float rotation, Vector2Int pivot) {
-	Vector2 rot = pos.todouble() - pivot.todouble();
-	rot.rotate(rotation);
-	Vector2 point = pivot.todouble() + rot;
-	Vector2Int pointint(floor(point.x), floor(point.y));
-
-	if (outside_screen(pointint)) return;
-
-	u32* pixel = (u32*)renderState.memory + pointint.x + pointint.y * renderState.width;
-	*pixel = img->getPixel(pix.x, pix.y, *pixel);
-}
-
 static void
 draw_image_pixel(Image* image, Vector2Int offset, float scale, float rotation, Vector2Int pivot) {
 	int height = floor((double)image->h * (double)scale);
 	int width = floor((double)image->w * (double)scale);
 	for (int y = offset.y; y < height + offset.y; y++) {
-
+		u32* pixel = (u32*)renderState.memory + offset.x + y * renderState.width;
 		for (int x = offset.x; x < width + offset.x; x++) {
-			int px = floor((x - offset.x) / scale);
-			int py = floor((y - offset.y) / scale);
-
-			set_pixel(Vector2Int(x, y), Vector2Int(px, py), image, rotation, pivot);
+			if (outside_screen(Vector2Int(x, y))) pixel++;
+			else {
+				Vector2 rot = Vector2(x, y) - pivot.todouble();
+				rot = rot.rotate(-rotation);
+				Vector2 point = pivot.todouble() + rot;
+				Vector2Int pointint(floor(point.x), floor(point.y));
+				if (pointint.x - offset.x <= 0 || pointint.x - offset.x >= width
+					|| pointint.y - offset.y <= 0 || pointint.y - offset.y >= height) {
+					pixel++;
+					continue;
+				}
+				*pixel++ = image->getPixel(floor((pointint.x - offset.x) / scale), floor((pointint.y - offset.y) / scale), *pixel);
+			}
 		}
 	}
 }

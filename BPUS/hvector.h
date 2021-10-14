@@ -39,10 +39,9 @@ struct Vector2 {
 		y /= len();
 	}
 
-	void rotate(float angle) {
-		double _x = x;
-		x = _x * cos(angle) - y * sin(angle);
-		y = _x * sin(angle) + y * cos(angle);
+	Vector2 rotate(float angle) {
+		return(Vector2(x * cos(angle) - y * sin(angle),
+					   x * sin(angle) + y * cos(angle)));
 	}
 };
 

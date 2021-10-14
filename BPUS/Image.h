@@ -26,5 +26,6 @@ struct Image {
 
 	ImageType getFileType(const char* filename);
 
-	unsigned int getPixel(int x, int y, unsigned int color);
+	u32 getPixel(int x, int y, u32 color);
+	u32 getPixel(Vector2Int p, u32 color);
 };
