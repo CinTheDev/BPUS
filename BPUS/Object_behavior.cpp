@@ -36,7 +36,6 @@ namespace Obj{
 	};
 
 	class Camera : public Object {
-	public:
 		using Object::Object;
 
 	private:

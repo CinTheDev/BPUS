@@ -116,22 +116,28 @@ draw_tri_pixel(Vector2Int p0, Vector2Int p1, Vector2Int p2, u32 color) {
 
 static void
 draw_image_pixel(Image* image, Vector2Int offset, float scale, float rotation, Vector2Int pivot) {
+	// Define and round image sizes
 	int height = floor((double)image->h * (double)scale);
 	int width = floor((double)image->w * (double)scale);
 	for (int y = offset.y; y < height + offset.y; y++) {
+		// Get pointer to buffer
 		u32* pixel = (u32*)renderState.memory + offset.x + y * renderState.width;
 		for (int x = offset.x; x < width + offset.x; x++) {
+			// If the pixel is outside buffer
 			if (outside_screen(Vector2Int(x, y))) pixel++;
 			else {
+				// Rotate position backwards to get color
 				Vector2 rot = Vector2(x, y) - pivot.todouble();
 				rot = rot.rotate(-rotation);
 				Vector2 point = pivot.todouble() + rot;
 				Vector2Int pointint(floor(point.x), floor(point.y));
+				// If rotated vector is outside image
 				if (pointint.x - offset.x <= 0 || pointint.x - offset.x >= width
 					|| pointint.y - offset.y <= 0 || pointint.y - offset.y >= height) {
 					pixel++;
 					continue;
 				}
+				// Color the pixel and increment
 				*pixel++ = image->getPixel(floor((pointint.x - offset.x) / scale), floor((pointint.y - offset.y) / scale), *pixel);
 			}
 		}

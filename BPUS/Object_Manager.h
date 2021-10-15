@@ -11,6 +11,7 @@ private:
 	static void destroy(Object* obj, int index);
 
 	static void lstupdate();
+
 public:
 	static std::vector<Object*> objects;
 
