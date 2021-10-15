@@ -117,8 +117,6 @@ draw_tri_pixel(Vector2Int p0, Vector2Int p1, Vector2Int p2, u32 color) {
 static void
 draw_image_pixel(Image* image, Vector2Int offset, Vector2Int size, float rotation, Vector2Int pivot) {
 	// Define and round image sizes
-	//int height = floor((double)image->h * (double)scale);
-	//int width = floor((double)image->w * (double)scale);
 	Vector2Int offset2 = size + offset;
 	for (int y = offset.y; y < offset2.y; y++) {
 		// Get pointer to buffer
@@ -128,21 +126,16 @@ draw_image_pixel(Image* image, Vector2Int offset, Vector2Int size, float rotatio
 			if (outside_screen(Vector2Int(x, y))) pixel++;
 			else {
 				// Rotate position backwards to get color
-				Vector2 rot = Vector2(x, y) - pivot.todouble();
-				rot = rot.rotate(-rotation);
-				Vector2 point = pivot.todouble() + rot;
-				Vector2Int pointint(floor(point.x), floor(point.y));
+				Vector2Int point = round_vector(pivot.todouble() + (Vector2(x, y) - pivot.todouble()).rotate(-rotation));
 				// If rotated vector is outside image
-				if (pointint.x - offset.x <= 0 || pointint.x - offset.x >= size.x
-					|| pointint.y - offset.y <= 0 || pointint.y - offset.y >= size.y) {
+				if (point.x - offset.x <= 0 || point.x - offset.x >= size.x
+					|| point.y - offset.y <= 0 || point.y - offset.y >= size.y) {
 					pixel++;
 					continue;
 				}
 				// Color the pixel and increment buffer
-				Vector2Int pix = pointint - offset;
-				Vector2 yes = (pix.todouble() / size.todouble()) * Vector2(image->w, image->h);
-				Vector2Int yesInt =  Vector2Int(floor(yes.x), floor(yes.y));
-				*pixel++ = image->getPixel(yesInt.x, yesInt.y, *pixel);
+				Vector2Int pix = round_vector(((point - offset).todouble() / size.todouble()) * Vector2(image->w, image->h));
+				*pixel++ = image->getPixel(pix.x, pix.y, *pixel);
 			}
 		}
 	}
@@ -158,7 +151,7 @@ camOperations(Vector2 point) {
 	Vector2 point_diff = (point - camera->middleOfScreen().todouble()) * camera->getZoom();
 	point = camera->middleOfScreen().todouble() + point_diff;
 
-	return Vector2Int((int)floor(point.x), (int)floor(point.y));
+	return round_vector(point);
 }
 
 static void
@@ -180,7 +173,7 @@ static void
 draw_oval(Vector2 p, Vector2Int size, u32 color) {
 	// Didn't feel like implementing camera operations
 	p -= camera->position;
-	Vector2Int p0((int)floor(p.x), (int)floor(p.y));
+	Vector2Int p0 = round_vector(p);
 
 	draw_oval_pixel(p0, size, color);
 }
@@ -252,7 +245,7 @@ draw_image(Image* image, Vector2 p, float scale, float rotation, Vector2 pivot) 
 	if (outside_screen(pos.todouble(), Vector2(image->w * scale * camera->getZoom(), image->h * scale * camera->getZoom()))) return;
 	
 	// Calculate how many pixels is 1 unit
-	draw_image_pixel(image, pos, Vector2Int(scale, scale), rotation, pivint);
+	draw_image_pixel(image, pos, round_vector(Vector2(scale, scale) * camera->getZoom()), rotation, pivint);
 }
 
 static void

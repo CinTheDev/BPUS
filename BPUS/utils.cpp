@@ -71,3 +71,8 @@ inline T max_array(T arr[], int size) {
 	delete temp;
 	return r;
 }
+
+inline Vector2Int
+round_vector(Vector2 vector) {
+	return Vector2Int((int)floor(vector.x), (int)floor(vector.y));
+}
