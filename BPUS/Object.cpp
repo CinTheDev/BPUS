@@ -33,11 +33,11 @@ bool Object::operator!=(const Object& o) {
 }
 
 void Object::centerPivot() {
-	pivot = Vector2(image->h * size / 2, image->w * size / 2);
+	pivot = Vector2(size / 2, size / 2);
 }
 
 Vector2 Object::getPivAbs() {
-	return position + Vector2(image->h * size / 2, image->w * size / 2);
+	return position + Vector2(size / 2, size / 2);
 }
 
 void Object::init() {}

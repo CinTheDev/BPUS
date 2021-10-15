@@ -115,14 +115,15 @@ draw_tri_pixel(Vector2Int p0, Vector2Int p1, Vector2Int p2, u32 color) {
 }
 
 static void
-draw_image_pixel(Image* image, Vector2Int offset, float scale, float rotation, Vector2Int pivot) {
+draw_image_pixel(Image* image, Vector2Int offset, Vector2Int size, float rotation, Vector2Int pivot) {
 	// Define and round image sizes
-	int height = floor((double)image->h * (double)scale);
-	int width = floor((double)image->w * (double)scale);
-	for (int y = offset.y; y < height + offset.y; y++) {
+	//int height = floor((double)image->h * (double)scale);
+	//int width = floor((double)image->w * (double)scale);
+	Vector2Int offset2 = size + offset;
+	for (int y = offset.y; y < offset2.y; y++) {
 		// Get pointer to buffer
 		u32* pixel = (u32*)renderState.memory + offset.x + y * renderState.width;
-		for (int x = offset.x; x < width + offset.x; x++) {
+		for (int x = offset.x; x < offset2.x; x++) {
 			// If the pixel is outside buffer
 			if (outside_screen(Vector2Int(x, y))) pixel++;
 			else {
@@ -132,13 +133,16 @@ draw_image_pixel(Image* image, Vector2Int offset, float scale, float rotation, V
 				Vector2 point = pivot.todouble() + rot;
 				Vector2Int pointint(floor(point.x), floor(point.y));
 				// If rotated vector is outside image
-				if (pointint.x - offset.x <= 0 || pointint.x - offset.x >= width
-					|| pointint.y - offset.y <= 0 || pointint.y - offset.y >= height) {
+				if (pointint.x - offset.x <= 0 || pointint.x - offset.x >= size.x
+					|| pointint.y - offset.y <= 0 || pointint.y - offset.y >= size.y) {
 					pixel++;
 					continue;
 				}
-				// Color the pixel and increment
-				*pixel++ = image->getPixel(floor((pointint.x - offset.x) / scale), floor((pointint.y - offset.y) / scale), *pixel);
+				// Color the pixel and increment buffer
+				Vector2Int pix = pointint - offset;
+				Vector2 yes = (pix.todouble() / size.todouble()) * Vector2(image->w, image->h);
+				Vector2Int yesInt =  Vector2Int(floor(yes.x), floor(yes.y));
+				*pixel++ = image->getPixel(yesInt.x, yesInt.y, *pixel);
 			}
 		}
 	}
@@ -247,7 +251,8 @@ draw_image(Image* image, Vector2 p, float scale, float rotation, Vector2 pivot) 
 
 	if (outside_screen(pos.todouble(), Vector2(image->w * scale * camera->getZoom(), image->h * scale * camera->getZoom()))) return;
 	
-	draw_image_pixel(image, pos, scale * camera->getZoom(), rotation, pivint);
+	// Calculate how many pixels is 1 unit
+	draw_image_pixel(image, pos, Vector2Int(scale, scale), rotation, pivint);
 }
 
 static void

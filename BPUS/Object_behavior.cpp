@@ -69,6 +69,10 @@ namespace Obj{
 	class Baseobject : public Object {
 		using Object::Object;
 
+		void init() override {
+			size = 100;
+		}
+
 		void update(Input* input, double dt) override {
 			if (isdown(BUTTON_W)) position.y += 200. * dt;
 			if (isdown(BUTTON_A)) position.x -= 200. * dt;
@@ -78,8 +82,8 @@ namespace Obj{
 			if (isdown(BUTTON_Q)) rotation += 1 * dt;
 			if (isdown(BUTTON_E)) rotation -= 1 * dt;
 
-			if (isdown(BUTTON_NUMPAD_8)) size += 2 * dt;
-			if (isdown(BUTTON_NUMPAD_2)) size -= 2 * dt;
+			if (isdown(BUTTON_NUMPAD_8)) size += 200 * dt;
+			if (isdown(BUTTON_NUMPAD_2)) size -= 200 * dt;
 		}
 	};
 

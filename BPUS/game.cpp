@@ -45,7 +45,8 @@ public:
 		render();
 
 		// Debug
-
+		std::string debug = obj2->position.str() + std::to_string(obj2->size);
+		draw_text(Vector2(10, 40), debug.c_str(), 5.f);
 
 		//sendData();
 	}
