@@ -25,9 +25,9 @@ public:
 	bool operator==(const Object& o);
 	bool operator!=(const Object& o);
 
-	void centerPivot();
-	Vector2 getPivAbs();
-
 	virtual void init();
 	virtual void update(Input* input, double dt);
+
+	void centerPivot();
+	Vector2 getPivAbs();
 };

@@ -71,7 +71,7 @@ struct Vector2Int {
 	std::string str() { return "(x: " + std::to_string(x) + "; y: " + std::to_string(y) + ")"; }
 
 	double len() { return sqrt((double)x * (double)x + (double)y * (double)y); }
-	double sqrlen() { return (double)x * (double)x + (double)y * (double)y; }
+	int sqrlen() { return (double)x * (double)x + (double)y * (double)y; }
 
 	Vector2 todouble() {
 		return Vector2(x, y);

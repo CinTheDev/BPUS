@@ -22,8 +22,8 @@ namespace Obj{
 
 	{...}
 
-	inline void Name::init() {}
-	inline void Name::update(Input* input, double dt) {}
+	void Name::init() {}
+	void Name::update(Input* input, double dt) {}
 
 	*/
 
@@ -68,10 +68,6 @@ namespace Obj{
 
 	class Baseobject : public Object {
 		using Object::Object;
-
-		void init() override {
-			size = 100;
-		}
 
 		void update(Input* input, double dt) override {
 			if (isdown(BUTTON_W)) position.y += 200. * dt;
