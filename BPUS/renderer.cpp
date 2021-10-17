@@ -125,7 +125,7 @@ draw_image_pixel(Image* image, Vector2Int offset, Vector2Int size, float rotatio
 static Vector2Int
 camOperations(Vector2 point) {
 	point -= camera->position;
-	Vector2 point_diff = (point - camera->middleOfScreen().todouble()) * camera->getZoom();
+	Vector2 point_diff = (point - camera->middleOfScreen().todouble()) * camera->unitInPixel();
 	point = camera->middleOfScreen().todouble() + point_diff;
 
 	return round_vector(point);
@@ -140,10 +140,10 @@ draw_rect(Vector2 p, Vector2 size, u32 color) {
 }
 
 static void
-draw_cir(Vector2 p, int radius, u32 color) {
+draw_cir(Vector2 p, double radius, u32 color) {
 	Vector2Int p0 = camOperations(p);
 
-	draw_cir_pixel(p0, radius * camera->getZoom(), color);
+	draw_cir_pixel(p0, radius * camera->unitInPixel(), color);
 }
 
 static void
@@ -210,10 +210,10 @@ draw_image(Image* image, Vector2 p, float scale, float rotation, Vector2 pivot) 
 	Vector2Int pos = camOperations(p);
 	Vector2Int pivint = camOperations(pivot);
 
-	if (outside_screen(pos.todouble(), Vector2(image->w * scale * camera->getZoom(), image->h * scale * camera->getZoom()))) return;
+	if (outside_screen(pos.todouble(), Vector2(image->w * scale * camera->unitInPixel(), image->h * scale * camera->unitInPixel()))) return;
 	
 	// Calculate how many pixels is 1 unit
-	draw_image_pixel(image, pos, round_vector(Vector2(scale, scale) * camera->getZoom()), rotation, pivint);
+	draw_image_pixel(image, pos, round_vector(Vector2(scale, scale) * camera->unitInPixel()), rotation, pivint);
 }
 
 static void
@@ -237,10 +237,10 @@ static void
 render() {
 	draw_background(0x000011);
 
-	draw_rect(Vector2(300, 100), Vector2(100, 300), 0xAA0055);
-	draw_tri(Vector2(100, 100), Vector2(200, 150), Vector2(180, 250), 0x00AA55);
-	draw_cir(Vector2(300, 100), 50, 0x55AA00);
-	draw_text(Vector2(500, 200), "The Quick Brown Fox Jumps Over The Lazy Dog\nTHE QUICK BROWN FOX JUMPS OVER THE LAZY DOG\nthe quick brown fox jumps over the lazy dog", 2.5f);
+	draw_rect(Vector2(3, 1), Vector2(1, 3), 0xAA0055);
+	draw_tri(Vector2(1, 1), Vector2(2, 1.5), Vector2(1.8, 2.5), 0x00AA55);
+	draw_cir(Vector2(3, 1), 0.5, 0x55AA00);
+	draw_text(Vector2(5, 2), "The Quick Brown Fox Jumps Over The Lazy Dog\nTHE QUICK BROWN FOX JUMPS OVER THE LAZY DOG\nthe quick brown fox jumps over the lazy dog", .025f);
 
 	draw_objects();
 }

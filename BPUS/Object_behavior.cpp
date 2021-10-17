@@ -39,17 +39,17 @@ namespace Obj{
 		using Object::Object;
 
 	private:
-		float zoom = 1;
+		float zoom = 10;
 
 	public:
 		void update(Input* input, double dt) override {
-			if (isdown(BUTTON_UP)) position.y += 50. * dt;
-			if (isdown(BUTTON_DOWN)) position.y -= 50. * dt;
-			if (isdown(BUTTON_LEFT)) position.x -= 50. * dt;
-			if (isdown(BUTTON_RIGHT)) position.x += 50. * dt;
+			if (isdown(BUTTON_UP)) position.y += 2. * dt;
+			if (isdown(BUTTON_DOWN)) position.y -= 2. * dt;
+			if (isdown(BUTTON_LEFT)) position.x -= 2. * dt;
+			if (isdown(BUTTON_RIGHT)) position.x += 2. * dt;
 
-			if (isdown(BUTTON_SHIFT)) setZoom(zoom + 1 * dt);
-			if (isdown(BUTTON_CTRL)) setZoom(zoom - 1 * dt);
+			if (isdown(BUTTON_SHIFT)) setZoom(zoom - 5 * dt);
+			if (isdown(BUTTON_CTRL)) setZoom(zoom + 5 * dt);
 		}
 
 		// Setter
@@ -62,12 +62,13 @@ namespace Obj{
 		}
 
 		Vector2Int middleOfScreen() {
+			// Both values are bitshifted left, this halfs the values.
 			return Vector2Int(renderState.width >> 1, renderState.height >> 1);
 		}
 
-		int unitInPixel(double units) {
+		double unitInPixel() {
 			//return (int)floor(units * zoom);
-			return (int)floor((renderState.height / zoom) * units);
+			return renderState.height / zoom;
 		}
 	};
 
@@ -75,16 +76,16 @@ namespace Obj{
 		using Object::Object;
 
 		void update(Input* input, double dt) override {
-			if (isdown(BUTTON_W)) position.y += 200. * dt;
-			if (isdown(BUTTON_A)) position.x -= 200. * dt;
-			if (isdown(BUTTON_S)) position.y -= 200. * dt;
-			if (isdown(BUTTON_D)) position.x += 200. * dt;
+			if (isdown(BUTTON_W)) position.y += 1. * dt;
+			if (isdown(BUTTON_A)) position.x -= 1. * dt;
+			if (isdown(BUTTON_S)) position.y -= 1. * dt;
+			if (isdown(BUTTON_D)) position.x += 1. * dt;
 
 			if (isdown(BUTTON_Q)) rotation += 1 * dt;
 			if (isdown(BUTTON_E)) rotation -= 1 * dt;
 
-			if (isdown(BUTTON_NUMPAD_8)) size += 200 * dt;
-			if (isdown(BUTTON_NUMPAD_2)) size -= 200 * dt;
+			if (isdown(BUTTON_NUMPAD_8)) size += 1 * dt;
+			if (isdown(BUTTON_NUMPAD_2)) size -= 1 * dt;
 		}
 	};
 
