@@ -23,7 +23,7 @@ private:
 public:
 	BPUS_Game() {
 		// Camera
-		camera = new Obj::Camera(Vector2(-626, -337.5), &empty, 1.f);
+		camera = new Obj::Camera(Vector2(5, 2.5), &empty, 1.f);
 		Obj_M::create(camera);
 
 		//obj = new Obj::Empty(Vector2(0, 0), &test, 200.f);
@@ -46,7 +46,7 @@ public:
 
 		// Debug
 		std::string debug = obj2->position.str() + std::to_string(obj2->size);
-		draw_text(Vector2(1, 4), debug.c_str(), .05f);
+		draw_text(Vector2(1, 0), debug.c_str(), .05f);
 
 		//sendData();
 	}

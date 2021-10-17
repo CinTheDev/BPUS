@@ -39,7 +39,7 @@ namespace Obj{
 		using Object::Object;
 
 	private:
-		float zoom = 10;
+		float zoom = 8;
 
 	public:
 		void update(Input* input, double dt) override {

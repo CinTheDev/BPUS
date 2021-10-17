@@ -125,7 +125,7 @@ draw_image_pixel(Image* image, Vector2Int offset, Vector2Int size, float rotatio
 static Vector2Int
 camOperations(Vector2 point) {
 	point -= camera->position;
-	Vector2 point_diff = (point - camera->middleOfScreen().todouble()) * camera->unitInPixel();
+	Vector2 point_diff = point * camera->unitInPixel();
 	point = camera->middleOfScreen().todouble() + point_diff;
 
 	return round_vector(point);
@@ -229,7 +229,8 @@ static void
 draw_objects() {
 	for (unsigned int i = 0; i < Obj_M::objects.size(); i++) {
 		Object o = *Obj_M::objects[i];
-		draw_image(o);
+		// Only draw when image is not empty
+		if (o.image->w > 0) draw_image(o);
 	}
 }
 
