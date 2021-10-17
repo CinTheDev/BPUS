@@ -59,29 +59,6 @@ draw_cir_pixel(Vector2Int p, int radius, u32 color) {
 	}
 }
 
-// Formula from https://math.stackexchange.com/questions/432902/how-to-get-the-radius-of-an-ellipse-at-a-specific-angle-by-knowing-its-semi-majo
-// Also performance is terrible
-bool inside_oval(Vector2Int l, Vector2Int axis) {
-	double angle = atan2(l.y, l.x);
-	double nom = (double)axis.x * (double)axis.y;
-	double den = sqrt(pow(axis.x, 2) * pow(sin(angle), 2) + pow(axis.y, 2) * pow(cos(angle), 2));
-	double r = nom / den;
-	return l.sqrlen() <= r*r;
-}
-
-static void
-draw_oval_pixel(Vector2Int p, Vector2Int radius, u32 color) {
-	for (int y = p.y - radius.y; y < p.y + radius.y; y++) {
-		if (y >= renderState.height || y <= 0) continue;
-		u32* pixel = (u32*)renderState.memory + p.x + y * renderState.width;
-		for (int x = p.x - radius.x; x < p.x + radius.x; x++) {
-			Vector2Int l = Vector2Int(x, y) - p;
-			if (inside_oval(l, radius) && !(x >= renderState.width || x <= 0)) *pixel++ = color;
-			else pixel++;
-		}
-	}
-}
-
 // sign_tri and draw_tri_pixel from https://stackoverflow.com/questions/2049582/how-to-determine-if-a-point-is-in-a-2d-triangle
 int sign_tri(Vector2Int p0, Vector2Int p1, Vector2Int p2) {
 	return (p0.x - p2.x) * (p1.y - p2.y) - (p1.x - p2.x) * (p0.y - p2.y);
@@ -167,15 +144,6 @@ draw_cir(Vector2 p, int radius, u32 color) {
 	Vector2Int p0 = camOperations(p);
 
 	draw_cir_pixel(p0, radius * camera->getZoom(), color);
-}
-
-static void
-draw_oval(Vector2 p, Vector2Int size, u32 color) {
-	// Didn't feel like implementing camera operations
-	p -= camera->position;
-	Vector2Int p0 = round_vector(p);
-
-	draw_oval_pixel(p0, size, color);
 }
 
 static void

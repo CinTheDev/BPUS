@@ -64,6 +64,11 @@ namespace Obj{
 		Vector2Int middleOfScreen() {
 			return Vector2Int(renderState.width >> 1, renderState.height >> 1);
 		}
+
+		int unitInPixel(double units) {
+			//return (int)floor(units * zoom);
+			return (int)floor((renderState.height / zoom) * units);
+		}
 	};
 
 	class Baseobject : public Object {
