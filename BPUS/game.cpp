@@ -1,6 +1,6 @@
 Image empty(0, 0, 0);
-Image test("test2.jpg");
-Image alphatest("test3.png");
+Image test("Assets\\Images\\test2.jpg");
+Image alphatest("Assets\\Images\\test3.png");
 
 Obj::Empty* obj;
 Obj::Baseobject* obj2;
@@ -8,6 +8,9 @@ Obj::Baseobject* obj2;
 class BPUS_Game{
 	// Networking has been removed for now
 	// https://www.youtube.com/watch?v=f_1lt9pfaEo has everything important
+private:
+	std::vector<Image*> images;
+
 public:
 	BPUS_Game() {
 		// Camera
