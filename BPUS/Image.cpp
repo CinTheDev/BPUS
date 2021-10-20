@@ -7,7 +7,6 @@
 #include <stb_image.h>
 #include <stb_image_write.h>
 #include <stdexcept>
-//#include "utils.cpp"
 
 Image::Image() {
 	w = 0;
@@ -95,6 +94,8 @@ u32 Image::getPixel(int x, int y, u32 color) {
 
 u32 Image::getPixel(Vector2Int p, u32 color) {
 	int index = size - w * channels - p.y * channels * w + p.x * channels;
+
+	if (outside(0, p.x, w) || outside(0, p.y, h) || index >= size) return color;
 
 	u32 rgb[] = {
 		(u32)data[index],

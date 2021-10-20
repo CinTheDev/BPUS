@@ -95,6 +95,11 @@ static void
 draw_image_pixel(Image* image, Vector2Int offset, Vector2Int size, float rotation, Vector2Int pivot) {
 	// Define and round image sizes
 	Vector2Int offset2 = size + offset;
+
+	Vector2 length = Vector2(size.len(), size.len());
+	Vector2 o = (length - size.todouble()) / 2;
+	offset2 = round_vector(length) + offset;
+
 	for (int y = offset.y; y < offset2.y; y++) {
 		// Get pointer to buffer
 		u32* pixel = (u32*)renderState.memory + offset.x + y * renderState.width;
@@ -103,15 +108,9 @@ draw_image_pixel(Image* image, Vector2Int offset, Vector2Int size, float rotatio
 			if (outside_screen(Vector2Int(x, y))) pixel++;
 			else {
 				// Rotate position backwards to get color
-				Vector2Int point = round_vector(pivot.todouble() + (Vector2(x, y) - pivot.todouble()).rotate(-rotation));
-				// If rotated vector is outside image
-				if (point.x - offset.x <= 0 || point.x - offset.x >= size.x
-					|| point.y - offset.y <= 0 || point.y - offset.y >= size.y) {
-					pixel++;
-					continue;
-				}
+				Vector2Int point = round_vector(pivot.todouble() - o + (Vector2(x, y) - o - pivot.todouble()).rotate(-rotation));
 				// Color the pixel and increment buffer
-				Vector2Int pix = round_vector(((point - offset).todouble() / size.todouble()) * Vector2(image->w, image->h));
+				Vector2Int pix = round_vector((((point - offset).todouble() + o) / size.todouble()) * Vector2(image->w, image->h));
 				*pixel++ = image->getPixel(pix.x, pix.y, *pixel);
 			}
 		}
