@@ -25,6 +25,21 @@
     <Filter Include="Quelldateien\Object">
       <UniqueIdentifier>{2ea664d6-ae08-402e-8b19-1aeda7673950}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Quelldateien\Image">
+      <UniqueIdentifier>{58128307-7fea-4012-b989-7d27237f4ec8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\Game">
+      <UniqueIdentifier>{7f5b0bb1-85c1-46d4-95bf-e2dc112926a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\OpenGL">
+      <UniqueIdentifier>{ed9b83cd-95ed-4ecb-ac13-c3eeb252cf9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\OpenGL">
+      <UniqueIdentifier>{a24ed90d-c8c0-4650-af35-5f48647fdf92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ressourcendateien\Shaders">
+      <UniqueIdentifier>{dbe36a29-ac68-4925-bc44-1169a76812f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="win32_platform.cpp">
@@ -36,32 +51,47 @@
     <ClCompile Include="platform_common.cpp">
       <Filter>Ressourcendateien</Filter>
     </ClCompile>
-    <ClCompile Include="game.cpp">
-      <Filter>Ressourcendateien</Filter>
-    </ClCompile>
-    <ClCompile Include="Image.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="Object.cpp">
       <Filter>Quelldateien\Object</Filter>
     </ClCompile>
     <ClCompile Include="Object_Manager.cpp">
       <Filter>Quelldateien\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Object_behavior.cpp">
-      <Filter>Ressourcendateien</Filter>
-    </ClCompile>
     <ClCompile Include="font.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="utils.cpp">
-      <Filter>Ressourcendateien</Filter>
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Image.cpp">
+      <Filter>Quelldateien\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="game.cpp">
+      <Filter>Quelldateien\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Object_behavior.cpp">
+      <Filter>Quelldateien\Game</Filter>
     </ClCompile>
     <ClCompile Include="glad.c">
-      <Filter>Ressourcendateien</Filter>
+      <Filter>Quelldateien\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Ressourcendateien</Filter>
+    </ClCompile>
+    <ClCompile Include="shaderClass.cpp">
+      <Filter>Quelldateien\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="EBO.cpp">
+      <Filter>Quelldateien\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Quelldateien\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="VAO.cpp">
+      <Filter>Quelldateien\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="VBO.cpp">
+      <Filter>Quelldateien\OpenGL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -77,5 +107,28 @@
     <ClInclude Include="hvector.h">
       <Filter>Headerdateien\utils</Filter>
     </ClInclude>
+    <ClInclude Include="shaderClass.h">
+      <Filter>Headerdateien\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="EBO.h">
+      <Filter>Headerdateien\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="VAO.h">
+      <Filter>Headerdateien\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="VBO.h">
+      <Filter>Headerdateien\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Headerdateien\OpenGL</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="default.frag">
+      <Filter>Ressourcendateien\Shaders</Filter>
+    </None>
+    <None Include="default.vert">
+      <Filter>Ressourcendateien\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

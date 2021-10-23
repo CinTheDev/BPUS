@@ -9,6 +9,7 @@
 #include <stdexcept>
 
 Image::Image() {
+	stbi_set_flip_vertically_on_load(true);
 	w = 0;
 	h = 0;
 	channels = 0;
@@ -16,6 +17,7 @@ Image::Image() {
 }
 
 Image::Image(const char* filename) {
+	stbi_set_flip_vertically_on_load(true);
 	if (read(filename)) {
 		size = w * h * channels;
 	}
@@ -25,11 +27,13 @@ Image::Image(const char* filename) {
 }
 
 Image::Image(int w, int h, int channels) : w(w), h(h), channels(channels) {
+	stbi_set_flip_vertically_on_load(true);
 	size = w * h * channels;
 	data = new uint8_t[size];
 }
 
 Image::Image(const Image& img) : Image(img.w, img.h, img.channels) {
+	stbi_set_flip_vertically_on_load(true);
 	memcpy(data, img.data, img.size);
 }
 
