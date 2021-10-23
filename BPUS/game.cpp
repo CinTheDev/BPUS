@@ -1,6 +1,4 @@
 class BPUS_Game{
-	// Networking has been removed for now
-	// https://www.youtube.com/watch?v=f_1lt9pfaEo has everything important
 private:
 #pragma region Images
 	Image empty = Image(0, 0, 0);
