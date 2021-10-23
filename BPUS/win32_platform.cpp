@@ -1,4 +1,4 @@
-#define WIN32_LEAN_AND_MEAN
+/*#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include "utils.cpp"
 
@@ -186,3 +186,4 @@ input.buttons[b].isdown = isdown;\
 		frameBeginTime = frameEndTime;
 	}
 }
+*/
