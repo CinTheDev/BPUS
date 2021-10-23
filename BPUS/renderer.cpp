@@ -2,7 +2,7 @@
 #include "Object_behavior.cpp"
 
 Obj::Camera* camera;
-
+/*
 #pragma region Screen functions
 
 static void
@@ -246,3 +246,4 @@ render() {
 }
 
 #pragma endregion
+*/

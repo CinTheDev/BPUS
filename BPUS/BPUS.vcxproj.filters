@@ -72,9 +72,6 @@
     <ClCompile Include="Object_behavior.cpp">
       <Filter>Quelldateien\Game</Filter>
     </ClCompile>
-    <ClCompile Include="glad.c">
-      <Filter>Quelldateien\OpenGL</Filter>
-    </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Ressourcendateien</Filter>
     </ClCompile>
@@ -92,6 +89,9 @@
     </ClCompile>
     <ClCompile Include="VBO.cpp">
       <Filter>Quelldateien\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="glad.c">
+      <Filter>Ressourcendateien</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

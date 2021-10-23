@@ -1,13 +1,19 @@
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "Image.h"
 
 #include "Texture.h"
 #include "shaderClass.h"
 #include "VAO.h"
 #include "VBO.h"
 #include "EBO.h"
+
+#include "utils.cpp"
+#include "platform_common.cpp"
+#include "renderer.cpp"
+#include "game.cpp"
 
 // Vertices coordinates
 GLfloat vertices[] =
@@ -74,8 +80,26 @@ int main() {
 	Texture popCat("Assets/Images/popcat.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	popCat.texUnit(shaderProgram, "tex0", 0);
 
+	Input input = {};
+
+	float deltatime = 0.16f;
+	LARGE_INTEGER frameBeginTime;
+	QueryPerformanceCounter(&frameBeginTime);
+
+	float performanceFrequency;
+	{
+		LARGE_INTEGER perf;
+		QueryPerformanceFrequency(&perf);
+		performanceFrequency = (float)perf.QuadPart;
+	}
+
+	BPUS_Game* game = new BPUS_Game();
+
 	// Main loop
 	while (!glfwWindowShouldClose(window)) {
+		game->update(&input, deltatime);
+
+		// RENDER
 		// Specify color of background
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -93,6 +117,11 @@ int main() {
 		glfwSwapBuffers(window);
 		// Take care of all GLFW events
 		glfwPollEvents();
+
+		LARGE_INTEGER frameEndTime;
+		QueryPerformanceCounter(&frameEndTime);
+		deltatime = (float)(frameEndTime.QuadPart - frameBeginTime.QuadPart) / performanceFrequency;
+		frameBeginTime = frameEndTime;
 	}
 	
 	// Delete and terminate everything

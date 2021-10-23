@@ -61,15 +61,15 @@ namespace Obj{
 			return zoom;
 		}
 
-		Vector2Int middleOfScreen() {
+		//Vector2Int middleOfScreen() {
 			// Both values are bitshifted left, this halfs the values.
-			return Vector2Int(renderState.width >> 1, renderState.height >> 1);
-		}
+		//	return Vector2Int(renderState.width >> 1, renderState.height >> 1);
+		//}
 
-		double unitInPixel() {
+		//double unitInPixel() {
 			//return (int)floor(units * zoom);
-			return renderState.height / zoom;
-		}
+		//	return renderState.height / zoom;
+		//}
 	};
 
 	class Baseobject : public Object {

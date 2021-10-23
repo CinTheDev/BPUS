@@ -25,10 +25,10 @@ public:
 		Obj_M::objects_update(input, dt);
 
 		// Render
-		render();
+		//render();
 
 		// Debug
-		std::string debug = std::to_string(baseObject->image->w);
-		draw_text(Vector2(1, 0), debug.c_str(), .05f);
+		//std::string debug = std::to_string(baseObject->image->w);
+		//draw_text(Vector2(1, 0), debug.c_str(), .05f);
 	}
 };
