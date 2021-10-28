@@ -42,11 +42,7 @@ int main() {
 	// Get ID of uniform
 	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
 	 // Example texture
-	Texture popCat("Assets/Images/popcat.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
-	popCat.texUnit(shaderProgram, "tex0", 0);
-
-	Obj::Baseobject bso = Obj::Baseobject(Vector2(-0.65, -0.5), &popCat, Vector2(0.6, 1));
-	Obj_M::create(&bso);
+	
 
 	Input input = {};
 
@@ -61,7 +57,7 @@ int main() {
 		performanceFrequency = (float)perf.QuadPart;
 	}
 
-	BPUS_Game* game = new BPUS_Game();
+	BPUS_Game* game = new BPUS_Game(shaderProgram);
 
 	// Main loop
 	while (!glfwWindowShouldClose(window)) {
@@ -72,8 +68,6 @@ int main() {
 		args.shader = &shaderProgram;
 		args.scaleUni = uniID;
 
-		args.testObject = &bso;
-
 		render(args);
 
 		LARGE_INTEGER frameEndTime;
@@ -83,7 +77,6 @@ int main() {
 	}
 	
 	// Delete and terminate everything
-	popCat.Delete();
 	shaderProgram.Delete();
 	glfwDestroyWindow(window);
 	glfwTerminate();

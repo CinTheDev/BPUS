@@ -260,8 +260,6 @@ public:
 	GLFWwindow* window;
 	Shader* shader;
 
-	Object* testObject;
-
 	GLuint scaleUni;
 };
 
@@ -320,41 +318,44 @@ GLfloat* calcVertices(Object* obj) {
 }
 
 static void render(RenderArguments args) {
-	GLfloat* vertices = calcVertices(args.testObject);
-
-	// Generate Vertex Array Object and bind
-	VAO vao;
-	vao.Bind();
-
-	// Generate Vertex Buffer Object and link to vertices
-	VBO vbo(vertices, 32 * sizeof(GLfloat));
-	// Generate Element Buffer Object and link to indices
-	EBO ebo(sqrIndices, sizeof(sqrIndices));
-
-	// Link VBO attributes to VAO
-	vao.LinkAttrib(vbo, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
-	vao.LinkAttrib(vbo, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	vao.LinkAttrib(vbo, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	// Unbind all to prevent accidental modification
-	vao.Unbind();
-	vao.Unbind();
-	ebo.Unbind();
-
 	// Specify color of background
 	glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	args.shader->Activate();
 	glUniform1f(args.scaleUni, 0.0f);
-	args.testObject->image->Bind();
-	vao.Bind();
-	glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+
+	for (int i = 0; i < Obj_M::objects.size(); i++) {
+		GLfloat* vertices = calcVertices(Obj_M::objects[i]);
+
+		// Generate Vertex Array Object and bind
+		VAO vao;
+		vao.Bind();
+
+		// Generate Vertex Buffer Object and link to vertices
+		VBO vbo(vertices, 32 * sizeof(GLfloat));
+		// Generate Element Buffer Object and link to indices
+		EBO ebo(sqrIndices, sizeof(sqrIndices));
+
+		// Link VBO attributes to VAO
+		vao.LinkAttrib(vbo, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
+		vao.LinkAttrib(vbo, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+		vao.LinkAttrib(vbo, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+		// Unbind all to prevent accidental modification
+		vao.Unbind();
+		vao.Unbind();
+		ebo.Unbind();
+
+		Obj_M::objects[i]->image->Bind();
+		vao.Bind();
+		glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+
+		vao.Delete();
+		vbo.Delete();
+		ebo.Delete();
+		delete[] vertices;
+	}
+
 	glfwSwapBuffers(args.window);
-	glfwPollEvents();
-
-	vao.Delete();
-	vbo.Delete();
-	ebo.Delete();
-
-	delete[] vertices;
+	glfwPollEvents();	
 }
