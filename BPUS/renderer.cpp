@@ -263,56 +263,40 @@ public:
 	GLuint scaleUni;
 };
 
-GLfloat* calcVertices(Object* obj) {
-	GLfloat* vertices = new GLfloat[4 * 8];
+GLfloat* sqrCalcVertices(Object* obj) {
+	GLfloat* vertices = new GLfloat[4 * 5];
 
 	// Lower left corner
 	vertices[0] = obj->position.x;
 	vertices[1] = obj->position.y;
 	vertices[2] = 0.0f;
-	// Color
-	vertices[3] = 1.0f;
-	vertices[4] = 0.0f;
-	vertices[5] = 0.0f;
 	// Texture coordinate
-	vertices[6] = 0.0f;
-	vertices[7] = 0.0f;
+	vertices[3] = 0.0f;
+	vertices[4] = 0.0f;
 	
 	// Upper left corner
-	vertices[8] = obj->position.x;
-	vertices[9] = obj->position.y + obj->size.y;
-	vertices[10] = 0.0f;
-	// Color
-	vertices[11] = 0.0f;
-	vertices[12] = 1.0f;
-	vertices[13] = 0.0f;
+	vertices[5] = obj->position.x;
+	vertices[6] = obj->position.y + obj->size.y;
+	vertices[7] = 0.0f;
 	// Texture coordinate
-	vertices[14] = 0.0f;
-	vertices[15] = 1.0f;
+	vertices[8] = 0.0f;
+	vertices[9] = 1.0f;
 	
 	// Upper right corner
-	vertices[16] = obj->position.x + obj->size.x;
-	vertices[17] = obj->position.y + obj->size.y;
-	vertices[18] = 0.0f;
-	// Color
-	vertices[19] = 0.0f;
-	vertices[20] = 0.0f;
-	vertices[21] = 1.0f;
+	vertices[10] = obj->position.x + obj->size.x;
+	vertices[11] = obj->position.y + obj->size.y;
+	vertices[12] = 0.0f;
 	// Texture coordinate
-	vertices[22] = 1.0f;
-	vertices[23] = 1.0f;
+	vertices[13] = 1.0f;
+	vertices[14] = 1.0f;
 
 	// Lower right corner
-	vertices[24] = obj->position.x + obj->size.x;
-	vertices[25] = obj->position.y;
-	vertices[26] = 0.0f;
-	// Color
-	vertices[27] = 1.0f;
-	vertices[28] = 1.0f;
-	vertices[29] = 1.0f;
+	vertices[15] = obj->position.x + obj->size.x;
+	vertices[16] = obj->position.y;
+	vertices[17] = 0.0f;
 	// Texture coordinate
-	vertices[30] = 1.0f;
-	vertices[31] = 0.0f;
+	vertices[18] = 1.0f;
+	vertices[19] = 0.0f;
 
 	return vertices;
 }
@@ -326,21 +310,20 @@ static void render(RenderArguments args) {
 	glUniform1f(args.scaleUni, 0.0f);
 
 	for (int i = 0; i < Obj_M::objects.size(); i++) {
-		GLfloat* vertices = calcVertices(Obj_M::objects[i]);
+		GLfloat* vertices = sqrCalcVertices(Obj_M::objects[i]);
 
 		// Generate Vertex Array Object and bind
 		VAO vao;
 		vao.Bind();
 
 		// Generate Vertex Buffer Object and link to vertices
-		VBO vbo(vertices, 32 * sizeof(GLfloat));
+		VBO vbo(vertices, 20 * sizeof(GLfloat));
 		// Generate Element Buffer Object and link to indices
 		EBO ebo(sqrIndices, sizeof(sqrIndices));
 
 		// Link VBO attributes to VAO
-		vao.LinkAttrib(vbo, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
-		vao.LinkAttrib(vbo, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-		vao.LinkAttrib(vbo, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+		vao.LinkAttrib(vbo, 0, 2, GL_FLOAT, 5 * sizeof(float), (void*)0);
+		vao.LinkAttrib(vbo, 1, 2, GL_FLOAT, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 		// Unbind all to prevent accidental modification
 		vao.Unbind();
 		vao.Unbind();
