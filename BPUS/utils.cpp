@@ -14,6 +14,19 @@ typedef unsigned long long u64;
 #define global_variable static
 
 template <class T>
+inline T* join_array(T* array1, int size1, T* array2, int size2) {
+	T* result = new T[size1 + size2];
+	for (int i = 0; i < size1; i++) {
+		result[i] = array1[i];
+	}
+	for (int i = size1; i < size1 + size2; i++) {
+		result[i] = array2[i - size1];
+	}
+
+	return result;
+}
+
+template <class T>
 inline bool outside(T min, T val, T max) {
 	return (val < min || val > max);
 }

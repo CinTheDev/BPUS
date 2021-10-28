@@ -13,19 +13,16 @@ private:
 public:
 	BPUS_Game() {
 		// Camera
-		camera = new Obj::Camera(Vector2(5, 2.5), &empty, 1.f);
-		Obj_M::create(camera);
+		//camera = new Obj::Camera(Vector2(5, 2.5), &empty, 1.f);
+		//Obj_M::create(camera);
 
-		baseObject = new Obj::Baseobject(Vector2(7, 2.5), &box, 0.5f);
-		baseObject->z = 0;
-		Obj_M::create(baseObject);
+		//baseObject = new Obj::Baseobject(Vector2(7, 2.5), &box, 0.5f);
+		//baseObject->z = 0;
+		//Obj_M::create(baseObject);
 	}
 
 	void update(Input* input, float dt) {
 		Obj_M::objects_update(input, dt);
-
-		// Render
-		//render();
 
 		// Debug
 		//std::string debug = std::to_string(baseObject->image->w);

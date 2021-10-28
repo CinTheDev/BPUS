@@ -247,3 +247,114 @@ render() {
 
 #pragma endregion
 */
+
+// Indices for vertices order of square
+GLuint sqrIndices[] =
+{
+	0, 2, 1, // Upper triangle
+	0, 3, 2, // Lower triangle
+};
+
+struct RenderArguments {
+public:
+	GLFWwindow* window;
+	Shader* shader;
+
+	Object* testObject;
+
+	GLuint scaleUni;
+};
+
+GLfloat* calcVertices(Object* obj) {
+	GLfloat* vertices = new GLfloat[4 * 8];
+
+	// Lower left corner
+	vertices[0] = obj->position.x;
+	vertices[1] = obj->position.y;
+	vertices[2] = 0.0f;
+	// Color
+	vertices[3] = 1.0f;
+	vertices[4] = 0.0f;
+	vertices[5] = 0.0f;
+	// Texture coordinate
+	vertices[6] = 0.0f;
+	vertices[7] = 0.0f;
+	
+	// Upper left corner
+	vertices[8] = obj->position.x;
+	vertices[9] = obj->position.y + obj->size.y;
+	vertices[10] = 0.0f;
+	// Color
+	vertices[11] = 0.0f;
+	vertices[12] = 1.0f;
+	vertices[13] = 0.0f;
+	// Texture coordinate
+	vertices[14] = 0.0f;
+	vertices[15] = 1.0f;
+	
+	// Upper right corner
+	vertices[16] = obj->position.x + obj->size.x;
+	vertices[17] = obj->position.y + obj->size.y;
+	vertices[18] = 0.0f;
+	// Color
+	vertices[19] = 0.0f;
+	vertices[20] = 0.0f;
+	vertices[21] = 1.0f;
+	// Texture coordinate
+	vertices[22] = 1.0f;
+	vertices[23] = 1.0f;
+
+	// Lower right corner
+	vertices[24] = obj->position.x + obj->size.x;
+	vertices[25] = obj->position.y;
+	vertices[26] = 0.0f;
+	// Color
+	vertices[27] = 1.0f;
+	vertices[28] = 1.0f;
+	vertices[29] = 1.0f;
+	// Texture coordinate
+	vertices[30] = 1.0f;
+	vertices[31] = 0.0f;
+
+	return vertices;
+}
+
+static void render(RenderArguments args) {
+	GLfloat* vertices = calcVertices(args.testObject);
+
+	// Generate Vertex Array Object and bind
+	VAO vao;
+	vao.Bind();
+
+	// Generate Vertex Buffer Object and link to vertices
+	VBO vbo(vertices, 32 * sizeof(GLfloat));
+	// Generate Element Buffer Object and link to indices
+	EBO ebo(sqrIndices, sizeof(sqrIndices));
+
+	// Link VBO attributes to VAO
+	vao.LinkAttrib(vbo, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
+	vao.LinkAttrib(vbo, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	vao.LinkAttrib(vbo, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	// Unbind all to prevent accidental modification
+	vao.Unbind();
+	vao.Unbind();
+	ebo.Unbind();
+
+	// Specify color of background
+	glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	args.shader->Activate();
+	glUniform1f(args.scaleUni, 0.0f);
+	args.testObject->image->Bind();
+	vao.Bind();
+	glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+	glfwSwapBuffers(args.window);
+	glfwPollEvents();
+
+	vao.Delete();
+	vbo.Delete();
+	ebo.Delete();
+
+	delete[] vertices;
+}

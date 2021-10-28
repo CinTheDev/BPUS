@@ -84,8 +84,8 @@ namespace Obj{
 			if (isdown(BUTTON_Q)) rotation += 1 * dt;
 			if (isdown(BUTTON_E)) rotation -= 1 * dt;
 
-			if (isdown(BUTTON_NUMPAD_8)) size += 1 * dt;
-			if (isdown(BUTTON_NUMPAD_2)) size -= 1 * dt;
+			//if (isdown(BUTTON_NUMPAD_8)) size += 1 * dt;
+			//if (isdown(BUTTON_NUMPAD_2)) size -= 1 * dt;
 		}
 	};
 

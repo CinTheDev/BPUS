@@ -4,7 +4,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "Texture.h"
 #include "shaderClass.h"
 #include "VAO.h"
 #include "VBO.h"
@@ -14,22 +13,6 @@
 #include "platform_common.cpp"
 #include "renderer.cpp"
 #include "game.cpp"
-
-// Vertices coordinates
-GLfloat vertices[] =
-{ //     COORDINATES     /        COLORS      /   TexCoord  //
-	-0.5f, -0.5f, 0.0f,     1.0f, 0.0f, 0.0f,	0.0f, 0.0f, // Lower left corner
-	-0.5f,  0.5f, 0.0f,     0.0f, 1.0f, 0.0f,	0.0f, 1.0f, // Upper left corner
-	 0.1f,  0.5f, 0.0f,     0.0f, 0.0f, 1.0f,	1.0f, 1.0f, // Upper right corner
-	 0.1f, -0.5f, 0.0f,     1.0f, 1.0f, 1.0f,	1.0f, 0.0f  // Lower right corner
-};
-
-// Indices for vertices order
-GLuint indices[] =
-{
-	0, 2, 1, // Upper triangle
-	0, 3, 2 // Lower triangle
-};
 
 int main() {
 	glfwInit();
@@ -56,29 +39,14 @@ int main() {
 	// Generate default shader
 	Shader shaderProgram("default.vert", "default.frag");
 
-	// Generate Vertex Array Object and bind
-	VAO VAO1;
-	VAO1.Bind();
-
-	// Generate Vertex Buffer Object and link to vertices
-	VBO VBO1(vertices, sizeof(vertices));
-	// Generate Element Buffer Object and link to indices
-	EBO EBO1(indices, sizeof(indices));
-
-	// Link VBO attributes to VAO
-	VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
-	VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	VAO1.LinkAttrib(VBO1, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	// Unbind all to prevent accidental modification
-	VAO1.Unbind();
-	VBO1.Unbind();
-	EBO1.Unbind();
-
 	// Get ID of uniform
 	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
 	 // Example texture
 	Texture popCat("Assets/Images/popcat.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	popCat.texUnit(shaderProgram, "tex0", 0);
+
+	Obj::Baseobject bso = Obj::Baseobject(Vector2(-0.65, -0.5), &popCat, Vector2(0.6, 1));
+	Obj_M::create(&bso);
 
 	Input input = {};
 
@@ -99,24 +67,14 @@ int main() {
 	while (!glfwWindowShouldClose(window)) {
 		game->update(&input, deltatime);
 
-		// RENDER
-		// Specify color of background
-		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-		// Use default shader
-		shaderProgram.Activate();
-		// Assign value to uniform
-		glUniform1f(uniID, 0.5f);
-		// Bind texture
-		popCat.Bind();
-		// Bind VAO
-		VAO1.Bind();
-		// Draw primitives
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		// Swap front and back buffer
-		glfwSwapBuffers(window);
-		// Take care of all GLFW events
-		glfwPollEvents();
+		RenderArguments args = RenderArguments();
+		args.window = window;
+		args.shader = &shaderProgram;
+		args.scaleUni = uniID;
+
+		args.testObject = &bso;
+
+		render(args);
 
 		LARGE_INTEGER frameEndTime;
 		QueryPerformanceCounter(&frameEndTime);
@@ -125,9 +83,6 @@ int main() {
 	}
 	
 	// Delete and terminate everything
-	VAO1.Delete();
-	VBO1.Delete();
-	EBO1.Delete();
 	popCat.Delete();
 	shaderProgram.Delete();
 	glfwDestroyWindow(window);

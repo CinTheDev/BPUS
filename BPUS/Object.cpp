@@ -1,6 +1,6 @@
 #include "Object.h"
 
-Object::Object(Vector2 pos, Image* img, float s, float r) {
+Object::Object(Vector2 pos, Texture* img, Vector2 s, float r) {
 	position = pos;
 	image = img;
 	rotation = r;
@@ -9,16 +9,10 @@ Object::Object(Vector2 pos, Image* img, float s, float r) {
 	centerPivot();
 }
 
-Object::Object(Vector2 pos, Image* img, float s) : Object(pos, img, s, 0) {
+Object::Object(Vector2 pos, Texture* img, Vector2 s) : Object(pos, img, s, 0) {
 }
 
-Object::Object(Vector2 pos, Image* img) : Object(pos, img, 1.f) {
-}
-
-Object::Object(Vector2 pos) : Object(pos, new Image()) {
-}
-
-Object::Object() : Object(Vector2(0, 0)) {
+Object::Object(Vector2 pos, Texture* img) : Object(pos, img, Vector2(1, 1)) {
 }
 
 Object::~Object() {
@@ -33,11 +27,11 @@ bool Object::operator!=(const Object& o) {
 }
 
 void Object::centerPivot() {
-	pivot = Vector2(size / 2, size / 2);
+	pivot = Vector2(size.x / 2, size.y / 2);
 }
 
 Vector2 Object::getPivAbs() {
-	return position + Vector2(size / 2, size / 2);
+	return position + Vector2(size.x / 2, size.y / 2);
 }
 
 void Object::init() {}
