@@ -261,38 +261,61 @@ public:
 	GLuint scaleUni;
 };
 
+Vector2 camOperations(Vector2 point) {
+	point -= camera->position;
+	//Vector2 point_diff = point * camera->unitInPixel();
+	//point = camera->middleOfScreen().todouble() + point_diff;
+
+	return point;
+}
+
 GLfloat* calcObjectVertices(Object* obj) {
 	GLfloat* vertices = new GLfloat[4 * 5];
 
+	Vector2 position = camOperations(obj->position);
+	Vector2 pivot = obj->size / 2;
+	// Lower left
+	Vector2 pos0 = (Vector2(0, 0) - pivot).rotate(obj->rotation);
+	pos0 += position + pivot;
+	// Upper left
+	Vector2 pos1 = (Vector2(-pivot.x, pivot.y)).rotate(obj->rotation);
+	pos1 += position + pivot;
+	// Upper right
+	Vector2 pos2 = (Vector2(0, 0) + pivot).rotate(obj->rotation);
+	pos2 += position + pivot;
+	// Lower right
+	Vector2 pos3 = (Vector2(pivot.x, -pivot.y)).rotate(obj->rotation);
+	pos3 += position + pivot;
+
 	// Lower left corner
-	vertices[0] = obj->position.x;
-	vertices[1] = obj->position.y;
+	vertices[0] = pos0.x;
+	vertices[1] = pos0.y;
 	vertices[2] = 0.0f;
-	// Texture coordinate
+	// Texture coordinates
 	vertices[3] = 0.0f;
 	vertices[4] = 0.0f;
 	
 	// Upper left corner
-	vertices[5] = obj->position.x;
-	vertices[6] = obj->position.y + obj->size.y;
+	vertices[5] = pos1.x;
+	vertices[6] = pos1.y;
 	vertices[7] = 0.0f;
-	// Texture coordinate
+	// Texture coordinates
 	vertices[8] = 0.0f;
 	vertices[9] = 1.0f;
 	
 	// Upper right corner
-	vertices[10] = obj->position.x + obj->size.x;
-	vertices[11] = obj->position.y + obj->size.y;
+	vertices[10] = pos2.x;
+	vertices[11] = pos2.y;
 	vertices[12] = 0.0f;
-	// Texture coordinate
+	// Texture coordinates
 	vertices[13] = 1.0f;
 	vertices[14] = 1.0f;
 
 	// Lower right corner
-	vertices[15] = obj->position.x + obj->size.x;
-	vertices[16] = obj->position.y;
+	vertices[15] = pos3.x;
+	vertices[16] = pos3.y;
 	vertices[17] = 0.0f;
-	// Texture coordinate
+	// Texture coordinates
 	vertices[18] = 1.0f;
 	vertices[19] = 0.0f;
 
@@ -308,6 +331,7 @@ static void render(RenderArguments args) {
 	glUniform1f(args.scaleUni, 0.0f);
 
 	for (int i = 0; i < Obj_M::objects.size(); i++) {
+		if (Obj_M::objects[i]->image == NULL) continue;
 		GLfloat* vertices = calcObjectVertices(Obj_M::objects[i]);
 
 		// Generate Vertex Array Object and bind

@@ -16,7 +16,6 @@ class Object
 public:
 	Vector2 position;
 	Vector2 size;
-	Vector2 pivot;
 	float rotation;
 
 	Texture* image;
@@ -35,6 +34,6 @@ public:
 	virtual void init();
 	virtual void update(UpdateArguments args);
 
-	void centerPivot();
-	Vector2 getPivAbs();
+	//void centerPivot();
+	//Vector2 getPivAbs();
 };
