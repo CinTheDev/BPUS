@@ -23,7 +23,7 @@ int main() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Create window
-	GLFWwindow* window = glfwCreateWindow(1280, 720, "Bad Piggies Ultimate Sandbox", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(1280, 720, "BPUS", NULL, NULL);
 	if (window == NULL) {
 		// If the window fails to create
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -36,13 +36,15 @@ int main() {
 	// Specify viewport of OpenGL
 	glViewport(0, 0, 1280, 720);
 
+	// Enable Alpha
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+
 	// Generate default shader
 	Shader shaderProgram("default.vert", "default.frag");
 
 	// Get ID of uniform
 	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
-	 // Example texture
-	
 
 	Input input = {};
 
