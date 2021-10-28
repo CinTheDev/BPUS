@@ -19,5 +19,5 @@ public:
 
 	static void remove(Object* obj);
 
-	static void objects_update(Input* input, float dt);
+	static void objects_update(UpdateArguments args);
 };

@@ -247,10 +247,8 @@ render() {
 
 #pragma endregion
 */
-
-// Indices for vertices order of square
-GLuint sqrIndices[] =
-{
+// Indices for vertices order of a square
+GLuint sqrIndices[] = {
 	0, 2, 1, // Upper triangle
 	0, 3, 2, // Lower triangle
 };
@@ -263,7 +261,7 @@ public:
 	GLuint scaleUni;
 };
 
-GLfloat* sqrCalcVertices(Object* obj) {
+GLfloat* calcObjectVertices(Object* obj) {
 	GLfloat* vertices = new GLfloat[4 * 5];
 
 	// Lower left corner
@@ -310,7 +308,7 @@ static void render(RenderArguments args) {
 	glUniform1f(args.scaleUni, 0.0f);
 
 	for (int i = 0; i < Obj_M::objects.size(); i++) {
-		GLfloat* vertices = sqrCalcVertices(Obj_M::objects[i]);
+		GLfloat* vertices = calcObjectVertices(Obj_M::objects[i]);
 
 		// Generate Vertex Array Object and bind
 		VAO vao;

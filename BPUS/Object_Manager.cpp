@@ -30,10 +30,10 @@ void Obj_M::destroy(Object* obj, int index) {
 	obj->~Object();
 }
 
-void Obj_M::objects_update(Input* input, float dt) {
+void Obj_M::objects_update(UpdateArguments args) {
 	// Call update for every object
 	for (unsigned int i = 0; i < objects.size(); i++) {
-		objects[i]->update(input, (double)dt);
+		objects[i]->update(args);
 	}
 
 	// Destroy every object that has been flagged

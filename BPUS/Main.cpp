@@ -63,14 +63,19 @@ int main() {
 
 	// Main loop
 	while (!glfwWindowShouldClose(window)) {
-		game->update(&input, deltatime);
+		UpdateArguments upArgs = UpdateArguments();
+		upArgs.window = window;
+		upArgs.input = &input;
+		upArgs.deltaTime = deltatime;
 
-		RenderArguments args = RenderArguments();
-		args.window = window;
-		args.shader = &shaderProgram;
-		args.scaleUni = uniID;
+		game->update(upArgs);
 
-		render(args);
+		RenderArguments reArgs = RenderArguments();
+		reArgs.window = window;
+		reArgs.shader = &shaderProgram;
+		reArgs.scaleUni = uniID;
+
+		render(reArgs);
 
 		LARGE_INTEGER frameEndTime;
 		QueryPerformanceCounter(&frameEndTime);

@@ -4,6 +4,13 @@
 #include "Texture.h"
 #include "platform_common.cpp"
 
+struct UpdateArguments {
+	GLFWwindow* window;
+	Input* input;
+
+	float deltaTime;
+};
+
 class Object
 {
 public:
@@ -26,7 +33,7 @@ public:
 	bool operator!=(const Object& o);
 
 	virtual void init();
-	virtual void update(Input* input, double dt);
+	virtual void update(UpdateArguments args);
 
 	void centerPivot();
 	Vector2 getPivAbs();

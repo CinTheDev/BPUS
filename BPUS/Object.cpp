@@ -36,4 +36,4 @@ Vector2 Object::getPivAbs() {
 
 void Object::init() {}
 
-void Object::update(Input* input, double dt) {}
+void Object::update(UpdateArguments args) {}
