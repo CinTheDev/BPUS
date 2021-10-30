@@ -59,7 +59,7 @@ int main() {
 		performanceFrequency = (float)perf.QuadPart;
 	}
 
-	BPUS_Game* game = new BPUS_Game(shaderProgram);
+	BPUS_Game* game = new BPUS_Game(window, shaderProgram);
 
 	// Main loop
 	while (!glfwWindowShouldClose(window)) {

@@ -265,6 +265,9 @@ Vector2 camOperations(Vector2 point) {
 	point -= camera->position;
 	//Vector2 point_diff = point * camera->unitInPixel();
 	//point = camera->middleOfScreen().todouble() + point_diff;
+	point /= camera->getZoom();
+	//double ratio = (double)camera->getWindowDimensions().y / (double)camera->getWindowDimensions().x;
+	//point.x *= ratio;
 
 	return point;
 }
@@ -273,7 +276,8 @@ GLfloat* calcObjectVertices(Object* obj) {
 	GLfloat* vertices = new GLfloat[4 * 5];
 
 	Vector2 position = camOperations(obj->position);
-	Vector2 pivot = obj->size / 2;
+	Vector2 size = obj->size / camera->getZoom();
+	Vector2 pivot = size / 2;
 	// Lower left
 	Vector2 pos0 = (Vector2(0, 0) - pivot).rotate(obj->rotation);
 	pos0 += position + pivot;
@@ -286,6 +290,12 @@ GLfloat* calcObjectVertices(Object* obj) {
 	// Lower right
 	Vector2 pos3 = (Vector2(pivot.x, -pivot.y)).rotate(obj->rotation);
 	pos3 += position + pivot;
+
+	double ratio = (double)camera->getWindowDimensions().y / (double)camera->getWindowDimensions().x;
+	pos0.x *= ratio;
+	pos1.x *= ratio;
+	pos2.x *= ratio;
+	pos3.x *= ratio;
 
 	// Lower left corner
 	vertices[0] = pos0.x;

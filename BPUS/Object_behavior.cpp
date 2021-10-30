@@ -23,18 +23,11 @@ namespace Obj{
 
 	*/
 
-	class Empty : public Object {
-		using Object::Object;
-
-		void init() override {}
-
-		void update(UpdateArguments args) override {}
-	};
-
 	class Camera : public Object {
 		using Object::Object;
 
 	private:
+		GLFWwindow* window;
 		float zoom = 1;
 
 	public:
@@ -44,32 +37,33 @@ namespace Obj{
 			if (glfwGetKey(args.window, GLFW_KEY_LEFT) == GLFW_PRESS) position.x -= 2. * args.deltaTime;
 			if (glfwGetKey(args.window, GLFW_KEY_RIGHT) == GLFW_PRESS) position.x += 2. * args.deltaTime;
 
-			if (glfwGetKey(args.window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) setZoom(zoom - 5 * args.deltaTime);
-			if (glfwGetKey(args.window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) setZoom(zoom + 5 * args.deltaTime);
+			if (glfwGetKey(args.window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) setZoom(zoom - 1 * args.deltaTime);
+			if (glfwGetKey(args.window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) setZoom(zoom + 1 * args.deltaTime);
 
 			//std::cout << "Visible units on y-axis: " << zoom << std::endl;
 		}
 
+		void setWindow(GLFWwindow* window) {
+			this->window = window;
+		}
+		GLFWwindow* getWindow() {
+			return window;
+		}
+
 		// Setter
 		void setZoom(float value) {
-			zoom = clamp(0.f, value, INFINITY);
+			zoom = clamp(0.1f, value, INFINITY);
 		}
 		// Getter
 		float getZoom() {
 			return zoom;
 		}
 
-		/*Vector2Int middleOfScreen() {
-			// Both values are bitshifted left, this halfs the values.
-			int width = 1280, height = 720;
-			return Vector2Int(width >> 1, height >> 1);
+		Vector2Int getWindowDimensions() {
+			Vector2Int dim;
+			glfwGetWindowSize(window, &dim.x, &dim.y);
+			return dim;
 		}
-
-		double unitInPixel() {
-			//return (int)floor(units * zoom);
-			int height = 720;
-			return height / zoom;
-		}*/
 	};
 
 	class Baseobject : public Object {

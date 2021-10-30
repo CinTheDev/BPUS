@@ -17,6 +17,8 @@ public:
 
 	static void create(Object* obj);
 
+	static Object* create(Vector2 position, Vector2 size, Texture* texture);
+
 	static void remove(Object* obj);
 
 	static void objects_update(UpdateArguments args);
