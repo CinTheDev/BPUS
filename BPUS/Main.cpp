@@ -10,7 +10,6 @@
 #include "EBO.h"
 
 #include "utils.cpp"
-#include "platform_common.cpp"
 #include "renderer.cpp"
 #include "game.cpp"
 
@@ -50,8 +49,6 @@ int main() {
 	// Get ID of uniform
 	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
 
-	Input input = {};
-
 	float deltatime = 0.16f;
 	LARGE_INTEGER frameBeginTime;
 	QueryPerformanceCounter(&frameBeginTime);
@@ -69,7 +66,6 @@ int main() {
 	while (!glfwWindowShouldClose(window)) {
 		UpdateArguments upArgs = UpdateArguments();
 		upArgs.window = window;
-		upArgs.input = &input;
 		upArgs.deltaTime = deltatime;
 
 		game->update(upArgs);

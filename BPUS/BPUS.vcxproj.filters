@@ -42,13 +42,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="win32_platform.cpp">
-      <Filter>Ressourcendateien</Filter>
-    </ClCompile>
     <ClCompile Include="renderer.cpp">
-      <Filter>Ressourcendateien</Filter>
-    </ClCompile>
-    <ClCompile Include="platform_common.cpp">
       <Filter>Ressourcendateien</Filter>
     </ClCompile>
     <ClCompile Include="Object.cpp">
@@ -56,9 +50,6 @@
     </ClCompile>
     <ClCompile Include="Object_Manager.cpp">
       <Filter>Quelldateien\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="font.cpp">
-      <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="utils.cpp">
       <Filter>Quelldateien</Filter>

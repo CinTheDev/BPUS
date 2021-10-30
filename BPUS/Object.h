@@ -2,11 +2,9 @@
 
 //#include "utils.cpp"
 #include "Texture.h"
-#include "platform_common.cpp"
 
 struct UpdateArguments {
 	GLFWwindow* window;
-	Input* input;
 
 	float deltaTime;
 };
