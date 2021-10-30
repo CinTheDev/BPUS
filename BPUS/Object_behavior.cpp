@@ -39,8 +39,6 @@ namespace Obj{
 
 			if (glfwGetKey(args.window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) setZoom(zoom - 1 * args.deltaTime);
 			if (glfwGetKey(args.window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) setZoom(zoom + 1 * args.deltaTime);
-
-			//std::cout << "Visible units on y-axis: " << zoom << std::endl;
 		}
 
 		void setWindow(GLFWwindow* window) {
@@ -77,9 +75,6 @@ namespace Obj{
 
 			if (glfwGetKey(args.window, GLFW_KEY_Q) == GLFW_PRESS) rotation += 1 * args.deltaTime;
 			if (glfwGetKey(args.window, GLFW_KEY_E) == GLFW_PRESS) rotation -= 1 * args.deltaTime;
-			
-			//if (isdown(BUTTON_NUMPAD_8)) size += 1 * dt;
-			//if (isdown(BUTTON_NUMPAD_2)) size -= 1 * dt;
 		}
 	};
 
