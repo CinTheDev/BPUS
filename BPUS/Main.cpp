@@ -22,6 +22,8 @@ int main() {
 
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+	glfwWindowHint(GLFW_SAMPLES, 4);
+	
 	// Create window
 	GLFWwindow* window = glfwCreateWindow(1280, 720, "BPUS", NULL, NULL);
 	if (window == NULL) {
@@ -39,6 +41,8 @@ int main() {
 	// Enable Alpha
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
+
+	glEnable(GL_MULTISAMPLE);
 
 	// Generate default shader
 	Shader shaderProgram("default.vert", "default.frag");
