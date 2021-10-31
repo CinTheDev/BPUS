@@ -19,7 +19,9 @@ public:
 		loadTextures(shader);
 
 		cat = new Object(Vector2(-1.5, -0.5), &popCat);
+		cat->z = 1;
 		bso2 = new Obj::Baseobject(Vector2(0.5, -0.5), &box);
+		bso2->z = 2;
 
 		// Camera
 		camera = new Obj::Camera(Vector2(0, 0), NULL);

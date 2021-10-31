@@ -12,9 +12,6 @@ GLuint sqrIndices[] = {
 struct RenderArguments {
 public:
 	GLFWwindow* window;
-	Shader* shader;
-
-	GLuint scaleUni;
 };
 
 Vector2 camOperations(Vector2 point) {
@@ -89,9 +86,6 @@ static void render(RenderArguments args) {
 	glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	args.shader->Activate();
-	glUniform1f(args.scaleUni, 0.0f);
-
 	for (int i = 0; i < Obj_M::objects.size(); i++) {
 		if (Obj_M::objects[i]->image == NULL) continue;
 		GLfloat* vertices = calcObjectVertices(Obj_M::objects[i]);
@@ -121,6 +115,8 @@ static void render(RenderArguments args) {
 		vbo.Delete();
 		ebo.Delete();
 		delete[] vertices;
+
+		
 	}
 
 	glfwSwapBuffers(args.window);

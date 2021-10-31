@@ -45,9 +45,10 @@ int main() {
 
 	// Generate default shader
 	Shader shaderProgram("default.vert", "default.frag");
+	shaderProgram.Activate();
 
 	// Get ID of uniform
-	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
+	//GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
 
 	float deltatime = 0.16f;
 	LARGE_INTEGER frameBeginTime;
@@ -72,8 +73,6 @@ int main() {
 
 		RenderArguments reArgs = RenderArguments();
 		reArgs.window = window;
-		reArgs.shader = &shaderProgram;
-		reArgs.scaleUni = uniID;
 
 		render(reArgs);
 
