@@ -70,6 +70,7 @@ int main() {
 		upArgs.deltaTime = deltatime;
 
 		game->update(upArgs);
+		Obj_M::objects_update(upArgs);
 
 		RenderArguments reArgs = RenderArguments();
 		reArgs.window = window;
@@ -83,6 +84,7 @@ int main() {
 	}
 	
 	// Delete and terminate everything
+	delete game;
 	shaderProgram.Delete();
 	glfwDestroyWindow(window);
 	glfwTerminate();

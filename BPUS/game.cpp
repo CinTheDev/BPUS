@@ -21,7 +21,7 @@ public:
 		cat = new Object(Vector2(-1.5, -0.5), &popCat);
 		cat->z = 1;
 		bso2 = new Obj::Baseobject(Vector2(0.5, -0.5), &box);
-		bso2->z = 2;
+		bso2->z = 0;
 
 		// Camera
 		camera = new Obj::Camera(Vector2(0, 0), NULL);
@@ -32,7 +32,15 @@ public:
 		Obj_M::create(bso2);
 	}
 
+	~BPUS_Game() {
+		Obj_M::stop();
+		popCat.Delete();
+		box.Delete();
+		delete cat;
+		delete bso2;
+	}
+
 	void update(UpdateArguments args) {
-		Obj_M::objects_update(args);
+		
 	}
 };

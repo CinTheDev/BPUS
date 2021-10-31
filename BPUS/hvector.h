@@ -3,8 +3,7 @@
 #include <string>
 
 struct Vector2 {
-	double x;
-	double y;
+	double x, y;
 
 	Vector2() { x = 0; y = 0; }
 	Vector2(double x, double y) { this->x = x; this->y = y; }
@@ -46,8 +45,7 @@ struct Vector2 {
 };
 
 struct Vector2Int {
-	int x;
-	int y;
+	int x, y;
 
 	Vector2Int() { x = 0; y = 0; }
 	Vector2Int(int x, int y) { this->x = x; this->y = y; }
@@ -79,9 +77,7 @@ struct Vector2Int {
 };
 
 struct Vector3 {
-	double x;
-	double y;
-	double z;
+	double x, y, z;
 
 	Vector3() : x(0), y(0), z(0) {};
 	Vector3(double x, double y, double z) {
@@ -107,9 +103,7 @@ struct Vector3 {
 };
 
 struct Vector3Int {
-	int x;
-	int y;
-	int z;
+	int x, y, z;
 
 	Vector3Int() : x(0), y(0), z(0) {}
 	Vector3Int(int x, int y, int z) {

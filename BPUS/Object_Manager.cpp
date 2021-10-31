@@ -17,14 +17,15 @@ Object* Obj_M::create(Vector2 position, Vector2 size, Texture* texture) {
 }
 
 void Obj_M::remove(Object* obj) {
-	// Flaggs item to remove
+	// Flag item to remove
 	remove_obj.push_back(obj);
 }
 
 void Obj_M::destroy(Object* obj, int index) {
-	// Removes item from list
+	// Remove item from flag list
 	remove_obj.erase(remove_obj.begin() + index);
 
+	// Remove object from actual vector
 	for (unsigned int i = 0; i < objects.size(); i++) {
 		if (objects[i] == obj) {
 			objects.erase(objects.begin() + i);
@@ -46,6 +47,11 @@ void Obj_M::objects_update(UpdateArguments args) {
 		Object* o = remove_obj[i];
 		destroy(o, i);
 	}
+}
+
+void Obj_M::stop() {
+	remove_obj.clear();
+	objects.clear();
 }
 
 #include<algorithm>

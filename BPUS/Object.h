@@ -22,8 +22,6 @@ public:
 	Object(Vector2 pos, Texture* img, Vector2 s, float r);
 	Object(Vector2 pos, Texture* img, Vector2 s);
 	Object(Vector2 pos, Texture* img);
-	Object(Vector2 pos);
-	Object();
 	~Object();
 
 	bool operator==(const Object& o);
@@ -31,7 +29,4 @@ public:
 
 	virtual void init();
 	virtual void update(UpdateArguments args);
-
-	//void centerPivot();
-	//Vector2 getPivAbs();
 };

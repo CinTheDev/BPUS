@@ -6,7 +6,6 @@ Object::Object(Vector2 pos, Texture* img, Vector2 s, float r) {
 	rotation = r;
 	size = s;
 	z = 0;
-	//centerPivot();
 }
 
 Object::Object(Vector2 pos, Texture* img, Vector2 s) : Object(pos, img, s, 0) {
@@ -25,14 +24,6 @@ bool Object::operator==(const Object& o) {
 bool Object::operator!=(const Object& o) {
 	return this != &o;
 }
-
-/*void Object::centerPivot() {
-	pivot = Vector2(size.x / 2, size.y / 2);
-}
-
-Vector2 Object::getPivAbs() {
-	return position + Vector2(size.x / 2, size.y / 2);
-}*/
 
 void Object::init() {}
 

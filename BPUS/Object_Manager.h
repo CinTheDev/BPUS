@@ -22,4 +22,6 @@ public:
 	static void remove(Object* obj);
 
 	static void objects_update(UpdateArguments args);
+
+	static void stop();
 };

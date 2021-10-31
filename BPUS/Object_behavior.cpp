@@ -11,9 +11,9 @@ namespace Obj{
 		using Object::Object;
 		// Variables here
 
-		void init() override;
+		void init() override {}
 
-		void update(UpdateArguments args) override;
+		void update(UpdateArguments args) override {}
 	};
 
 	{...}
