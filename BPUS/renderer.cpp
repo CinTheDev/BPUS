@@ -115,8 +115,6 @@ static void render(RenderArguments args) {
 		vbo.Delete();
 		ebo.Delete();
 		delete[] vertices;
-
-		
 	}
 
 	glfwSwapBuffers(args.window);
