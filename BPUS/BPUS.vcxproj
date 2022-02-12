@@ -29,26 +29,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -72,23 +72,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\CinKM4D\source\repos\BPUS\BPUS\Libraries\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);D:\Libraries\C++\stb_image</IncludePath>
-    <LibraryPath>C:\Users\CinKM4D\source\repos\BPUS\BPUS\Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Libraries\C++\stb_image;C:\Users\Kevin\source\repos\BPUS\BPUS\Libraries\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);D:\Libraries\C++\stb_image</IncludePath>
+    <LibraryPath>C:\Users\Kevin\source\repos\BPUS\BPUS\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\CinKM4D\source\repos\BPUS\BPUS\Libraries\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);D:\Libraries\C++\stb_image</IncludePath>
-    <LibraryPath>C:\Users\CinKM4D\source\repos\BPUS\BPUS\Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Libraries\C++\stb_image;C:\Users\Kevin\source\repos\BPUS\BPUS\Libraries\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);D:\Libraries\C++\stb_image</IncludePath>
+    <LibraryPath>C:\Users\Kevin\source\repos\BPUS\BPUS\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\CinKM4D\source\repos\BPUS\BPUS\Libraries\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);D:\Libraries\C++\stb_image</IncludePath>
-    <LibraryPath>C:\Users\CinKM4D\source\repos\BPUS\BPUS\Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Libraries\C++\stb_image;C:\Users\Kevin\source\repos\BPUS\BPUS\Libraries\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);D:\Libraries\C++\stb_image</IncludePath>
+    <LibraryPath>C:\Users\Kevin\source\repos\BPUS\BPUS\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\CinKM4D\source\repos\BPUS\BPUS\Libraries\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);D:\Libraries\C++\stb_image</IncludePath>
-    <LibraryPath>C:\Users\CinKM4D\source\repos\BPUS\BPUS\Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Libraries\C++\stb_image;C:\Users\Kevin\source\repos\BPUS\BPUS\Libraries\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);D:\Libraries\C++\stb_image</IncludePath>
+    <LibraryPath>C:\Users\Kevin\source\repos\BPUS\BPUS\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
