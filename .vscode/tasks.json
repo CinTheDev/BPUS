@@ -1,0 +1,66 @@
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "C/C++: g++ Aktive Datei kompilieren",
+            "command": "/usr/bin/g++",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "main/main.cpp",
+                "glad.c",
+                //"main/game.cpp",
+
+                //"object/object/object.h",
+                "object/object/object.cpp",
+
+                //"object/object_manager/object_manager.h",
+                "object/object_manager/object_manager.cpp",
+
+                //"object/Object_behavior.cpp",
+
+
+                //"renderer/EBO/EBO.h",
+                "renderer/EBO/EBO.cpp",
+
+                //"renderer/shaderclass/shaderclass.h",
+                "renderer/shaderclass/shaderclass.cpp",
+
+                //"renderer/texture/texture.h",
+                "renderer/texture/texture.cpp",
+
+                //"renderer/VAO/VAO.h",
+                "renderer/VAO/VAO.cpp",
+
+                //"renderer/VBO/VBO.h",
+                "renderer/VBO/VBO.cpp",
+
+                //"renderer/renderer.cpp",
+
+
+                //"utils/image/image.h",
+                "utils/image/image.cpp",
+
+                //"utils/hvector.h",
+                //"utils/utils.cpp",
+
+                "-ldl",
+                "-lglfw",
+                "-o",
+                "BPUS"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Vom Debugger generierte Aufgabe."
+        }
+    ],
+    "version": "2.0.0"
+}
