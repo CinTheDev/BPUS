@@ -26,5 +26,17 @@ bool object::operator!=(const object& o) {
     return this != &o;
 }
 
+void object::addComponent(component* component) {
+    components.push_back(component);
+    component->init();
+}
+
+void object::updateComponents() {
+    for (int i = 0; i < components.size(); i++) {
+        if (!components[i]->enabled) continue;
+        components[i]->update();
+    }
+}
+
 void object::init() {}
 void object::update(updateArguments args) {}
