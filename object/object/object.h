@@ -9,7 +9,7 @@ struct updateArguments {
     float deltatime;
 };
 
-#include "../component/component.h"
+#include "../component.h"
 
 class object {
 private:

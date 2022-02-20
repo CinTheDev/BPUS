@@ -20,6 +20,7 @@ public:
 
         cat = new object(Vector2(-1.5, -0.5), &popCat);
         cat->z = 1;
+        cat->addComponent(new comp::moveRight);
         bso2 = new obj::Baseobject(Vector2(0.5, -0.5), &box);
         bso2->z = 0;
 

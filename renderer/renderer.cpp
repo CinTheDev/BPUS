@@ -1,5 +1,6 @@
 #include "../object/object_manager/object_manager.h"
 #include "../object/Object_behavior.cpp"
+#include "../object/Component_behavior.cpp"
 
 obj::Camera* camera;
 

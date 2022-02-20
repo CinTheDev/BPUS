@@ -28,6 +28,7 @@ bool object::operator!=(const object& o) {
 
 void object::addComponent(component* component) {
     components.push_back(component);
+    component->parent = this;
     component->init();
 }
 

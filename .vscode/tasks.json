@@ -14,13 +14,13 @@
                 //"object/object/object.h",
                 "object/object/object.cpp",
 
-                //"object/component/component.h",
-                //"object/component/component.cpp",
+                //"object/component.h",
 
                 //"object/object_manager/object_manager.h",
                 "object/object_manager/object_manager.cpp",
 
                 //"object/Object_behavior.cpp",
+                //"object/Component_behavior.cpp",
 
 
                 //"renderer/EBO/EBO.h",
