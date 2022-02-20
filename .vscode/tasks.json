@@ -14,6 +14,9 @@
                 //"object/object/object.h",
                 "object/object/object.cpp",
 
+                //"object/component/component.h",
+                //"object/component/component.cpp",
+
                 //"object/object_manager/object_manager.h",
                 "object/object_manager/object_manager.cpp",
 

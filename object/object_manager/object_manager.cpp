@@ -6,7 +6,7 @@ std::vector<object*> obj_m::objects;
 void obj_m::create(object* obj) {
     // Put new object in list
     objects.push_back(obj);
-    obj->init();
+    obj->objectInit();
     lstupdate();
 }
 
@@ -38,7 +38,7 @@ void obj_m::destroy(object* obj, int index) {
 void obj_m::objects_update(updateArguments args) {
     // Call update for every object
     for (unsigned int i = 0; i < objects.size(); i++) {
-        objects[i]->update(args);
+        objects[i]->objectUpdate(args);
     }
 
     // Destroy every object that has been flagged

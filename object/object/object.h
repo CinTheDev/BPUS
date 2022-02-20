@@ -2,7 +2,6 @@
 
 #include <vector>
 #include "../../renderer/texture/texture.h"
-#include "../component/component.h"
 
 struct updateArguments {
     GLFWwindow* window;
@@ -10,7 +9,15 @@ struct updateArguments {
     float deltatime;
 };
 
+#include "../component/component.h"
+
 class object {
+private:
+    void objectInit();
+    void objectUpdate(updateArguments args);
+    
+    friend class obj_m;
+
 public:
     Vector2 position;
     Vector2 size;
@@ -31,7 +38,7 @@ public:
     bool operator!=(const object& o);
 
     void addComponent(component* comp);
-    void updateComponents();
+    void updateComponents(updateArguments args);
 
     virtual void init();
     virtual void update(updateArguments args);

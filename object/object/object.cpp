@@ -31,11 +31,20 @@ void object::addComponent(component* component) {
     component->init();
 }
 
-void object::updateComponents() {
+void object::updateComponents(updateArguments args) {
     for (int i = 0; i < components.size(); i++) {
         if (!components[i]->enabled) continue;
-        components[i]->update();
+        components[i]->update(args);
     }
+}
+
+void object::objectInit() {
+    init();
+}
+void object::objectUpdate(updateArguments args) {
+    updateComponents(args);
+
+    update(args);
 }
 
 void object::init() {}
