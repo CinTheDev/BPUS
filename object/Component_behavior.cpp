@@ -45,11 +45,13 @@ namespace comp {
         }
 
         void update(updateArguments args) override {
+            // using v = a * t
             speed.y += gravity * args.deltatime;
             speed += acceleration * args.deltatime;
 
             // I know Euler's method isn't great, but I'm not smart enough to use better stuff
             //parent->position += speed * args.deltatime;
+            // using s = s0 + v0 * t + 0.5 * a * t²
             parent->position += (speed + acceleration * 0.5 * args.deltatime) * args.deltatime;
         }
     };
