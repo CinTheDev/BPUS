@@ -20,7 +20,12 @@ public:
 
         cat = new object(Vector2(-1.5, -0.5), &popCat);
         cat->z = 1;
-        cat->addComponent(new comp::moveRight);
+        comp::kinematics* kin = new comp::kinematics();
+        kin->speed = Vector2(1, 1);
+        kin->acceleration = Vector2(-0.5, 9.0);
+        cat->addComponent(kin);
+
+
         bso2 = new obj::Baseobject(Vector2(0.5, -0.5), &box);
         bso2->z = 0;
 
