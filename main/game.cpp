@@ -25,7 +25,6 @@ public:
         kin->acceleration = Vector2(-0.5, 9.0);
         cat->addComponent(kin);
 
-
         bso2 = new obj::Baseobject(Vector2(0.5, -0.5), &box);
         bso2->z = 0;
 

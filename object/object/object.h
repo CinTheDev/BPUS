@@ -39,6 +39,7 @@ public:
 
     void addComponent(component* comp);
     void updateComponents(updateArguments args);
+    component* getComponent(const std::type_info* typeinfo);
 
     virtual void init();
     virtual void update(updateArguments args);

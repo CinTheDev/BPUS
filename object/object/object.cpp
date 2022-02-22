@@ -27,6 +27,13 @@ bool object::operator!=(const object& o) {
 }
 
 void object::addComponent(component* component) {
+    // It is not intended to add a component more than once.
+    for (int i = 0; i < components.size(); i++) {
+        if (typeid(*component) == typeid(*components[i])) {
+            std::cout << "Warning: added component \"" << typeid(*component).name() << "\" more than once." << std::endl;
+        }
+    }
+
     components.push_back(component);
     component->parent = this;
     component->init();
@@ -37,6 +44,14 @@ void object::updateComponents(updateArguments args) {
         if (!components[i]->enabled) continue;
         components[i]->update(args);
     }
+}
+
+component* object::getComponent(const std::type_info* typeinfo) {
+    for (int i = 0; i < components.size(); i++) {
+        if (typeid(*components[i]) == *typeinfo) return components[i];
+    }
+
+    return nullptr;
 }
 
 void object::objectInit() {
