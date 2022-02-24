@@ -24,15 +24,15 @@ namespace comp {
     public:
         Vector2 speed = Vector2(); // Speed in m/s (actually units/second but for the sake of physics let's use real units)
         Vector2 acceleration = Vector2(); // in m/s²
-        double mass = 0; // Mass in kg
+        double mass = 1; // Mass in kg
 
         double gravity = -9.81;
 
         // Adds a certain amount of energy to the object (with direction)
         void addForce(Vector2 joules) {
             // using v = sqrt(2W / m)
-            speed.x += sqrt(2 * joules.x / mass);
-            speed.y += sqrt(2 * joules.y / mass);
+            speed.x += sqrt(2 * abs(joules.x) / mass) * sign(joules.x);
+            speed.y += sqrt(2 * abs(joules.y) / mass) * sign(joules.y);
         }
 
         // Sets the acceleration constant, so the force is applied continuously
@@ -52,7 +52,7 @@ namespace comp {
             // I know Euler's method isn't great, but I'm not smart enough to use better stuff
             //parent->position += speed * args.deltatime;
             // using s = s0 + v0 * t + 0.5 * a * t²
-            parent->position += (speed + acceleration * 0.5 * args.deltatime) * args.deltatime;
+            parent->position += speed * args.deltatime;
         }
     };
 }

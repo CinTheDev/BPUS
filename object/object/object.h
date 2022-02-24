@@ -39,7 +39,17 @@ public:
 
     void addComponent(component* comp);
     void updateComponents(updateArguments args);
-    component* getComponent(const std::type_info* typeinfo);
+    //component* getComponent(const std::type_info* typeinfo);
+    // Template functions cannot be defined in the .cpp file, so I did it here
+    template<typename T>
+    T* getComponent() {
+        const std::type_info* info = &typeid(T);
+        for (int i = 0; i < components.size(); i++) {
+            if (typeid(*components[i]) == *info) return (T*)components[i];
+        }
+
+        return nullptr;
+    }
 
     virtual void init();
     virtual void update(updateArguments args);

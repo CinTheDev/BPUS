@@ -22,7 +22,7 @@ public:
         cat->z = 1;
         comp::kinematics* kin = new comp::kinematics();
         kin->speed = Vector2(1, 1);
-        kin->acceleration = Vector2(-0.5, 9.0);
+        kin->acceleration = Vector2(0, 5);
         cat->addComponent(kin);
 
         bso2 = new obj::Baseobject(Vector2(0.5, -0.5), &box);
@@ -46,6 +46,18 @@ public:
     }
 
     void update(updateArguments args) {
-        // h
+        //comp::kinematics* kin = (comp::kinematics*)cat->getComponent(&typeid(comp::kinematics));
+        comp::kinematics* kin = cat->getComponent<comp::kinematics>();
+        if (glfwGetKey(args.window, GLFW_KEY_W)) {
+            kin->addForce(Vector2(0, 2) * args.deltatime);
+        }
+
+        if (glfwGetKey(args.window, GLFW_KEY_A)) {
+            kin->addForce(Vector2(-1, 0) * args.deltatime);
+        }
+
+        if (glfwGetKey(args.window, GLFW_KEY_D)) {
+            kin->addForce(Vector2(1, 0) * args.deltatime);
+        }
     }
 };

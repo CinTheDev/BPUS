@@ -118,6 +118,7 @@ static void render(renderArguments args) {
         delete[] vertices;
     }
 
+	glfwSwapInterval(1);
     glfwSwapBuffers(args.window);
     glfwPollEvents();
 }

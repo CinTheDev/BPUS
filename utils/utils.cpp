@@ -30,6 +30,12 @@ inline T clamp(T min, T val, T max) {
 	if (val > max) return max;
 	return val;
 }
+template <class T>
+inline T sign(T val) {
+	if (val == 0) return 0;
+
+	return val / abs(val);
+}
 
 template <class T>
 inline void swap(T* p1, T* p2) {
