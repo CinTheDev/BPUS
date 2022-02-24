@@ -46,25 +46,6 @@ void object::updateComponents(updateArguments args) {
     }
 }
 
-/*component* object::getComponent(const std::type_info* typeinfo) {
-    for (int i = 0; i < components.size(); i++) {
-        if (typeid(*components[i]) == *typeinfo) return components[i];
-    }
-
-    return nullptr;
-}
-template<typename T>
-T* object::getComponent() {
-    const std::type_info* info = &typeid(T);
-    for (int i = 0; i < components.size(); i++) {
-        if (typeid(*components[i]) == *info) return components[i];
-    }
-
-    return nullptr;
-}
-// Should "cure" the linker problem
-template component* object::getComponent<component>();*/
-
 void object::objectInit() {
     init();
 }
