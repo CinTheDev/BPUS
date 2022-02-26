@@ -3,22 +3,48 @@
 namespace comp {
     class collider : public component {
         // General class used for colliders
+    public:
+        ~collider() {
+            //obj_m::removeCollider(this);
+        }
     };
 
     class collider_line : public collider {
-        // Line shaped collider, mostly used by other components
+    private:
+        Vector2 normal;
+    public:
+        //using collider::~collider();
+
+        Vector2 point1;
+        Vector2 point2;
+
+        void calcNormal() {
+            normal = (point2 - point1).rotate(0.5 * PI).normalized();
+        }
+
+        void init() override {
+            calcNormal();
+        }
+
+        void update(updateArguments args) override {
+
+        }
     };
 
     class collider_rect : public collider {
         // Rectangle shaped collider, mostly used by other components
+    public:
+        //using collider::~collider();
     };
 
     class collider_circle : public collider {
         // Circle shaped collider, mostly used by other components
+    public:
+        //using collider::~collider();
     };
 
-    class kinematics : public component {
-        // Component for everything related to kinematics (movement and acceleration)
+    class dynamics : public component {
+        // Component for everything related to dynamics (movement and acceleration)
         // Can also take advantage of colliders to simulate collisions
     private:
     public:
@@ -41,7 +67,7 @@ namespace comp {
         }
 
         void init() override {
-            // Initialize kinematics
+            // Initialize dynamics
         }
 
         void update(updateArguments args) override {

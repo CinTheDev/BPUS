@@ -2,6 +2,8 @@
 
 #include "hvector.h"
 
+#define PI 3.14159265359
+
 template <class T>
 inline T* join_array(T* array1, int size1, T* array2, int size2) {
 	T* result = new T[size1 + size2];

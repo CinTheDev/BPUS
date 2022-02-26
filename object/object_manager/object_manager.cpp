@@ -2,6 +2,7 @@
 
 std::vector<object*> obj_m::remove_obj;
 std::vector<object*> obj_m::objects;
+std::vector<comp::collider*> obj_m::colliders;
 
 void obj_m::create(object* obj) {
     // Put new object in list
@@ -14,6 +15,19 @@ object* obj_m::create(Vector2 position, Vector2 size, texture* texture) {
     object* obj = new object(position, texture, size);
     create(obj);
     return obj;
+}
+
+void obj_m::registerCollider(comp::collider* coll) {
+    colliders.push_back(coll);
+}
+
+void obj_m::removeCollider(comp::collider* coll) {
+    for (int i = 0; i < colliders.size(); i++) {
+        if (colliders[i] == coll) {
+            colliders.erase(colliders.begin() + i);
+            break;
+        }
+    }
 }
 
 void obj_m::remove(object* obj) {
