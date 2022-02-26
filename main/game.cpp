@@ -25,6 +25,10 @@ public:
         kin->acceleration = Vector2(0, 5);
         cat->addComponent(kin);
 
+        comp::collider* test = new comp::collider();
+        cat->addComponent(test);
+        delete test;
+
         bso2 = new obj::Baseobject(Vector2(0.5, -0.5), &box);
         bso2->z = 0;
 

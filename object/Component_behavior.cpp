@@ -4,8 +4,12 @@ namespace comp {
     class collider : public component {
         // General class used for colliders
     public:
+        void init() override {
+            obj_m::registerCollider(this);
+        }
+
         ~collider() {
-            //obj_m::removeCollider(this);
+            obj_m::removeCollider(this);
         }
     };
 
@@ -13,7 +17,6 @@ namespace comp {
     private:
         Vector2 normal;
     public:
-        //using collider::~collider();
 
         Vector2 point1;
         Vector2 point2;
@@ -24,6 +27,7 @@ namespace comp {
 
         void init() override {
             calcNormal();
+            obj_m::registerCollider(this);
         }
 
         void update(updateArguments args) override {
@@ -34,13 +38,17 @@ namespace comp {
     class collider_rect : public collider {
         // Rectangle shaped collider, mostly used by other components
     public:
-        //using collider::~collider();
+        void init() override {
+            obj_m::registerCollider(this);
+        }
     };
 
     class collider_circle : public collider {
         // Circle shaped collider, mostly used by other components
     public:
-        //using collider::~collider();
+        void init() override {
+            obj_m::registerCollider(this);
+        }
     };
 
     class dynamics : public component {
