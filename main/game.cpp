@@ -25,7 +25,7 @@ public:
         kin->acceleration = Vector2(0, 5);
         cat->addComponent(kin);
 
-        comp::collider_circle* test = new comp::collider_circle();
+        comp::collider_line* test = new comp::collider_line(Vector2(1, 0), Vector2(0, 0));
         test->alias = "This da component ya lookin for";
         cat->addComponent(test);
         delete test;

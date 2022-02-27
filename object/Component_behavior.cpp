@@ -21,6 +21,8 @@ namespace comp {
         Vector2 point1;
         Vector2 point2;
 
+        collider_line(Vector2 p1, Vector2 p2) : point1(p1), point2(p2) {}
+
         void calcNormal() {
             normal = (point2 - point1).rotate(0.5 * PI).normalized();
         }
