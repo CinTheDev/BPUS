@@ -6,6 +6,7 @@ class component {
 public:
     bool enabled = true;
     object* parent;
+    std::string alias;
 
     bool operator==(const component& c) { return this == &c; }
     bool operator!=(const component& c) { return this != &c; }

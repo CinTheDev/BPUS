@@ -25,7 +25,7 @@ void obj_m::removeCollider(comp::collider* coll) {
     for (int i = 0; i < colliders.size(); i++) {
         if (colliders[i] == coll) {
             colliders.erase(colliders.begin() + i);
-            break;
+            return;
         }
     }
 }
