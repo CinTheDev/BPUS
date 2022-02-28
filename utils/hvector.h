@@ -29,6 +29,9 @@ struct Vector2 {
 	double len() { return sqrt(x * x + y * y); }
 	double sqrlen() { return x * x + y * y; }
 
+	static double dot(Vector2 v1, Vector2 v2) { return v1.x * v2.x + v1.y * v2.y; }
+	double dot(Vector2 v) {return x * v.x + y * v.y; }
+
 	Vector2 normalized() {
 		double X = x / len();
 		double Y = y / len();
@@ -71,6 +74,9 @@ struct Vector2Int {
 
 	double len() { return sqrt((double)x * (double)x + (double)y * (double)y); }
 	int sqrlen() { return (double)x * (double)x + (double)y * (double)y; }
+
+	static double dot(Vector2Int v1, Vector2Int v2) { return v1.x * v2.x + v1.y * v2.y; }
+	double dot(Vector2Int v) {return x * v.x + y * v.y; }
 
 	Vector2 todouble() {
 		return Vector2(x, y);
