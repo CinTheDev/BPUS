@@ -37,13 +37,13 @@ namespace comp {
                     if (map_contains(observed_points, p1)) continue;
                     // Add it to the list if it isn't already
                     observed_points.insert({ p1, *p1 + ppos });
-                    std::cout << alias << ": Add point 1 from component " << co->alias << std::endl;
+                    //std::cout << alias << ": Add point 1 from component " << co->alias << std::endl;
                 }
                 // If the first point is not in range but in the list
                 else if (map_contains(observed_points, p1)) {
                     // Remove it from the list
                     observed_points.erase(p1);
-                    std::cout << alias << ": Remove point 1 from component " << co->alias << std::endl;
+                    //std::cout << alias << ": Remove point 1 from component " << co->alias << std::endl;
                 }
 
                 // If the second point is in range
@@ -51,13 +51,13 @@ namespace comp {
                     if (map_contains(observed_points, p2)) continue;
                     // Add it to the list if it isn't already
                     observed_points.insert({ p2, *p2 + ppos });
-                    std::cout << alias << ": Add point 2 from component " << co->alias << std::endl;
+                    //std::cout << alias << ": Add point 2 from component " << co->alias << std::endl;
                 }
                 // If the secind point is not in range but in the list
                 else if (map_contains(observed_points, p2)) {
                     // Remove it from the list
                     observed_points.erase(p2);
-                    std::cout << alias << ": Remove point 2 from component " << co->alias << std::endl;
+                    //std::cout << alias << ": Remove point 2 from component " << co->alias << std::endl;
                 }
             }
         }
@@ -65,6 +65,17 @@ namespace comp {
         void update_LastPositions() {
             for (auto& elem : observed_points) {
                 elem.second = *elem.first;
+            }
+        }
+
+        void collide() {
+            //system("clear");
+            for (auto& elem : observed_points) {
+                Vector2 p1 = *elem.first - point1 - parent->position;
+                Vector2 p2 = elem.second - point1 - parent->position;
+                if (sign(normal.dot(p1) != sign(normal.dot(p2)))) {
+                    //std::cout << alias << ": Probable collision" << std::endl;
+                }
             }
         }
 
@@ -89,6 +100,7 @@ namespace comp {
         }
 
         void update(updateArguments args) override {
+            collide();
             getPointsInRadius(getMidpoint() + parent->position, (point2 - point1).len());
             update_LastPositions();
         }
