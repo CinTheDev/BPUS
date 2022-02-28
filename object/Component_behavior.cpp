@@ -16,6 +16,62 @@ namespace comp {
     class collider_line : public collider {
     private:
         Vector2 normal;
+
+        // First is key, second is last position
+        std::map<Vector2*, Vector2> observed_points;
+
+        void getPointsInRadius(Vector2 pos, double radius) {
+            std::string debug = alias;
+            std::vector<collider*> debug2(obj_m::colliders);
+            for (auto& c : obj_m::colliders) {
+                // Convert to collider_line if possible
+                if (typeid(*c) != typeid(collider_line)) continue;
+                if (c->parent == parent) continue;
+                collider_line* co = (collider_line*)c;
+                Vector2* p1 = &co->point1;
+                Vector2* p2 = &co->point2;
+                Vector2 ppos = co->parent->position;
+                
+                // If the first point is in range
+                if (((*p1 + ppos) - pos).sqrlen() < radius * radius) {
+                    if (map_contains(observed_points, p1)) continue;
+                    // Add it to the list if it isn't already
+                    observed_points.insert({ p1, *p1 + ppos });
+                    std::cout << alias << ": Add point 1 from component " << co->alias << std::endl;
+                }
+                // If the first point is not in range but in the list
+                else if (map_contains(observed_points, p1)) {
+                    // Remove it from the list
+                    observed_points.erase(p1);
+                    std::cout << alias << ": Remove point 1 from component " << co->alias << std::endl;
+                }
+
+                // If the second point is in range
+                if (((*p2 + ppos) - pos).sqrlen() < radius * radius) {
+                    if (map_contains(observed_points, p2)) continue;
+                    // Add it to the list if it isn't already
+                    observed_points.insert({ p2, *p2 + ppos });
+                    std::cout << alias << ": Add point 2 from component " << co->alias << std::endl;
+                }
+                // If the secind point is not in range but in the list
+                else if (map_contains(observed_points, p2)) {
+                    // Remove it from the list
+                    observed_points.erase(p2);
+                    std::cout << alias << ": Remove point 2 from component " << co->alias << std::endl;
+                }
+            }
+        }
+
+        void update_LastPositions() {
+            for (auto& elem : observed_points) {
+                elem.second = *elem.first;
+            }
+        }
+
+        Vector2 getMidpoint() {
+            return (point2 - point1) * 0.5;
+        }
+
     public:
 
         Vector2 point1;
@@ -33,7 +89,8 @@ namespace comp {
         }
 
         void update(updateArguments args) override {
-
+            getPointsInRadius(getMidpoint() + parent->position, (point2 - point1).len());
+            update_LastPositions();
         }
     };
 

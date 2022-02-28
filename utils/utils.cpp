@@ -1,6 +1,8 @@
 #pragma once
 
 #include "hvector.h"
+#include <vector>
+#include <map>
 
 #define PI 3.14159265359
 
@@ -85,4 +87,19 @@ inline T max_array(T arr[], int size) {
 inline Vector2Int
 round_vector(Vector2 vector) {
 	return Vector2Int((int)floor(vector.x), (int)floor(vector.y));
+}
+
+template <class T>
+inline bool vector_contains(std::vector<T> v, T element) {
+	for (auto& elem : v) {
+		if (elem == element) return true;
+	}
+
+	return false;
+}
+
+template <class T, class U>
+inline bool map_contains(std::map<T, U> m, T elem) {
+	if (m.find(elem) == m.end()) return false;
+	return true;
 }

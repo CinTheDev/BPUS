@@ -6,7 +6,7 @@ private:
 #pragma endregion
 #pragma region Objects
     object* cat;
-    obj::Baseobject* bso2;
+    object* bso2;
 #pragma endregion
 
     void loadTextures(shader shdr) {
@@ -18,19 +18,21 @@ public:
     BPUS_game(GLFWwindow* window, shader shdr) {
         loadTextures(shdr);
 
-        cat = new object(Vector2(-1.5, -0.5), &popCat);
+        cat = new object(Vector2(0, -0.5), &popCat);
         cat->z = 1;
         comp::dynamics* kin = new comp::dynamics();
-        kin->speed = Vector2(1, 1);
+        kin->speed = Vector2(0, 4);
         kin->acceleration = Vector2(0, 5);
         cat->addComponent(kin);
 
         comp::collider_line* test = new comp::collider_line(Vector2(1, 0), Vector2(0, 0));
-        test->alias = "This da component ya lookin for";
+        test->alias = "Collider for cat";
         cat->addComponent(test);
-        delete test;
 
-        bso2 = new obj::Baseobject(Vector2(0.5, -0.5), &box);
+        bso2 = new object(Vector2(0, -0.5), &box);
+        test = new comp::collider_line(Vector2(1, 0), Vector2(0, 0));
+        test->alias = "Collider for bso2";
+        bso2->addComponent(test);
         bso2->z = 0;
 
         // Camera
