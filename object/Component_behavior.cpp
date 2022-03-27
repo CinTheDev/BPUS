@@ -15,16 +15,16 @@ namespace comp {
         }
     };
 
-    struct owned_vector2 {
+    /*struct owned_vector2 {
     public:
         component* c;
         Vector2* v;
 
         bool operator<(const owned_vector2& vec) { return *v < *vec.v; }
-    };
+    };*/
 
     class collider_line : public collider {
-    private:
+    /*private:
         Vector2 normal;
 
         // First is key, second is last position
@@ -122,7 +122,7 @@ namespace comp {
         void update(updateArguments args) override {
             getPointsInRadius(getMidpoint() + parent->position, (point2 - point1).len());
             update_LastPositions();
-        }
+        }*/
     };
 
     class collider_rect : public collider {
@@ -136,8 +136,18 @@ namespace comp {
     class collider_circle : public collider {
         // Circle shaped collider, mostly used by other components
     public:
+        float radius;
+        Vector2 offset;
+
         void init() override {
             obj_m::registerCollider(this);
+        }
+
+        Vector2* collide() override {
+            // Circle vs. circle
+            for (auto& c : obj_m::colliders) {
+                
+            }
         }
     };
 
@@ -166,7 +176,7 @@ namespace comp {
             acceleration = newtons / mass;
         }
 
-        void collide() {
+        /*void collide() {
             if (!hitbox) return;
 
             if (typeid(*hitbox) == typeid(collider_line)) {
@@ -180,7 +190,7 @@ namespace comp {
             }
 
             
-        }
+        }*/
 
         void init() override {
             // Initialize dynamics
@@ -189,7 +199,7 @@ namespace comp {
 
         void update(updateArguments args) override {
             // Collision
-            collide();
+            //collide();
 
             // using v = a * t
             speed.y += gravity * args.deltatime;

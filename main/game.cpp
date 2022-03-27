@@ -25,14 +25,14 @@ public:
         kin->acceleration = Vector2(0, 5);
         cat->addComponent(kin);
 
-        comp::collider_line* test = new comp::collider_line(Vector2(1, 0), Vector2(0, 0));
-        test->alias = "Collider for cat";
-        cat->addComponent(test);
+        //comp::collider_line* test = new comp::collider_line(Vector2(1, 0), Vector2(0, 0));
+        //test->alias = "Collider for cat";
+        //cat->addComponent(test);
 
         bso2 = new object(Vector2(0, -0.5), &box);
-        test = new comp::collider_line(Vector2(0.5, 1), Vector2(0.5, 0));
-        test->alias = "Collider for bso2";
-        bso2->addComponent(test);
+        //test = new comp::collider_line(Vector2(0.5, 1), Vector2(0.5, 0));
+        //test->alias = "Collider for bso2";
+        //bso2->addComponent(test);
         bso2->z = 0;
 
         // Camera
