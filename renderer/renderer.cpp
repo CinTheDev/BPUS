@@ -15,6 +15,54 @@ public:
     GLFWwindow* window;
 };
 
+namespace debug {
+	template <class T>
+	struct vectorPair {
+	public:
+		std::vector<T> v1 = std::vector<T>();
+		std::vector<T> v2 = std::vector<T>();
+
+		void add(T val1, T val2) {
+			v1.push_back(val1);
+			v2.push_back(val2);
+		}
+
+		void pop_back(T* val1, T* val2) {
+			if (v1.size() == 0) return;
+			*val1 = v1.back();
+			*val2 = v2.back();
+
+			v1.pop_back();
+			v2.pop_back();
+		}
+
+		
+	};
+
+	vectorPair<Vector2> lines = vectorPair<Vector2>();
+
+	GLfloat* getLineVertices() {
+		// Six values because it defines two positions in 3D space
+		GLfloat* vert = new GLfloat[6];
+		Vector2* v1 = nullptr;
+		Vector2* v2 = nullptr;
+		lines.pop_back(v1, v2);
+		if (v1 == nullptr) {
+			delete v1, v2;
+			delete[] vert;
+			return nullptr;	
+		}
+		vert[0] = v1->x;
+		vert[1] = v1->y;
+		vert[2] = 0;
+		vert[3] = v2->x;
+		vert[4] = v2->y;
+		vert[5] = 0;
+
+		return vert;
+	}
+}
+
 Vector2 camOperations(Vector2 point) {
     point -= camera->position;
     point /= camera->getZoom();
@@ -87,6 +135,7 @@ static void render(renderArguments args) {
     glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
+	// Render objects
     for (unsigned long int i = 0; i < obj_m::objects.size(); i++) {
         if (obj_m::objects[i]->image == NULL) continue;
         GLfloat* vertices = calcObjectVertices(obj_m::objects[i]);
@@ -117,6 +166,18 @@ static void render(renderArguments args) {
         ebo.Delete();
         delete[] vertices;
     }
+
+	// Render lines
+	glEnableClientState(GL_VERTEX_ARRAY);
+	GLfloat* lineVertices = debug::getLineVertices();
+	while (lineVertices != nullptr) {
+		glVertexPointer(3, GL_FLOAT, 0, lineVertices);
+		glDrawArrays(GL_LINES, 0, 2);
+
+		lineVertices = debug::getLineVertices();
+	}
+	delete[] lineVertices;
+	glDisableClientState(GL_VERTEX_ARRAY);
 
 	glfwSwapInterval(1);
     glfwSwapBuffers(args.window);

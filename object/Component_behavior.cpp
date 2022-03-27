@@ -146,8 +146,10 @@ namespace comp {
         Vector2* collide() override {
             // Circle vs. circle
             for (auto& c : obj_m::colliders) {
-                
+
             }
+
+            return nullptr;
         }
     };
 
