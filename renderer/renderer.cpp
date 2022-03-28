@@ -70,32 +70,38 @@ namespace debug {
 
 		Vector2 pos1 = camOperations(*v1);
 		Vector2 pos2 = camOperations(*v2);
+		float angle = atan2((pos2 - pos1).y, (pos2 - pos1).x);
+		float width = 0.003;
+		float offset_x = sin(-angle) * width * 0.5;
+		float offset_y = cos(-angle) * width;
 		//Vector2 pos3 = camOperations(Vector2(0, 0));
 
 		double ratio = (double)camera->getWindowDimensions().y / (double)camera->getWindowDimensions().x;
 		pos1.x *= ratio;
 		pos2.x *= ratio;
+		//Vector2 pos3 = Vector2(pos2.x + sin(angle) * 0.01, pos2.y + cos(angle) * 0.01);
+		//Vector2 pos4 = Vector2(pos1.x + sin(angle) * 0.01, pos1.y + cos(angle) * 0.01);
 
-		vert[0] = pos1.x;
-		vert[1] = pos1.y;
+		vert[0] = pos1.x - offset_x;
+		vert[1] = pos1.y - offset_y;
 		vert[2] = 0;
 		vert[3] = 0;
 		vert[4] = 0;
 
-		vert[5] = pos2.x;
-		vert[6] = pos2.y;
+		vert[5] = pos2.x - offset_x;
+		vert[6] = pos2.y - offset_y;
 		vert[7] = 0;
 		vert[8] = 0;
 		vert[9] = 1;
 
-		vert[10] = pos2.x;
-		vert[11] = pos2.y + 0.01;
+		vert[10] = pos2.x + offset_x;
+		vert[11] = pos2.y + offset_y;
 		vert[12] = 0;
 		vert[13] = 1;
 		vert[14] = 1;
 
-		vert[15] = pos1.x;
-		vert[16] = pos1.y + 0.01;
+		vert[15] = pos1.x + offset_x;
+		vert[16] = pos1.y + offset_y;
 		vert[17] = 0;
 		vert[18] = 1;
 		vert[19] = 0;

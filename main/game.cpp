@@ -67,6 +67,6 @@ public:
             kin->addForce(Vector2(1, 0) * args.deltatime);
         }
 
-        debug::draw_line(Vector2(0, 0), Vector2(2, 0));
+        debug::draw_line(Vector2(0, 0), cat->position);
     }
 };
