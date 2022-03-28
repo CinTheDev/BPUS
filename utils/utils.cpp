@@ -6,6 +6,11 @@
 
 #define PI 3.14159265359
 
+namespace debug {
+	void draw_line(Vector2 pos1, Vector2 pos2);
+	void draw_ray(Vector2 pos, Vector2 dir);
+}
+
 template <class T>
 inline T* join_array(T* array1, int size1, T* array2, int size2) {
 	T* result = new T[size1 + size2];

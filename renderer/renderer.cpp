@@ -10,10 +10,23 @@ GLuint sqrIndices[] = {
     0, 3, 2, // Lower triangle
 };
 
+GLuint lineIndices[] = {
+	0, 2, 1,
+};
+
 struct renderArguments {
 public:
     GLFWwindow* window;
+
+	shader* shaderProgram;
 };
+
+Vector2 camOperations(Vector2 point) {
+    point -= camera->position;
+    point /= camera->getZoom();
+
+    return point;
+}
 
 namespace debug {
 	template <class T>
@@ -27,13 +40,16 @@ namespace debug {
 			v2.push_back(val2);
 		}
 
-		void pop_back(T* val1, T* val2) {
-			if (v1.size() == 0) return;
+		bool pop_back(T* val1, T* val2) {
+			if (v1.size() == 0) return false;
+			auto test = v1.back();
 			*val1 = v1.back();
 			*val2 = v2.back();
 
 			v1.pop_back();
 			v2.pop_back();
+
+			return true;
 		}
 
 		
@@ -43,31 +59,58 @@ namespace debug {
 
 	GLfloat* getLineVertices() {
 		// Six values because it defines two positions in 3D space
-		GLfloat* vert = new GLfloat[6];
-		Vector2* v1 = nullptr;
-		Vector2* v2 = nullptr;
-		lines.pop_back(v1, v2);
-		if (v1 == nullptr) {
+		GLfloat* vert = new GLfloat[20];
+		Vector2* v1 = new Vector2();
+		Vector2* v2 = new Vector2();
+		if (!lines.pop_back(v1, v2)) {
 			delete v1, v2;
 			delete[] vert;
 			return nullptr;	
 		}
-		vert[0] = v1->x;
-		vert[1] = v1->y;
-		vert[2] = 0;
-		vert[3] = v2->x;
-		vert[4] = v2->y;
-		vert[5] = 0;
 
+		Vector2 pos1 = camOperations(*v1);
+		Vector2 pos2 = camOperations(*v2);
+		//Vector2 pos3 = camOperations(Vector2(0, 0));
+
+		double ratio = (double)camera->getWindowDimensions().y / (double)camera->getWindowDimensions().x;
+		pos1.x *= ratio;
+		pos2.x *= ratio;
+
+		vert[0] = pos1.x;
+		vert[1] = pos1.y;
+		vert[2] = 0;
+		vert[3] = 0;
+		vert[4] = 0;
+
+		vert[5] = pos2.x;
+		vert[6] = pos2.y;
+		vert[7] = 0;
+		vert[8] = 0;
+		vert[9] = 1;
+
+		vert[10] = pos2.x;
+		vert[11] = pos2.y + 0.01;
+		vert[12] = 0;
+		vert[13] = 1;
+		vert[14] = 1;
+
+		vert[15] = pos1.x;
+		vert[16] = pos1.y + 0.01;
+		vert[17] = 0;
+		vert[18] = 1;
+		vert[19] = 0;
+
+		delete v1, v2;
 		return vert;
 	}
-}
 
-Vector2 camOperations(Vector2 point) {
-    point -= camera->position;
-    point /= camera->getZoom();
-
-    return point;
+	void draw_line(Vector2 pos1, Vector2 pos2) {
+		lines.add(pos1, pos2);
+		//std::cout << "Draw line at " << pos1.str() << pos2.str() << std::endl;
+	}
+	void draw_ray(Vector2 pos, Vector2 dir) {
+		lines.add(pos, pos + dir);
+	}
 }
 
 GLfloat* calcObjectVertices(object* obj) {
@@ -168,16 +211,36 @@ static void render(renderArguments args) {
     }
 
 	// Render lines
-	glEnableClientState(GL_VERTEX_ARRAY);
 	GLfloat* lineVertices = debug::getLineVertices();
+	GLint col = glGetUniformLocation(args.shaderProgram->ID, "usetex");
+	glUniform1i(col, 0);
 	while (lineVertices != nullptr) {
-		glVertexPointer(3, GL_FLOAT, 0, lineVertices);
-		glDrawArrays(GL_LINES, 0, 2);
+		VAO vao;
+		vao.Bind();
 
+		VBO vbo(lineVertices, 20 * sizeof(GLfloat));
+		EBO ebo(sqrIndices, sizeof(sqrIndices));
+
+		vao.LinkAttrib(vbo, 0, 2, GL_FLOAT, 5 * sizeof(float), (void*)0);
+		vao.LinkAttrib(vbo, 1, 2, GL_FLOAT, 5 * sizeof(float), (void*)(3*sizeof(float)));
+
+		vao.Unbind();
+		vbo.Unbind();
+		ebo.Unbind();
+
+		obj_m::objects[0]->image->Bind();
+		vao.Bind();
+		glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+
+		vao.Delete();
+		vbo.Delete();
+		ebo.Delete();
+
+		delete[] lineVertices;
 		lineVertices = debug::getLineVertices();
 	}
+	glUniform1i(col, 1);
 	delete[] lineVertices;
-	glDisableClientState(GL_VERTEX_ARRAY);
 
 	glfwSwapInterval(1);
     glfwSwapBuffers(args.window);

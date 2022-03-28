@@ -66,6 +66,7 @@ int main() {
 
         renderArguments reArgs = renderArguments();
         reArgs.window = window;
+        reArgs.shaderProgram = &shaderProgram;
 
         render(reArgs);
 
