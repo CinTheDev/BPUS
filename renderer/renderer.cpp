@@ -58,7 +58,7 @@ namespace debug {
 	vectorPair<Vector2> lines = vectorPair<Vector2>();
 
 	GLfloat* getLineVertices() {
-		// Six values because it defines two positions in 3D space
+		// 20 values because it defines 4 positions plus UV coordinates in 3D space
 		GLfloat* vert = new GLfloat[20];
 		Vector2* v1 = new Vector2();
 		Vector2* v2 = new Vector2();
@@ -70,17 +70,17 @@ namespace debug {
 
 		Vector2 pos1 = camOperations(*v1);
 		Vector2 pos2 = camOperations(*v2);
-		float angle = atan2((pos2 - pos1).y, (pos2 - pos1).x);
 		float width = 0.003;
-		float offset_x = sin(-angle) * width * 0.5;
-		float offset_y = cos(-angle) * width;
-		//Vector2 pos3 = camOperations(Vector2(0, 0));
 
 		double ratio = (double)camera->getWindowDimensions().y / (double)camera->getWindowDimensions().x;
 		pos1.x *= ratio;
 		pos2.x *= ratio;
-		//Vector2 pos3 = Vector2(pos2.x + sin(angle) * 0.01, pos2.y + cos(angle) * 0.01);
-		//Vector2 pos4 = Vector2(pos1.x + sin(angle) * 0.01, pos1.y + cos(angle) * 0.01);
+
+		Vector2 diff = (pos2 - pos1).normalized();
+		// Dot product to the y-axis is equivalent to the sin of the angle
+		float offset_x = diff.dot(Vector2(0, 1)) * width * -ratio;
+		// Dot product to the x-axis is equivalent to the cos of the angle
+		float offset_y = diff.dot(Vector2(1, 0)) * width;
 
 		vert[0] = pos1.x - offset_x;
 		vert[1] = pos1.y - offset_y;
