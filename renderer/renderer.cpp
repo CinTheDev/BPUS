@@ -71,7 +71,7 @@ namespace debug {
 		Vector2* v2 = new Vector2();
 		Vector3* color = new Vector3();
 		if (!lines.pop_back(v1, v2, color)) {
-			delete v1, v2;
+			delete v1, v2, color;
 			delete[] vert;
 			return nullptr;	
 		}
@@ -118,7 +118,7 @@ namespace debug {
 		vert[18] = 1;
 		vert[19] = 0;
 
-		delete v1, v2;
+		delete v1, v2, color;
 		return vert;
 	}
 
