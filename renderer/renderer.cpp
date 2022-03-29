@@ -144,7 +144,7 @@ namespace debug {
 	}
 	void draw_ray(Vector2 pos, Vector2 dir) {
 		// Same here, red color as default
-		draw_line(pos, dir, Vector3(1, 0, 0));
+		draw_ray(pos, dir, Vector3(1, 0, 0));
 	}
 
 	void draw_rect(Vector2 pos, Vector2 size, float rotation, Vector3 col) {
@@ -160,10 +160,10 @@ namespace debug {
 		pos2 += pos + size * 0.5;
 		pos3 += pos + size * 0.5;
 
-		lines.add(pos0, pos1, col);
-		lines.add(pos1, pos2, col);
-		lines.add(pos2, pos3, col);
-		lines.add(pos3, pos0, col);
+		draw_line(pos0, pos1, col);
+		draw_line(pos1, pos2, col);
+		draw_line(pos2, pos3, col);
+		draw_line(pos3, pos0, col);
 	}
 	void draw_rect(Vector2 pos, Vector2 size, float rotation) {
 		draw_rect(pos, size, rotation, Vector3(1, 0, 0));
@@ -172,13 +172,21 @@ namespace debug {
 		draw_rect(pos, size, 0);
 	}
 
-	void draw_ellipse(Vector2 pos, Vector2 radius, Vector3 color) {
+	void draw_ellipse(Vector2 pos, Vector2 radius, float rotation, Vector3 color) {
 		int vertices = 32;
 		Vector2* points = distribute_points_across_circle(vertices);
 		for (int i = 0; i < vertices; i++) {
 			int connectIndex = (i + 1)%vertices;
-			lines.add(pos + points[i] * radius, pos + points[connectIndex] * radius, color);
+			draw_line(pos + points[i] * radius, pos + points[connectIndex] * radius, color);
 		}
+		// Draw line to indicate rotation
+		draw_ray(pos, Vector2(cos(rotation), sin(rotation)) * radius, color);
+	}
+	void draw_ellipse(Vector2 pos, Vector2 radius, float rotation) {
+		draw_ellipse(pos, radius, rotation, Vector3(1, 0, 0));
+	}
+	void draw_ellipse(Vector2 pos, Vector2 radius) {
+		draw_ellipse(pos, radius, 0);
 	}
 }
 

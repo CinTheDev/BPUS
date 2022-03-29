@@ -77,6 +77,6 @@ public:
 
         debug::draw_line(Vector2(0, 0), cat->position);
         debug::draw_rect(cat->position, cat->size, cat->rotation, Vector3(0, 1, 0));
-        debug::draw_ellipse(cat->position + cat->size * 0.5, cat->size * 0.5, Vector3(0, 0, 1));
+        debug::draw_ellipse(cat->position + cat->size * 0.5, Vector2(0.5, 0.25), cat->rotation, Vector3(0, 0, 1));
     }
 };
