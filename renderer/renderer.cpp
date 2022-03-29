@@ -34,20 +34,27 @@ namespace debug {
 	public:
 		std::vector<T> v1 = std::vector<T>();
 		std::vector<T> v2 = std::vector<T>();
+		std::vector<Vector3> color = std::vector<Vector3>();
 
-		void add(T val1, T val2) {
+		void add(T val1, T val2, Vector3 col) {
 			v1.push_back(val1);
 			v2.push_back(val2);
+			color.push_back(col);
+			if (col.x > 1 || col.y > 1 || col.z > 1) {
+				std::cout << "WARNING: debug::draw_line: color value is above 1" << std::endl;
+			}
 		}
 
-		bool pop_back(T* val1, T* val2) {
+		bool pop_back(T* val1, T* val2, Vector3* col) {
 			if (v1.size() == 0) return false;
 			auto test = v1.back();
 			*val1 = v1.back();
 			*val2 = v2.back();
+			*col = color.back();
 
 			v1.pop_back();
 			v2.pop_back();
+			color.pop_back();
 
 			return true;
 		}
@@ -57,16 +64,21 @@ namespace debug {
 
 	vectorPair<Vector2> lines = vectorPair<Vector2>();
 
-	GLfloat* getLineVertices() {
+	GLfloat* getLineVertices(renderArguments args) {
 		// 20 values because it defines 4 positions plus UV coordinates in 3D space
 		GLfloat* vert = new GLfloat[20];
 		Vector2* v1 = new Vector2();
 		Vector2* v2 = new Vector2();
-		if (!lines.pop_back(v1, v2)) {
+		Vector3* color = new Vector3();
+		if (!lines.pop_back(v1, v2, color)) {
 			delete v1, v2;
 			delete[] vert;
 			return nullptr;	
 		}
+
+		// Set color
+		GLint coloruni_location = glGetUniformLocation(args.shaderProgram->ID, "debug_color");
+		glUniform4f(coloruni_location, color->x, color->y, color->z, 1.0);
 
 		Vector2 pos1 = camOperations(*v1);
 		Vector2 pos2 = camOperations(*v2);
@@ -111,11 +123,18 @@ namespace debug {
 	}
 
 	void draw_line(Vector2 pos1, Vector2 pos2) {
-		lines.add(pos1, pos2);
-		//std::cout << "Draw line at " << pos1.str() << pos2.str() << std::endl;
+		// Make it a nice, vibrant red as default
+		lines.add(pos1, pos2, Vector3(1, 0, 0));
+	}
+	void draw_line(Vector2 pos1, Vector2 pos2, Vector3 col) {
+		lines.add(pos1, pos2, col);
 	}
 	void draw_ray(Vector2 pos, Vector2 dir) {
-		lines.add(pos, pos + dir);
+		// Same here, red color as default
+		lines.add(pos, pos + dir, Vector3(1, 0, 0));
+	}
+	void draw_ray(Vector2 pos, Vector2 dir, Vector3 col) {
+		lines.add(pos, pos + dir, col);
 	}
 }
 
@@ -217,7 +236,7 @@ static void render(renderArguments args) {
     }
 
 	// Render lines
-	GLfloat* lineVertices = debug::getLineVertices();
+	GLfloat* lineVertices = debug::getLineVertices(args);
 	GLint col = glGetUniformLocation(args.shaderProgram->ID, "usetex");
 	glUniform1i(col, 0);
 	while (lineVertices != nullptr) {
@@ -243,7 +262,7 @@ static void render(renderArguments args) {
 		ebo.Delete();
 
 		delete[] lineVertices;
-		lineVertices = debug::getLineVertices();
+		lineVertices = debug::getLineVertices(args);
 	}
 	glUniform1i(col, 1);
 	delete[] lineVertices;
