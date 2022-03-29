@@ -122,6 +122,16 @@ namespace debug {
 		return vert;
 	}
 
+	Vector2* distribute_points_across_circle(int number) {
+		Vector2* result = new Vector2[number];
+		for (int i = 0; i < number; i++) {
+			float angle = (float)i / number * 2*PI;
+
+			result[i] = Vector2(cos(angle), sin(angle));
+		}
+		return result;
+	}
+
 	void draw_line(Vector2 pos1, Vector2 pos2, Vector3 col) {
 		lines.add(pos1, pos2, col);
 	}
@@ -160,6 +170,15 @@ namespace debug {
 	}
 	void draw_rect(Vector2 pos, Vector2 size) {
 		draw_rect(pos, size, 0);
+	}
+
+	void draw_ellipse(Vector2 pos, Vector2 radius, Vector3 color) {
+		int vertices = 32;
+		Vector2* points = distribute_points_across_circle(vertices);
+		for (int i = 0; i < vertices; i++) {
+			int connectIndex = (i + 1)%vertices;
+			lines.add(pos + points[i] * radius, pos + points[connectIndex] * radius, color);
+		}
 	}
 }
 
