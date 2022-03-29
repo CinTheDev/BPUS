@@ -67,6 +67,15 @@ public:
             kin->addForce(Vector2(1, 0) * args.deltatime);
         }
 
+        if (glfwGetKey(args.window, GLFW_KEY_Q)) {
+            cat->rotation += 0.5 * args.deltatime;
+        }
+
+        if (glfwGetKey(args.window, GLFW_KEY_E)) {
+            cat->rotation -= 0.5 * args.deltatime;
+        }
+
         debug::draw_line(Vector2(0, 0), cat->position);
+        debug::draw_rect(cat->position, cat->size, cat->rotation, Vector3(0, 1, 0));
     }
 };

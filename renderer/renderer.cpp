@@ -122,19 +122,44 @@ namespace debug {
 		return vert;
 	}
 
-	void draw_line(Vector2 pos1, Vector2 pos2) {
-		// Make it a nice, vibrant red as default
-		lines.add(pos1, pos2, Vector3(1, 0, 0));
-	}
 	void draw_line(Vector2 pos1, Vector2 pos2, Vector3 col) {
 		lines.add(pos1, pos2, col);
 	}
-	void draw_ray(Vector2 pos, Vector2 dir) {
-		// Same here, red color as default
-		lines.add(pos, pos + dir, Vector3(1, 0, 0));
+	void draw_line(Vector2 pos1, Vector2 pos2) {
+		// Make it a nice, vibrant red as default
+		draw_line(pos1, pos2, Vector3(1, 0, 0));
 	}
 	void draw_ray(Vector2 pos, Vector2 dir, Vector3 col) {
 		lines.add(pos, pos + dir, col);
+	}
+	void draw_ray(Vector2 pos, Vector2 dir) {
+		// Same here, red color as default
+		draw_line(pos, dir, Vector3(1, 0, 0));
+	}
+
+	void draw_rect(Vector2 pos, Vector2 size, float rotation, Vector3 col) {
+		Vector2 pivot = size*0.5;
+
+		Vector2 pos0 = (Vector2(0, 0) - pivot).rotate(rotation);
+		Vector2 pos1 = (Vector2(-pivot.x, pivot.y)).rotate(rotation);
+		Vector2 pos2 = (Vector2(0, 0) + pivot).rotate(rotation);
+		Vector2 pos3 = (Vector2(pivot.x, -pivot.y)).rotate(rotation);
+
+		pos0 += pos + size * 0.5;
+		pos1 += pos + size * 0.5;
+		pos2 += pos + size * 0.5;
+		pos3 += pos + size * 0.5;
+
+		lines.add(pos0, pos1, col);
+		lines.add(pos1, pos2, col);
+		lines.add(pos2, pos3, col);
+		lines.add(pos3, pos0, col);
+	}
+	void draw_rect(Vector2 pos, Vector2 size, float rotation) {
+		draw_rect(pos, size, rotation, Vector3(1, 0, 0));
+	}
+	void draw_rect(Vector2 pos, Vector2 size) {
+		draw_rect(pos, size, 0);
 	}
 }
 
@@ -267,7 +292,7 @@ static void render(renderArguments args) {
 	glUniform1i(col, 1);
 	delete[] lineVertices;
 
-	glfwSwapInterval(1);
+	//glfwSwapInterval(1);
     glfwSwapBuffers(args.window);
     glfwPollEvents();
 }
