@@ -90,9 +90,9 @@ namespace debug {
 
 		Vector2 diff = (pos2 - pos1).normalized();
 		// Dot product to the y-axis is equivalent to the sin of the angle
-		float offset_x = diff.dot(Vector2(0, 1)) * width * -ratio;
+		float offset_x = diff.y * width * -ratio;
 		// Dot product to the x-axis is equivalent to the cos of the angle
-		float offset_y = diff.dot(Vector2(1, 0)) * width;
+		float offset_y = diff.x * width;
 
 		vert[0] = pos1.x - offset_x;
 		vert[1] = pos1.y - offset_y;
