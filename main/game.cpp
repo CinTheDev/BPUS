@@ -21,28 +21,31 @@ public:
         cat = new object(Vector2(-2, -0.5), &popCat);
         cat->z = 1;
         comp::dynamics* kin = new comp::dynamics();
-        kin->speed = Vector2(0, 0);
-        kin->acceleration = Vector2(0, 9.81);
+        kin->speed = Vector2(0, 10);
+        kin->acceleration = Vector2(0, 0);
+        kin->mass = 10; // This is not a cat anymore, it is a heckin chonker.
         cat->addComponent(kin);
 
         comp::collider_circle* test = new comp::collider_circle(0.5, Vector2(0.5, 0.5));
         test->alias = "Collider for cat";
+        test->bounciness = 0.8;
         cat->addComponent(test);
 
         bso2 = new object(Vector2(0, -0.75), &box);
 
         kin = new comp::dynamics();
         kin->speed = Vector2(0, 0);
-        kin->acceleration = Vector2(0, 9.81);
+        kin->acceleration = Vector2(0, 0);
         bso2->addComponent(kin);
 
         test = new comp::collider_circle(0.5, Vector2(0.5, 0.5));
         test->alias = "Collider for bso2";
+        test->bounciness = 0.5;
         bso2->addComponent(test);
         bso2->z = 0;
 
         for (int i = 0; i < 10; i++) {
-            object* o = new object(Vector2(i - 5, 2), NULL);
+            object* o = new object(Vector2(i - 5, -2), NULL);
             comp::collider_circle* coll = new comp::collider_circle(0.5, Vector2(0.5, 0.5));
             comp::dynamics* dyn = new comp::dynamics();
             dyn->acceleration = Vector2(0, 9.81);
@@ -70,10 +73,9 @@ public:
     }
 
     void update(updateArguments args) {
-        //comp::dynamics* kin = (comp::dynamics*)cat->getComponent(&typeid(comp::dynamics));
         comp::dynamics* kin = cat->getComponent<comp::dynamics>();
         if (glfwGetKey(args.window, GLFW_KEY_W)) {
-            kin->addForce(Vector2(0, 1) * args.deltatime);
+            kin->addForce(Vector2(0, 10) * args.deltatime);
         }
 
         if (glfwGetKey(args.window, GLFW_KEY_A)) {
@@ -95,9 +97,5 @@ public:
         if (glfwGetKey(args.window, GLFW_KEY_E)) {
             cat->rotation -= 0.5 * args.deltatime;
         }
-
-        //debug::draw_line(Vector2(0, 0), cat->position);
-        //debug::draw_rect(cat->position, cat->size, cat->rotation, Vector3(0, 1, 0));
-        //debug::draw_ellipse(cat->position + cat->size * 0.5, Vector2(0.5, 0.5), cat->rotation, Vector3(0, 0, 1));
     }
 };

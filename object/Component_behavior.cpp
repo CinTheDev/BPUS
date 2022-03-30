@@ -3,14 +3,13 @@
 namespace comp {
     class dynamics : public component {
         // Component for everything related to dynamics (movement and acceleration)
-        // Can also take advantage of colliders to simulate collisions
     private:
     public:
-        Vector2 speed = Vector2(); // Speed in m/s (actually units/second but for the sake of physics let's use real units)
+        Vector2 speed = Vector2(); // Speed in m/s (actually units/second but lets use real units for the sake of physics)
         Vector2 acceleration = Vector2(); // in m/s²
         double mass = 1; // Mass in kg
 
-        double gravity = -9.81;
+        const double gravity = -9.81;
 
         //collider* hitbox;
 
@@ -28,12 +27,9 @@ namespace comp {
 
         void init() override {
             // Initialize dynamics
-            //hitbox = parent->getComponent<collider>();
         }
 
         void update(updateArguments args) override {
-            // Collision
-            //collide();
 
             // using v = a * t
             speed.y += gravity * args.deltatime;
@@ -50,6 +46,8 @@ namespace comp {
     protected:
         dynamics* rigidbody;
     public:
+        double bounciness = 1;
+
         virtual bool check_collision() { return false; }
         virtual void resolve_collision(Vector2 collision) {}
 
@@ -228,7 +226,9 @@ namespace comp {
 
         void resolve_collision(comp::collider_circle* target) {
             Vector2 dist = target->parent->position - parent->position;
-            Vector2 point = dist.normalized() * (radius + 0.5*(dist.len() - radius - target->radius));
+            double d = dist.len();
+            dist.normalize();
+            Vector2 point = dist * (radius + 0.5*(d - radius - target->radius));
 
             // Debug
             debug::draw_ray(parent->position + parent->size * 0.5, point * 0.95, Vector3(0, 1, 0));
@@ -236,21 +236,22 @@ namespace comp {
             // Special case: Other object is static
             if (target->rigidbody == nullptr) {
                 // Static resolution on own object
-                parent->position += dist.normalized() * (dist.len() - radius - target->radius);
+                parent->position += dist * (d - radius - target->radius);
 
                 // Dynamic resolution is just flipping the own speed.
-                rigidbody->speed -= dist.normalized() * dist.normalized().dot(rigidbody->speed) * 2;
+                dist *= bounciness;
+                rigidbody->speed -= dist * dist.dot(rigidbody->speed) * (2 / bounciness);
                 
                 return;
             }
 
             // Static resolution
-            parent->position += dist.normalized() * (dist.len() - radius - target->radius) * 0.5;
-            target->parent->position -= dist.normalized() * (dist.len() - radius - target->radius) * 0.5;
+            parent->position += dist * (d - radius - target->radius) * 0.5;
+            target->parent->position -= dist * (d - radius - target->radius) * 0.5;
 
             // Dynamic resolution
             Vector2 k = rigidbody->speed - target->rigidbody->speed;
-            Vector2 n = dist.normalized();
+            Vector2 n = dist;
             double p = 2.0 * n.dot(k) / (rigidbody->mass + target->rigidbody->mass);
 
             rigidbody->speed -= n * p * target->rigidbody->mass;
