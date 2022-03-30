@@ -228,18 +228,33 @@ namespace comp {
 
         void resolve_collision(comp::collider_circle* target) {
             Vector2 dist = target->parent->position - parent->position;
-            Vector2 p = dist.normalized() * (radius + 0.5*(dist.len() - radius - target->radius));
+            Vector2 point = dist.normalized() * (radius + 0.5*(dist.len() - radius - target->radius));
 
             // Debug
-            debug::draw_ray(parent->position + parent->size * 0.5, p * 0.95, Vector3(0, 1, 0));
+            debug::draw_ray(parent->position + parent->size * 0.5, point * 0.95, Vector3(0, 1, 0));
 
-            //Vector2 normal = (parent->position - collision).normalized();
-            //rigidbody->speed -= normal * normal.dot(rigidbody->speed) * 2;
-            //rigidbody->speed *= 0.5;
+            // Special case: Other object is static
+            if (target->rigidbody == nullptr) {
+                // Static resolution on own object
+                parent->position += dist.normalized() * (dist.len() - radius - target->radius);
 
-            // Unelastic resolution
+                // Dynamic resolution is just flipping the own speed.
+                rigidbody->speed -= dist.normalized() * dist.normalized().dot(rigidbody->speed) * 2;
+                
+                return;
+            }
+
+            // Static resolution
             parent->position += dist.normalized() * (dist.len() - radius - target->radius) * 0.5;
             target->parent->position -= dist.normalized() * (dist.len() - radius - target->radius) * 0.5;
+
+            // Dynamic resolution
+            Vector2 k = rigidbody->speed - target->rigidbody->speed;
+            Vector2 n = dist.normalized();
+            double p = 2.0 * n.dot(k) / (rigidbody->mass + target->rigidbody->mass);
+
+            rigidbody->speed -= n * p * target->rigidbody->mass;
+            target->rigidbody->speed += n * p * rigidbody->mass;
         }
     };   
 }

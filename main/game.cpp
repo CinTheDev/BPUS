@@ -25,14 +25,14 @@ public:
         kin->acceleration = Vector2(0, 9.81);
         cat->addComponent(kin);
 
-        comp::collider_circle* test = new comp::collider_circle(1, Vector2(0.5, 0.5));
+        comp::collider_circle* test = new comp::collider_circle(0.5, Vector2(0.5, 0.5));
         test->alias = "Collider for cat";
         cat->addComponent(test);
 
         bso2 = new object(Vector2(0, -0.75), &box);
 
         kin = new comp::dynamics();
-        kin->speed = Vector2(-0.5, 0);
+        kin->speed = Vector2(0, 0);
         kin->acceleration = Vector2(0, 9.81);
         bso2->addComponent(kin);
 
@@ -46,7 +46,7 @@ public:
             comp::collider_circle* coll = new comp::collider_circle(0.5, Vector2(0.5, 0.5));
             comp::dynamics* dyn = new comp::dynamics();
             dyn->acceleration = Vector2(0, 9.81);
-            o->addComponent(dyn);
+            //o->addComponent(dyn);
             o->addComponent(coll);
 
             obj_m::create(o);
