@@ -1,14 +1,61 @@
 #pragma once
 
 namespace comp {
+    class dynamics : public component {
+        // Component for everything related to dynamics (movement and acceleration)
+        // Can also take advantage of colliders to simulate collisions
+    private:
+    public:
+        Vector2 speed = Vector2(); // Speed in m/s (actually units/second but for the sake of physics let's use real units)
+        Vector2 acceleration = Vector2(); // in m/s²
+        double mass = 1; // Mass in kg
+
+        double gravity = -9.81;
+
+        //collider* hitbox;
+
+        // Adds a certain amount of energy to the object (with direction)
+        void addForce(Vector2 joules) {
+            // using v = sqrt(2W / m)
+            speed.x += sqrt(2 * abs(joules.x) / mass) * sign(joules.x);
+            speed.y += sqrt(2 * abs(joules.y) / mass) * sign(joules.y);
+        }
+
+        // Sets the acceleration constant, so the force is applied continuously
+        void setForce(Vector2 newtons) {
+            acceleration = newtons / mass;
+        }
+
+        void init() override {
+            // Initialize dynamics
+            //hitbox = parent->getComponent<collider>();
+        }
+
+        void update(updateArguments args) override {
+            // Collision
+            //collide();
+
+            // using v = a * t
+            speed.y += gravity * args.deltatime;
+            speed += acceleration * args.deltatime;
+
+            // I know Euler's method isn't great, but I'm not smart enough to use better stuff
+            parent->position += speed * args.deltatime;
+        }
+    };
+
+
     class collider : public component {
         // General class used for colliders
+    protected:
+        dynamics* rigidbody;
     public:
         virtual bool check_collision() { return false; }
         virtual void resolve_collision(Vector2 collision) {}
 
         void init() override {
             obj_m::registerCollider(this);
+            rigidbody = parent->getComponent<dynamics>();
         }
 
         ~collider() {
@@ -151,6 +198,7 @@ namespace comp {
 
         void init() override {
             obj_m::registerCollider(this);
+            rigidbody = parent->getComponent<dynamics>();
         }
 
         void update(updateArguments args) override {
@@ -161,6 +209,7 @@ namespace comp {
         }
 
         bool check_collision() override {
+            if (rigidbody == nullptr) return false;
             std::vector<comp::collider_circle*> circles = obj_m::getCollider<comp::collider_circle>();
 
             bool collision = false;
@@ -169,77 +218,28 @@ namespace comp {
                 if (c == this) continue;
 
                 double sqrlen = (c->parent->position - parent->position).sqrlen();
-                if (sqrlen < (radius + c->radius) * (radius + c->radius)) {
-                    Vector2 dist = c->parent->position - parent->position;
-                    resolve_collision((dist.normalized() * (radius + 0.5*(dist.len() - radius - c->radius))));
+                if (sqrlen <= (radius + c->radius) * (radius + c->radius)) {
+                    resolve_collision(c);
                     collision = true;
                 }
             }
             return collision;
         }
 
-        void resolve_collision(Vector2 collision) override {
+        void resolve_collision(comp::collider_circle* target) {
+            Vector2 dist = target->parent->position - parent->position;
+            Vector2 p = dist.normalized() * (radius + 0.5*(dist.len() - radius - target->radius));
+
             // Debug
-            debug::draw_ray(parent->position + parent->size * 0.5, collision * 0.95, Vector3(0, 1, 0));
+            debug::draw_ray(parent->position + parent->size * 0.5, p * 0.95, Vector3(0, 1, 0));
+
+            //Vector2 normal = (parent->position - collision).normalized();
+            //rigidbody->speed -= normal * normal.dot(rigidbody->speed) * 2;
+            //rigidbody->speed *= 0.5;
+
+            // Unelastic resolution
+            parent->position += dist.normalized() * (dist.len() - radius - target->radius) * 0.5;
+            target->parent->position -= dist.normalized() * (dist.len() - radius - target->radius) * 0.5;
         }
-    };
-
-    class dynamics : public component {
-        // Component for everything related to dynamics (movement and acceleration)
-        // Can also take advantage of colliders to simulate collisions
-    private:
-    public:
-        Vector2 speed = Vector2(); // Speed in m/s (actually units/second but for the sake of physics let's use real units)
-        Vector2 acceleration = Vector2(); // in m/s²
-        double mass = 1; // Mass in kg
-
-        double gravity = -9.81;
-
-        collider* hitbox;
-
-        // Adds a certain amount of energy to the object (with direction)
-        void addForce(Vector2 joules) {
-            // using v = sqrt(2W / m)
-            speed.x += sqrt(2 * abs(joules.x) / mass) * sign(joules.x);
-            speed.y += sqrt(2 * abs(joules.y) / mass) * sign(joules.y);
-        }
-
-        // Sets the acceleration constant, so the force is applied continuously
-        void setForce(Vector2 newtons) {
-            acceleration = newtons / mass;
-        }
-
-        /*void collide() {
-            if (!hitbox) return;
-
-            if (typeid(*hitbox) == typeid(collider_line)) {
-                collider_line* hb = (collider_line*)hitbox;
-
-                Vector2* v = hb->collide();
-
-                speed = *v - hb->getNormal() * hb->getNormal().dot(*v) * 2;
-
-                delete v;
-            }
-
-            
-        }*/
-
-        void init() override {
-            // Initialize dynamics
-            hitbox = parent->getComponent<collider>();
-        }
-
-        void update(updateArguments args) override {
-            // Collision
-            //collide();
-
-            // using v = a * t
-            speed.y += gravity * args.deltatime;
-            speed += acceleration * args.deltatime;
-
-            // I know Euler's method isn't great, but I'm not smart enough to use better stuff
-            parent->position += speed * args.deltatime;
-        }
-    };
+    };   
 }

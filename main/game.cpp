@@ -18,11 +18,11 @@ public:
     BPUS_game(GLFWwindow* window, shader shdr) {
         loadTextures(shdr);
 
-        cat = new object(Vector2(0, -0.5), &popCat);
+        cat = new object(Vector2(-2, -0.5), &popCat);
         cat->z = 1;
         comp::dynamics* kin = new comp::dynamics();
         kin->speed = Vector2(0, 0);
-        kin->acceleration = Vector2(0,9.81);
+        kin->acceleration = Vector2(0, 9.81);
         cat->addComponent(kin);
 
         comp::collider_circle* test = new comp::collider_circle(1, Vector2(0.5, 0.5));
@@ -30,10 +30,27 @@ public:
         cat->addComponent(test);
 
         bso2 = new object(Vector2(0, -0.75), &box);
+
+        kin = new comp::dynamics();
+        kin->speed = Vector2(-0.5, 0);
+        kin->acceleration = Vector2(0, 9.81);
+        bso2->addComponent(kin);
+
         test = new comp::collider_circle(0.5, Vector2(0.5, 0.5));
         test->alias = "Collider for bso2";
         bso2->addComponent(test);
         bso2->z = 0;
+
+        for (int i = 0; i < 10; i++) {
+            object* o = new object(Vector2(i - 5, 2), NULL);
+            comp::collider_circle* coll = new comp::collider_circle(0.5, Vector2(0.5, 0.5));
+            comp::dynamics* dyn = new comp::dynamics();
+            dyn->acceleration = Vector2(0, 9.81);
+            o->addComponent(dyn);
+            o->addComponent(coll);
+
+            obj_m::create(o);
+        }
 
         // Camera
         camera = new obj::Camera(Vector2(0, 0), NULL);
