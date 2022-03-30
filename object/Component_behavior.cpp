@@ -4,7 +4,8 @@ namespace comp {
     class collider : public component {
         // General class used for colliders
     public:
-        virtual Vector2* collide() { return nullptr; }
+        virtual bool check_collision() { return false; }
+        virtual void resolve_collision(Vector2 collision) {}
 
         void init() override {
             obj_m::registerCollider(this);
@@ -139,17 +140,47 @@ namespace comp {
         float radius;
         Vector2 offset;
 
+        collider_circle() {
+            radius = 1;
+            offset = Vector2();
+        }
+        collider_circle(float r, Vector2 off) {
+            radius = r;
+            offset = off;
+        }
+
         void init() override {
             obj_m::registerCollider(this);
         }
 
-        Vector2* collide() override {
-            // Circle vs. circle
-            for (auto& c : obj_m::colliders) {
+        void update(updateArguments args) override {
+            // Debug
+            Vector3 color = Vector3(0, 0, 1);
+            if (check_collision()) color = Vector3(1, 0, 0);
+            debug::draw_ellipse(parent->position + offset, Vector2(radius, radius), parent->rotation, color);
+        }
 
+        bool check_collision() override {
+            std::vector<comp::collider_circle*> circles = obj_m::getCollider<comp::collider_circle>();
+
+            bool collision = false;
+
+            for (auto& c : circles) {
+                if (c == this) continue;
+
+                double sqrlen = (c->parent->position - parent->position).sqrlen();
+                if (sqrlen < (radius + c->radius) * (radius + c->radius)) {
+                    Vector2 dist = c->parent->position - parent->position;
+                    resolve_collision((dist.normalized() * (radius + 0.5*(dist.len() - radius - c->radius))));
+                    collision = true;
+                }
             }
+            return collision;
+        }
 
-            return nullptr;
+        void resolve_collision(Vector2 collision) override {
+            // Debug
+            debug::draw_ray(parent->position + parent->size * 0.5, collision * 0.95, Vector3(0, 1, 0));
         }
     };
 

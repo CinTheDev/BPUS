@@ -7,8 +7,19 @@
 #define PI 3.14159265359
 
 namespace debug {
+	void draw_line(Vector2 pos1, Vector2 pos2, Vector3 col);
 	void draw_line(Vector2 pos1, Vector2 pos2);
+
+	void draw_ray(Vector2 pos, Vector2 dir, Vector3 col);
 	void draw_ray(Vector2 pos, Vector2 dir);
+
+	void draw_rect(Vector2 pos, Vector2 size, float rotation, Vector3 col);
+	void draw_rect(Vector2 pos, Vector2 size, float rotation);
+	void draw_rect(Vector2 pos, Vector2 size);
+
+	void draw_ellipse(Vector2 pos, Vector2 radius, float rotation, Vector3 color);
+	void draw_ellipse(Vector2 pos, Vector2 radius, float rotation);
+	void draw_ellipse(Vector2 pos, Vector2 radius);
 }
 
 template <class T>

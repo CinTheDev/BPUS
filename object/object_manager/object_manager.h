@@ -27,6 +27,18 @@ public:
 
     static void removeCollider(comp::collider* coll);
 
+    template<class T>
+    static std::vector<T*> getCollider() {
+        const std::type_info* class_type = &typeid(T);
+        std::vector<T*> result = std::vector<T*>();
+        for (auto& c : obj_m::colliders) {
+            if (typeid(*c) == *class_type) {
+                result.push_back((T*)c);
+            }
+        }
+        return result;
+    }
+
     static void objects_update(updateArguments args);
 
     static void stop();

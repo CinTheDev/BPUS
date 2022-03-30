@@ -21,18 +21,18 @@ public:
         cat = new object(Vector2(0, -0.5), &popCat);
         cat->z = 1;
         comp::dynamics* kin = new comp::dynamics();
-        kin->speed = Vector2(0, 4);
-        kin->acceleration = Vector2(0, 5);
+        kin->speed = Vector2(0, 0);
+        kin->acceleration = Vector2(0,9.81);
         cat->addComponent(kin);
 
-        //comp::collider_line* test = new comp::collider_line(Vector2(1, 0), Vector2(0, 0));
-        //test->alias = "Collider for cat";
-        //cat->addComponent(test);
+        comp::collider_circle* test = new comp::collider_circle(1, Vector2(0.5, 0.5));
+        test->alias = "Collider for cat";
+        cat->addComponent(test);
 
-        bso2 = new object(Vector2(0, -0.5), &box);
-        //test = new comp::collider_line(Vector2(0.5, 1), Vector2(0.5, 0));
-        //test->alias = "Collider for bso2";
-        //bso2->addComponent(test);
+        bso2 = new object(Vector2(0, -0.75), &box);
+        test = new comp::collider_circle(0.5, Vector2(0.5, 0.5));
+        test->alias = "Collider for bso2";
+        bso2->addComponent(test);
         bso2->z = 0;
 
         // Camera
@@ -56,7 +56,7 @@ public:
         //comp::dynamics* kin = (comp::dynamics*)cat->getComponent(&typeid(comp::dynamics));
         comp::dynamics* kin = cat->getComponent<comp::dynamics>();
         if (glfwGetKey(args.window, GLFW_KEY_W)) {
-            kin->addForce(Vector2(0, 2) * args.deltatime);
+            kin->addForce(Vector2(0, 1) * args.deltatime);
         }
 
         if (glfwGetKey(args.window, GLFW_KEY_A)) {
@@ -67,6 +67,10 @@ public:
             kin->addForce(Vector2(1, 0) * args.deltatime);
         }
 
+        if (glfwGetKey(args.window, GLFW_KEY_S)) {
+            kin->addForce(Vector2(0, -1) * args.deltatime);
+        }
+
         if (glfwGetKey(args.window, GLFW_KEY_Q)) {
             cat->rotation += 0.5 * args.deltatime;
         }
@@ -75,8 +79,8 @@ public:
             cat->rotation -= 0.5 * args.deltatime;
         }
 
-        debug::draw_line(Vector2(0, 0), cat->position);
-        debug::draw_rect(cat->position, cat->size, cat->rotation, Vector3(0, 1, 0));
-        debug::draw_ellipse(cat->position + cat->size * 0.5, Vector2(0.5, 0.5), cat->rotation, Vector3(0, 0, 1));
+        //debug::draw_line(Vector2(0, 0), cat->position);
+        //debug::draw_rect(cat->position, cat->size, cat->rotation, Vector3(0, 1, 0));
+        //debug::draw_ellipse(cat->position + cat->size * 0.5, Vector2(0.5, 0.5), cat->rotation, Vector3(0, 0, 1));
     }
 };
