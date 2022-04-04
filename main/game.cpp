@@ -40,7 +40,7 @@ public:
 
         test = new comp::collider_circle(0.5, Vector2(0.5, 0.5));
         test->alias = "Collider for bso2";
-        test->bounciness = 0.5;
+        test->bounciness = 0.8;
         bso2->addComponent(test);
         bso2->z = 0;
 
