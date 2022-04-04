@@ -23,7 +23,7 @@ public:
         comp::dynamics* kin = new comp::dynamics();
         kin->speed = Vector2(0, 10);
         kin->acceleration = Vector2(0, 0);
-        kin->mass = 10; // This is not a cat anymore, it is a heckin chonker.
+        kin->mass = 1;
         cat->addComponent(kin);
 
         comp::collider_circle* test = new comp::collider_circle(0.5, Vector2(0.5, 0.5));
@@ -44,19 +44,14 @@ public:
         bso2->addComponent(test);
         bso2->z = 0;
 
-        for (int i = 0; i < 10; i++) {
-            object* o = new object(Vector2(i - 5, -2), NULL);
-            comp::collider_circle* coll = new comp::collider_circle(0.5, Vector2(0.5, 0.5));
-            comp::dynamics* dyn = new comp::dynamics();
-            dyn->acceleration = Vector2(0, 9.81);
-            //o->addComponent(dyn);
-            o->addComponent(coll);
-
-            obj_m::create(o);
-        }
+        object* floor = new object();
+        comp::collider_line* floorCollider = new comp::collider_line(Vector2(-5, -1.5), Vector2(5, -1.5));
+        floor->addComponent(floorCollider);
+        obj_m::create(floor);
 
         // Camera
         camera = new obj::Camera(Vector2(0, 0), NULL);
+        camera->setZoom(3);
         camera->setWindow(window);
         obj_m::create(camera);
 
@@ -75,15 +70,15 @@ public:
     void update(updateArguments args) {
         comp::dynamics* kin = cat->getComponent<comp::dynamics>();
         if (glfwGetKey(args.window, GLFW_KEY_W)) {
-            kin->addForce(Vector2(0, 25) * args.deltatime);
+            kin->addForce(Vector2(0, 2.5) * args.deltatime);
         }
 
         if (glfwGetKey(args.window, GLFW_KEY_A)) {
-            kin->addForce(Vector2(-1, 0) * args.deltatime);
+            kin->addForce(Vector2(-0.5, 0) * args.deltatime);
         }
 
         if (glfwGetKey(args.window, GLFW_KEY_D)) {
-            kin->addForce(Vector2(1, 0) * args.deltatime);
+            kin->addForce(Vector2(0.5, 0) * args.deltatime);
         }
 
         if (glfwGetKey(args.window, GLFW_KEY_S)) {

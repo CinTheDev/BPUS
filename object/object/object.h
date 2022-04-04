@@ -32,6 +32,7 @@ public:
     object(Vector2 pos, texture* img, Vector2 s);
     object(Vector2 pos, texture* img);
     object(Vector2 pos);
+    object();
     ~object();
 
     bool operator==(const object& o);

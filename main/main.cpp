@@ -50,7 +50,7 @@ int main() {
     // Get ID of uniform
     //GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
 
-    float deltatime = 0.16;
+    float deltatime = 0.016;
     auto frameBegin = std::chrono::system_clock::now();
 
     BPUS_game* game = new BPUS_game(window, shaderProgram);
@@ -72,7 +72,7 @@ int main() {
 
         auto frameEnd = std::chrono::system_clock::now();
         auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(frameEnd - frameBegin);
-        deltatime = elapsed.count() / 1000.0;
+        //deltatime = elapsed.count() / 1000.0;
 
         frameBegin = frameEnd;
     }

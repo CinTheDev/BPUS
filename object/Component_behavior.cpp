@@ -55,10 +55,25 @@ namespace comp {
     };
 
     class collider_line : public collider {
+        // Note: this collider can only be used as a static collider, no dynamics.
     private:
     public:
+        Vector2 p1;
+        Vector2 p2;
+
+        collider_line() {
+            p1 = Vector2();
+            p2 = Vector2();
+        }
+        collider_line(Vector2 p1, Vector2 p2) : p1(p1), p2(p2) {}
+
         void init() override {
             obj_m::registerLine(this);
+        }
+
+        void update(updateArguments args) override {
+            // Debug
+            debug::draw_line(p1, p2, Vector3(1, 0.8, 0));
         }
     };
 
@@ -80,10 +95,7 @@ namespace comp {
             radius = 1;
             offset = Vector2();
         }
-        collider_circle(float r, Vector2 off) {
-            radius = r;
-            offset = off;
-        }
+        collider_circle(float r, Vector2 off) : radius(r), offset(off) {}
 
         void init() override {
             obj_m::registerCircle(this);
@@ -102,12 +114,31 @@ namespace comp {
 
             bool collision = false;
 
+            // Circle vs. circle
             for (auto& c : obj_m::circle_colliders) {
                 if (c == this) continue;
 
                 double sqrlen = (c->parent->position - parent->position).sqrlen();
                 if (sqrlen <= (radius + c->radius) * (radius + c->radius)) {
                     resolve_collision(c);
+                    collision = true;
+                }
+            }
+            // Circle vs. line
+            for (auto& c : obj_m::line_colliders) {
+                Vector2 segment = c->p2 - c->p1;
+                Vector2 d1 = parent->position + offset - c->p1;
+
+                double s_len = segment.sqrlen();
+
+                double t = clamp(0.0, segment.dot(d1), s_len) / s_len;
+
+                Vector2 closest_point = c->p1 + segment * t;
+
+                double distance = (parent->position + offset - closest_point).len();
+
+                if (distance <= radius) {
+                    resolve_collision(closest_point);
                     collision = true;
                 }
             }
@@ -146,6 +177,16 @@ namespace comp {
 
             rigidbody->speed -= n * p * target->rigidbody->mass;
             target->rigidbody->speed += n * p * rigidbody->mass;
+        }
+
+        void resolve_collision(Vector2 close_dist) {
+            Vector2 dist = close_dist - parent->position - offset;
+            // Static resolution
+            parent->position += dist.normalized() * (dist.len() - radius);
+
+            // Dynamic resolution is just flipping the own speed.
+            dist = dist.normalized() * bounciness;
+            rigidbody->speed -= dist * dist.dot(rigidbody->speed) * (2 / bounciness);
         }
     };   
 }

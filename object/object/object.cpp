@@ -14,6 +14,8 @@ object::object(Vector2 pos, texture* img) : object(pos, img, Vector2(1, 1)) {}
 
 object::object(Vector2 pos) : object(pos, NULL) {}
 
+object::object() : object(Vector2(0, 0)) {}
+
 object::~object() {
     position.~Vector2();
 }
