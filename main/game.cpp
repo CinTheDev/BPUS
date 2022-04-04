@@ -75,7 +75,7 @@ public:
     void update(updateArguments args) {
         comp::dynamics* kin = cat->getComponent<comp::dynamics>();
         if (glfwGetKey(args.window, GLFW_KEY_W)) {
-            kin->addForce(Vector2(0, 10) * args.deltatime);
+            kin->addForce(Vector2(0, 25) * args.deltatime);
         }
 
         if (glfwGetKey(args.window, GLFW_KEY_A)) {

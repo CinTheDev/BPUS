@@ -2,7 +2,10 @@
 
 std::vector<object*> obj_m::remove_obj;
 std::vector<object*> obj_m::objects;
-std::vector<comp::collider*> obj_m::colliders;
+
+std::vector<comp::collider_circle*> obj_m::circle_colliders;
+std::vector<comp::collider_line*> obj_m::line_colliders;
+std::vector<comp::collider_rect*> obj_m::rect_colliders;
 
 void obj_m::create(object* obj) {
     // Put new object in list
@@ -17,15 +20,34 @@ object* obj_m::create(Vector2 position, Vector2 size, texture* texture) {
     return obj;
 }
 
-void obj_m::registerCollider(comp::collider* coll) {
-    colliders.push_back(coll);
+void obj_m::registerCircle(comp::collider_circle* coll) {
+    circle_colliders.push_back(coll);
+}
+void obj_m::registerLine(comp::collider_line* coll) {
+    line_colliders.push_back(coll);
+}
+void obj_m::registerRect(comp::collider_rect* coll) {
+    rect_colliders.push_back(coll);
 }
 
-void obj_m::removeCollider(comp::collider* coll) {
-    for (int i = 0; i < colliders.size(); i++) {
-        if (colliders[i] == coll) {
-            colliders.erase(colliders.begin() + i);
-            return;
+void obj_m::removeCircle(comp::collider_circle* coll) {
+    for (int i = 0; i < circle_colliders.size(); i++) {
+        if (circle_colliders[i] == coll) {
+            circle_colliders.erase(circle_colliders.begin() + i);
+        }
+    }
+}
+void obj_m::removeLine(comp::collider_line* coll) {
+    for (int i = 0; i < line_colliders.size(); i++) {
+        if (line_colliders[i] == coll) {
+            line_colliders.erase(line_colliders.begin() + i);
+        }
+    }
+}
+void obj_m::removeRect(comp::collider_rect* coll) {
+    for (int i = 0; i < rect_colliders.size(); i++) {
+        if (rect_colliders[i] == coll) {
+            rect_colliders.erase(rect_colliders.begin() + i);
         }
     }
 }

@@ -15,7 +15,9 @@ private:
 public:
     static std::vector<object*> objects;
 
-    static std::vector<comp::collider*> colliders;
+    static std::vector<comp::collider_circle*> circle_colliders;
+    static std::vector<comp::collider_line*> line_colliders;
+    static std::vector<comp::collider_rect*> rect_colliders;
 
     static void create(object* obj);
 
@@ -23,21 +25,13 @@ public:
 
     static void remove(object* obj);
 
-    static void registerCollider(comp::collider* coll);
+    static void registerCircle(comp::collider_circle* coll);
+    static void registerLine(comp::collider_line* coll);
+    static void registerRect(comp::collider_rect* coll);
 
-    static void removeCollider(comp::collider* coll);
-
-    template<class T>
-    static std::vector<T*> getCollider() {
-        const std::type_info* class_type = &typeid(T);
-        std::vector<T*> result = std::vector<T*>();
-        for (auto& c : obj_m::colliders) {
-            if (typeid(*c) == *class_type) {
-                result.push_back((T*)c);
-            }
-        }
-        return result;
-    }
+    static void removeCircle(comp::collider_circle* coll);
+    static void removeLine(comp::collider_line* coll);
+    static void removeRect(comp::collider_rect* coll);
 
     static void objects_update(updateArguments args);
 

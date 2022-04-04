@@ -4,4 +4,8 @@
 
 namespace comp {
     class collider;
+
+    class collider_circle;
+    class collider_line;
+    class collider_rect;
 }

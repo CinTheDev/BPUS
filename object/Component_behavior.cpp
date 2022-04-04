@@ -11,8 +11,6 @@ namespace comp {
 
         const double gravity = -9.81;
 
-        //collider* hitbox;
-
         // Adds a certain amount of energy to the object (with direction)
         void addForce(Vector2 joules) {
             // using v = sqrt(2W / m)
@@ -51,14 +49,9 @@ namespace comp {
         virtual bool check_collision() { return false; }
         virtual void resolve_collision(Vector2 collision) {}
 
-        void init() override {
-            obj_m::registerCollider(this);
-            rigidbody = parent->getComponent<dynamics>();
-        }
+        void init() override {}
 
-        ~collider() {
-            obj_m::removeCollider(this);
-        }
+        ~collider() {}
     };
 
     /*struct owned_vector2 {
@@ -169,13 +162,19 @@ namespace comp {
             getPointsInRadius(getMidpoint() + parent->position, (point2 - point1).len());
             update_LastPositions();
         }*/
+
+    private:
+    public:
+        void init() override {
+            obj_m::registerLine(this);
+        }
     };
 
     class collider_rect : public collider {
         // Rectangle shaped collider, mostly used by other components
     public:
         void init() override {
-            obj_m::registerCollider(this);
+            obj_m::registerRect(this);
         }
     };
 
@@ -195,7 +194,7 @@ namespace comp {
         }
 
         void init() override {
-            obj_m::registerCollider(this);
+            obj_m::registerCircle(this);
             rigidbody = parent->getComponent<dynamics>();
         }
 
@@ -208,11 +207,10 @@ namespace comp {
 
         bool check_collision() override {
             if (rigidbody == nullptr) return false;
-            std::vector<comp::collider_circle*> circles = obj_m::getCollider<comp::collider_circle>();
 
             bool collision = false;
 
-            for (auto& c : circles) {
+            for (auto& c : obj_m::circle_colliders) {
                 if (c == this) continue;
 
                 double sqrlen = (c->parent->position - parent->position).sqrlen();
