@@ -103,23 +103,75 @@ namespace comp {
             debug::draw_rect(parent->position + offset, size, parent->rotation, color);
         }
 
+        Vector2* getEdges() {
+            Vector2* edges = new Vector2[4];
+            edges[0] = Vector2(size.x, 0);
+            edges[1] = Vector2(0, size.y);
+            edges[3] = Vector2(-size.x, 0);
+            edges[4] = Vector2(0, -size.y);
+            return edges;
+        }
+
         bool check_collision() override {
             if (rigidbody == nullptr) return false;
 
-            // TODO: detect collision
+            bool collision = false;
 
-            return false;
+            // TODO: detect collision
+            // Go through rect colliders
+            for (auto& c : obj_m::rect_colliders) {
+                if (c == this) continue;
+
+                Vector2* edges1 = getEdges();
+
+                // Check diagonals of polygon
+                for (int p = 0; p < 4; p++) {
+                    Vector2* edges2 = c->getEdges();
+
+                    Vector2 line_r1s = parent->position;
+                    Vector2 line_r1e = edges1[p];
+
+                    // against edges of the other
+                    for (int q = 0; q < 4; q++) {
+                        Vector2 line_r2s = edges2[q];
+                        Vector2 line_r2e = edges2[(q + 1) % 4];
+
+                        // Standard line segment intersection
+                        double h = (line_r2e.x - line_r2s.x) * (line_r1s.y - line_r1e.y) - (line_r1s.x - line_r1e.x) * (line_r2e.y - line_r2s.y);
+                        double t1 = ((line_r2s.y - line_r2e.y) * (line_r1s.x - line_r2s.x) + (line_r2e.x - line_r2s.x) * (line_r1s.y - line_r2s.y)) / h;
+					    double t2 = ((line_r1s.y - line_r1e.y) * (line_r1s.x - line_r2s.x) + (line_r1e.x - line_r1s.x) * (line_r1s.y - line_r2s.y)) / h;
+
+                        if (t1 >= 0.0 && t1 < 1.0 && t2 >= 0.0 && t2 < 1.0) {
+                            collision = true;
+                            resolve_collision(c);
+                            break;
+                        }
+                    }
+
+                    delete[] edges2;
+                }
+
+                delete[] edges1;
+            }
+            for (auto& c : obj_m::circle_colliders) {
+                // Go through circle colliders
+            }
+            for (auto& c : obj_m::line_colliders) {
+                // Go through line colliders
+            }
+
+            return collision;
         }
 
         // Rect vs. rect
-        void resolve_collision(collider_rect target) {
+        void resolve_collision(collider_rect* target) {
             // TODO: Static resolution
 
             // TODO: Dynamic resolution
         }
 
         // Rect vs. circle
-        void resolve_collision(collider_circle target) {
+        void resolve_collision(collider_circle* target) {
             // TODO: Static resolution
 
             // TODO: Dynamic resolution
@@ -171,6 +223,10 @@ namespace comp {
                     resolve_collision(c);
                     collision = true;
                 }
+            }
+            // Circle vs. rect
+            for (auto& c : obj_m::rect_colliders) {
+                // TODO: this shit
             }
             // Circle vs. line
             for (auto& c : obj_m::line_colliders) {
@@ -226,6 +282,13 @@ namespace comp {
 
             rigidbody->speed -= n * p * target->rigidbody->mass;
             target->rigidbody->speed += n * p * rigidbody->mass;
+        }
+
+        // Circle vs. rect
+        void resolve_collision(collider_rect* target) {
+            // TODO: Static resolution
+
+            // TODO: Dynamic resolution
         }
 
         // Circle vs. line

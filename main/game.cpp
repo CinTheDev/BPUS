@@ -24,6 +24,7 @@ public:
         kin->speed = Vector2(0, 10);
         kin->acceleration = Vector2(0, 0);
         kin->mass = 1;
+        kin->alias = "Rigidbody for cat";
         cat->addComponent(kin);
 
         comp::collider_rect* test1 = new comp::collider_rect(Vector2(1, 1), Vector2(0, 0));
@@ -33,13 +34,16 @@ public:
 
         bso2 = new object(Vector2(0, -0.75), &box);
 
-        kin = new comp::dynamics();
-        kin->speed = Vector2(0, 0);
-        kin->acceleration = Vector2(0, 0);
-        bso2->addComponent(kin);
+        comp::dynamics* kin2 = new comp::dynamics();
+        kin2->speed = Vector2(0, 0);
+        kin2->acceleration = Vector2(0, 0);
+        kin2->mass = 1;
+        kin2->alias = "Rigidbody for bso2";
+        bso2->addComponent(kin2);
 
+        //comp::collider_rect* test2 = new comp::collider_rect(Vector2(1, 1), Vector2(0, 0));
         comp::collider_circle* test2 = new comp::collider_circle(0.5, Vector2(0.5, 0.5));
-        test2->alias = "Circle collider for bso2";
+        test2->alias = "Rect collider for bso2";
         test2->bounciness = 0.8;
         bso2->addComponent(test2);
         bso2->z = 0;
@@ -48,6 +52,11 @@ public:
         comp::collider_line* floorCollider = new comp::collider_line(Vector2(-5, -1.5), Vector2(5, -1.5));
         floor->addComponent(floorCollider);
         obj_m::create(floor);
+
+        object* second_floor = new object(Vector2(-2, -1));
+        comp::collider_rect* second_floorCollider = new comp::collider_rect(Vector2(1, 1), Vector2(0, 0));
+        //second_floor->addComponent(second_floorCollider);
+        //obj_m::create(second_floor);
 
         // Camera
         camera = new obj::Camera(Vector2(0, 0), NULL);

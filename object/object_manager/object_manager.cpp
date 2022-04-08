@@ -72,6 +72,8 @@ void obj_m::destroy(object* obj, int index) {
 }
 
 void obj_m::objects_update(updateArguments args) {
+    std::vector<comp::collider_rect*> debug = obj_m::rect_colliders;
+
     // Call update for every object
     for (unsigned int i = 0; i < objects.size(); i++) {
         objects[i]->objectUpdate(args);

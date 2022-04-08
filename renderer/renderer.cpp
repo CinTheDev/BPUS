@@ -166,7 +166,7 @@ namespace debug {
 		draw_line(pos3, pos0, col);
 	}
 	void draw_rect(Vector2 pos, Vector2 size, float rotation) {
-		draw_rect(pos, size, rotation, Vector3(1, 0, 0));
+		draw_rect(pos, size, rotation, Vector3(0, 1, 0));
 	}
 	void draw_rect(Vector2 pos, Vector2 size) {
 		draw_rect(pos, size, 0);
