@@ -80,8 +80,56 @@ namespace comp {
     class collider_rect : public collider {
         // Rectangle shaped collider, mostly used by other components
     public:
+        Vector2 size;
+        Vector2 offset;
+
+        collider_rect() {
+            size = Vector2(1, 1);
+            offset = Vector2();
+        }
+        collider_rect(Vector2 s, Vector2 o) {
+            size = s;
+            offset = o;
+        }
+
         void init() override {
             obj_m::registerRect(this);
+            rigidbody = parent->getComponent<dynamics>();
+        }
+
+        void update(updateArguments args) {
+            Vector3 color = Vector3(0, 1, 0);
+            if (check_collision()) color = Vector3(1, 0, 0);
+            debug::draw_rect(parent->position + offset, size, parent->rotation, color);
+        }
+
+        bool check_collision() override {
+            if (rigidbody == nullptr) return false;
+
+            // TODO: detect collision
+
+            return false;
+        }
+
+        // Rect vs. rect
+        void resolve_collision(collider_rect target) {
+            // TODO: Static resolution
+
+            // TODO: Dynamic resolution
+        }
+
+        // Rect vs. circle
+        void resolve_collision(collider_circle target) {
+            // TODO: Static resolution
+
+            // TODO: Dynamic resolution
+        }
+
+        // Rect vs. line
+        void resolve_collision(Vector2 close_dist) {
+            // TODO: Static resolution
+
+            // TODO: Dynamic resolution
         }
     };
 
@@ -145,6 +193,7 @@ namespace comp {
             return collision;
         }
 
+        // Circle vs. circle
         void resolve_collision(comp::collider_circle* target) {
             Vector2 dist = target->parent->position - parent->position;
             double d = dist.len();
@@ -179,6 +228,7 @@ namespace comp {
             target->rigidbody->speed += n * p * rigidbody->mass;
         }
 
+        // Circle vs. line
         void resolve_collision(Vector2 close_dist) {
             Vector2 dist = close_dist - parent->position - offset;
             // Static resolution
