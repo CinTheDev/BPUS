@@ -104,11 +104,23 @@ namespace comp {
         }
 
         Vector2* getEdges() {
+            Vector2 pivot = size*0.5;
+
+		    Vector2 pos0 = (Vector2(-pivot.x, -pivot.y)).rotate(parent->rotation);
+		    Vector2 pos1 = (Vector2(-pivot.x,  pivot.y)).rotate(parent->rotation);
+		    Vector2 pos2 = (Vector2( pivot.x,  pivot.y)).rotate(parent->rotation);
+		    Vector2 pos3 = (Vector2( pivot.x, -pivot.y)).rotate(parent->rotation);
+
+		    pos0 += parent->position + size * 0.5;
+		    pos1 += parent->position + size * 0.5;
+		    pos2 += parent->position + size * 0.5;
+		    pos3 += parent->position + size * 0.5;
+
             Vector2* edges = new Vector2[4];
-            edges[0] = Vector2(size.x, 0);
-            edges[1] = Vector2(0, size.y);
-            edges[2] = Vector2(-size.x, 0);
-            edges[3] = Vector2(0, -size.y);
+            edges[0] = pos0;
+            edges[1] = pos1;
+            edges[2] = pos2;
+            edges[3] = pos3;            
             return edges;
         }
 

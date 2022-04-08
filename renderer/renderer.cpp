@@ -150,10 +150,10 @@ namespace debug {
 	void draw_rect(Vector2 pos, Vector2 size, float rotation, Vector3 col) {
 		Vector2 pivot = size*0.5;
 
-		Vector2 pos0 = (Vector2(0, 0) - pivot).rotate(rotation);
-		Vector2 pos1 = (Vector2(-pivot.x, pivot.y)).rotate(rotation);
-		Vector2 pos2 = (Vector2(0, 0) + pivot).rotate(rotation);
-		Vector2 pos3 = (Vector2(pivot.x, -pivot.y)).rotate(rotation);
+		Vector2 pos0 = (Vector2(-pivot.x, -pivot.y)).rotate(rotation);
+		Vector2 pos1 = (Vector2(-pivot.x,  pivot.y)).rotate(rotation);
+		Vector2 pos2 = (Vector2( pivot.x,  pivot.y)).rotate(rotation);
+		Vector2 pos3 = (Vector2( pivot.x, -pivot.y)).rotate(rotation);
 
 		pos0 += pos + size * 0.5;
 		pos1 += pos + size * 0.5;
