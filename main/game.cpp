@@ -55,8 +55,8 @@ public:
 
         object* second_floor = new object(Vector2(-2, -1));
         comp::collider_rect* second_floorCollider = new comp::collider_rect(Vector2(1, 1), Vector2(0, 0));
-        //second_floor->addComponent(second_floorCollider);
-        //obj_m::create(second_floor);
+        second_floor->addComponent(second_floorCollider);
+        obj_m::create(second_floor);
 
         // Camera
         camera = new obj::Camera(Vector2(0, 0), NULL);

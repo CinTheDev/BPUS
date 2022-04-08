@@ -107,8 +107,8 @@ namespace comp {
             Vector2* edges = new Vector2[4];
             edges[0] = Vector2(size.x, 0);
             edges[1] = Vector2(0, size.y);
-            edges[3] = Vector2(-size.x, 0);
-            edges[4] = Vector2(0, -size.y);
+            edges[2] = Vector2(-size.x, 0);
+            edges[3] = Vector2(0, -size.y);
             return edges;
         }
 
