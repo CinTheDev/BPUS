@@ -163,6 +163,9 @@ namespace comp {
 
                 collision = true;
 
+                Vector2* edges1 = getEdges();
+                Vector2* edges2 = c->getEdges();
+
                 for (int a = 0; a < 4; a++) {
                     int b = (a + 1) % 4;
                     // This one here is kinda weird with its double negative, but I won't question it for now
