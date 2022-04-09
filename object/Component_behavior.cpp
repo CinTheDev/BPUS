@@ -156,7 +156,7 @@ namespace comp {
 
             bool collision = false;
 
-            // TODO: detect collision
+            double overlap = INFINITY;
             // Go through rect colliders
             for (auto& c : obj_m::rect_colliders) {
                 if (c == this) continue;
@@ -185,17 +185,25 @@ namespace comp {
                         max_r2 = std::max(max_r2, q);
                     }
 
+                    overlap = std::min(std::min(max_r1, max_r2) - std::max(min_r1, min_r2), overlap);
+
                     if (!(max_r2 >= min_r1 && max_r1 >= min_r2)) {
                         collision = false;
                         break;
                     }
                 }
 
+                delete[] edges1;
+                delete[] edges2;
+
                 // Check the other one against it
                 if (collision) collision = c->check_collision_rect(this);
 
-                delete[] edges1;
-                delete[] edges2;
+                if (collision) {
+                    Vector2 d = (c->parent->position - parent->position).normalized();
+                    parent->position -= d * overlap * 0.5;
+                    c->parent->position += d * overlap * 0.5;
+                }
             }
             for (auto& c : obj_m::circle_colliders) {
                 // Go through circle colliders
