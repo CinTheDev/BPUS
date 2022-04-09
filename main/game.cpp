@@ -53,6 +53,15 @@ public:
         floor->addComponent(floorCollider);
         obj_m::create(floor);
 
+        for (int i = 0; i <= 10; i++) {
+            object* h = new object(Vector2(-10 + i * 2, 2));
+
+            comp::collider_rect* hc = new comp::collider_rect(Vector2(1, 1), Vector2(0, 0));
+
+            h->addComponent(hc);
+            obj_m::create(h);
+        }
+
         // Camera
         camera = new obj::Camera(Vector2(0, 0), NULL);
         camera->setZoom(3);

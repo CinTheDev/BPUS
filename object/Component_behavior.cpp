@@ -160,12 +160,12 @@ namespace comp {
 
             bool collision = false;
 
-            double overlap = INFINITY;
             // Go through rect colliders
             for (auto& c : obj_m::rect_colliders) {
                 if (c == this) continue;
 
                 // Check the other one against it
+                double overlap = INFINITY;
                 collision = c->check_collision_rect(this, overlap);
 
                 Vector2* edges1 = getEdges();
@@ -194,7 +194,7 @@ namespace comp {
 
                     if (!(max_r2 >= min_r1 && max_r1 >= min_r2)) {
                         collision = false;
-                        //break;
+                        break;
                     }
                 }
 
@@ -217,11 +217,19 @@ namespace comp {
 
         // Rect vs. rect
         void resolve_collision(collider_rect* target, double overlap) {
+            if (target->rigidbody == nullptr) {
+                Vector2 d = (target->parent->position - parent->position).normalized();
+                parent->position -= d * overlap;
+                return;
+
+                // TODO: Dynamic resolution with static
+            }
+
             Vector2 d = (target->parent->position - parent->position).normalized();
             parent->position -= d * overlap * 0.5;
             target->parent->position += d * overlap * 0.5;
 
-            // TODO: Dynamic resolution
+            // TODO: Dynamic resolution with dynamic
         }
 
         // Rect vs. circle
