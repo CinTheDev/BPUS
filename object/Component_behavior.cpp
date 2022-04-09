@@ -124,9 +124,11 @@ namespace comp {
             return edges;
         }
 
-        bool check_collision_rect(collider_rect* c) {
+        bool check_collision_rect(collider_rect* c, double& overlap) {
             Vector2* edges1 = getEdges();
             Vector2* edges2 = c->getEdges();
+
+            overlap = INFINITY;
 
             for (int a = 0; a < 4; a++) {
                 int b = (a + 1) % 4;
@@ -146,6 +148,8 @@ namespace comp {
                     max_r2 = std::max(max_r2, q);
                 }
 
+                overlap = std::min(std::min(max_r1, max_r2) - std::max(min_r1, min_r2), overlap);
+
                 if (!(max_r2 >= min_r1 && max_r1 >= min_r2)) return false;
             }
             return true;
@@ -161,7 +165,8 @@ namespace comp {
             for (auto& c : obj_m::rect_colliders) {
                 if (c == this) continue;
 
-                collision = true;
+                // Check the other one against it
+                collision = c->check_collision_rect(this, overlap);
 
                 Vector2* edges1 = getEdges();
                 Vector2* edges2 = c->getEdges();
@@ -189,20 +194,15 @@ namespace comp {
 
                     if (!(max_r2 >= min_r1 && max_r1 >= min_r2)) {
                         collision = false;
-                        break;
+                        //break;
                     }
                 }
 
                 delete[] edges1;
                 delete[] edges2;
 
-                // Check the other one against it
-                if (collision) collision = c->check_collision_rect(this);
-
                 if (collision) {
-                    Vector2 d = (c->parent->position - parent->position).normalized();
-                    parent->position -= d * overlap * 0.5;
-                    c->parent->position += d * overlap * 0.5;
+                    resolve_collision(c, overlap);
                 }
             }
             for (auto& c : obj_m::circle_colliders) {
@@ -216,9 +216,10 @@ namespace comp {
         }
 
         // Rect vs. rect
-        void resolve_collision(collider_rect* target, Vector2 displacement) {
-            parent->position -= displacement * 1;
-            target->parent->position += displacement * 1;
+        void resolve_collision(collider_rect* target, double overlap) {
+            Vector2 d = (target->parent->position - parent->position).normalized();
+            parent->position -= d * overlap * 0.5;
+            target->parent->position += d * overlap * 0.5;
 
             // TODO: Dynamic resolution
         }
