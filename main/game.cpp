@@ -18,11 +18,11 @@ public:
     BPUS_game(GLFWwindow* window, shader shdr) {
         loadTextures(shdr);
 
-        cat = new object(Vector2(-2, -0.5), &popCat);
+        cat = new object(Vector2(0, 0), &popCat);
         cat->z = 1;
         comp::dynamics* kin = new comp::dynamics();
-        kin->speed = Vector2(0, 10);
-        kin->acceleration = Vector2(0, 0);
+        kin->speed = Vector2(0, 0);
+        kin->acceleration = Vector2(0, 9.81);
         kin->mass = 1;
         kin->alias = "Rigidbody for cat";
         cat->addComponent(kin);
@@ -32,7 +32,7 @@ public:
         test1->bounciness = 0.8;
         cat->addComponent(test1);
 
-        bso2 = new object(Vector2(0, -0.75), &box);
+        bso2 = new object(Vector2(3, -0.75), &box);
 
         comp::dynamics* kin2 = new comp::dynamics();
         kin2->speed = Vector2(0, 0);
@@ -74,7 +74,7 @@ public:
     void update(updateArguments args) {
         comp::dynamics* kin = cat->getComponent<comp::dynamics>();
         if (glfwGetKey(args.window, GLFW_KEY_W)) {
-            kin->addForce(Vector2(0, 2.5) * args.deltatime);
+            kin->addForce(Vector2(0, 0.5) * args.deltatime);
         }
 
         if (glfwGetKey(args.window, GLFW_KEY_A)) {
@@ -86,7 +86,7 @@ public:
         }
 
         if (glfwGetKey(args.window, GLFW_KEY_S)) {
-            kin->addForce(Vector2(0, -1) * args.deltatime);
+            kin->addForce(Vector2(0, -0.5) * args.deltatime);
         }
 
         if (glfwGetKey(args.window, GLFW_KEY_Q)) {

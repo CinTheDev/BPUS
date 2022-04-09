@@ -124,6 +124,33 @@ namespace comp {
             return edges;
         }
 
+        bool check_collision_rect(collider_rect* c) {
+            Vector2* edges1 = getEdges();
+            Vector2* edges2 = c->getEdges();
+
+            for (int a = 0; a < 4; a++) {
+                int b = (a + 1) % 4;
+                Vector2 axisProject = Vector2(-(edges1[b].y - edges1[a].y), edges1[b].x - edges1[a].x).normalized();
+
+                double min_r1 = INFINITY, max_r1 = -INFINITY;
+                for (int p = 0; p < 4; p++) {
+                    double q = edges1[p].dot(axisProject);
+                    min_r1 = std::min(min_r1, q);
+                    max_r1 = std::max(max_r1, q);
+                }
+
+                double min_r2 = INFINITY, max_r2 = -INFINITY;
+                for (int p = 0; p < 4; p++) {
+                    double q = edges2[p].dot(axisProject);
+                    min_r2 = std::min(min_r2, q);
+                    max_r2 = std::max(max_r2, q);
+                }
+
+                if (!(max_r2 >= min_r1 && max_r1 >= min_r2)) return false;
+            }
+            return true;
+        }
+
         bool check_collision() override {
             if (rigidbody == nullptr) return false;
 
@@ -134,36 +161,38 @@ namespace comp {
             for (auto& c : obj_m::rect_colliders) {
                 if (c == this) continue;
 
-                Vector2* edges1 = getEdges();
+                collision = true;
 
-                // Check diagonals of polygon
-                for (int p = 0; p < 4; p++) {
-                    Vector2* edges2 = c->getEdges();
+                for (int a = 0; a < 4; a++) {
+                    int b = (a + 1) % 4;
+                    // This one here is kinda weird with its double negative, but I won't question it for now
+                    Vector2 axisProject = Vector2(-(edges1[b].y - edges1[a].y), edges1[b].x - edges1[a].x).normalized();
 
-                    Vector2 line_r1s = parent->position;
-                    Vector2 line_r1e = edges1[p];
-
-                    // against edges of the other
-                    for (int q = 0; q < 4; q++) {
-                        Vector2 line_r2s = edges2[q];
-                        Vector2 line_r2e = edges2[(q + 1) % 4];
-
-                        // Standard line segment intersection
-                        double h = (line_r2e.x - line_r2s.x) * (line_r1s.y - line_r1e.y) - (line_r1s.x - line_r1e.x) * (line_r2e.y - line_r2s.y);
-                        double t1 = ((line_r2s.y - line_r2e.y) * (line_r1s.x - line_r2s.x) + (line_r2e.x - line_r2s.x) * (line_r1s.y - line_r2s.y)) / h;
-					    double t2 = ((line_r1s.y - line_r1e.y) * (line_r1s.x - line_r2s.x) + (line_r1e.x - line_r1s.x) * (line_r1s.y - line_r2s.y)) / h;
-
-                        if (t1 >= 0.0 && t1 < 1.0 && t2 >= 0.0 && t2 < 1.0) {
-                            collision = true;
-                            resolve_collision(c);
-                            break;
-                        }
+                    double min_r1 = INFINITY, max_r1 = -INFINITY;
+                    for (int p = 0; p < 4; p++) {
+                        double q = edges1[p].dot(axisProject);
+                        min_r1 = std::min(min_r1, q);
+                        max_r1 = std::max(max_r1, q);
                     }
 
-                    delete[] edges2;
+                    double min_r2 = INFINITY, max_r2 = -INFINITY;
+                    for (int p = 0; p < 4; p++) {
+                        double q = edges2[p].dot(axisProject);
+                        min_r2 = std::min(min_r2, q);
+                        max_r2 = std::max(max_r2, q);
+                    }
+
+                    if (!(max_r2 >= min_r1 && max_r1 >= min_r2)) {
+                        collision = false;
+                        break;
+                    }
                 }
 
+                // Check the other one against it
+                if (collision) collision = c->check_collision_rect(this);
+
                 delete[] edges1;
+                delete[] edges2;
             }
             for (auto& c : obj_m::circle_colliders) {
                 // Go through circle colliders
@@ -176,8 +205,9 @@ namespace comp {
         }
 
         // Rect vs. rect
-        void resolve_collision(collider_rect* target) {
-            // TODO: Static resolution
+        void resolve_collision(collider_rect* target, Vector2 displacement) {
+            parent->position -= displacement * 1;
+            target->parent->position += displacement * 1;
 
             // TODO: Dynamic resolution
         }
