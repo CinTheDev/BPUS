@@ -57,8 +57,8 @@ public:
         for (int i = 0; i <= 10; i++) {
             object* h = new object(Vector2(-10 + i * 2, 2));
 
-            comp::collider_rect* hc = new comp::collider_rect(Vector2(1, 1), Vector2(0, 0));
-            //comp::collider_circle* hc = new comp::collider_circle(0.5, Vector2(0.5, 0.5));
+            //comp::collider_rect* hc = new comp::collider_rect(Vector2(1, 1), Vector2(0, 0));
+            comp::collider_circle* hc = new comp::collider_circle(0.5, Vector2(0.5, 0.5));
 
             h->addComponent(hc);
             obj_m::create(h);

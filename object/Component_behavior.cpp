@@ -124,8 +124,6 @@ namespace comp {
         }
 
         bool check_collision_rect(Vector2* corners1, Vector2* corners2, double& overlap) {
-            overlap = INFINITY;
-
             for (int i = 0; i < 2; i++) {
 
                 // Use SAT on both shapes
@@ -161,6 +159,7 @@ namespace comp {
             }
             return true;
         }
+        bool check_collision_circle(collider_circle* c, Vector2& closest_point); // Need to define later (after circle)
 
         bool check_collision() override {
             if (rigidbody == nullptr) return false;
@@ -172,12 +171,12 @@ namespace comp {
                 if (c == this) continue;
 
                 // Check the other one against it
-                double overlap;
+                double overlap = INFINITY;
                 Vector2* corners1 = getCorners();
                 Vector2* corners2 = c->getCorners();
 
                 if(check_collision_rect(corners1, corners2, overlap)) {
-                    resolve_collision(c, overlap);
+                    resolve_collision_rect(c, overlap);
                     collision = true;
                 }
 
@@ -185,7 +184,12 @@ namespace comp {
             }
             // Go through circle colliders
             for (auto& c : obj_m::circle_colliders) {
-                // TODO
+                Vector2 closest_point;
+
+                if (check_collision_circle(c, closest_point)) {                    
+                    resolve_collision_circle(c, closest_point);
+                    collision = true;
+                }
             }
             for (auto& c : obj_m::line_colliders) {
                 // Go through line colliders
@@ -195,7 +199,7 @@ namespace comp {
         }
 
         // Rect vs. rect
-        void resolve_collision(collider_rect* target, double overlap) {
+        void resolve_collision_rect(collider_rect* target, double overlap) {
             if (target->rigidbody == nullptr) {
                 Vector2 d = (target->parent->position - parent->position).normalized();
                 parent->position -= d * overlap;
@@ -212,14 +216,14 @@ namespace comp {
         }
 
         // Rect vs. circle
-        void resolve_collision(collider_circle* target, Vector2 close_dist) {
+        void resolve_collision_circle(collider_circle* target, Vector2 close_dist) {
             // TODO: Static resolution
 
             // TODO: Dynamic resolution
         }
 
         // Rect vs. line
-        void resolve_collision(Vector2 close_dist) {
+        void resolve_collision_line(Vector2 close_dist) {
             // TODO: Static resolution
 
             // TODO: Dynamic resolution
@@ -310,6 +314,8 @@ namespace comp {
                     resolve_collision_rect(c, closest_point);
                     collision = true;
                 }
+
+                delete[] corners;
             }
             // Circle vs. line
             for (auto& c : obj_m::line_colliders) {
@@ -383,5 +389,16 @@ namespace comp {
 
             // TODO: Dynamic resolution
         }        
-    };   
+    };
+
+    // Definition for rect (it needs to know what a circle is)
+    bool collider_rect::check_collision_circle(collider_circle* c, Vector2& closest_point) {
+        Vector2* corners = getCorners();
+        if (c->check_collision_rect(corners, closest_point)) {
+            delete[] corners;
+            return true;
+        }
+        delete[] corners;
+        return false;
+    }  
 }
