@@ -27,7 +27,8 @@ public:
         kin->alias = "Rigidbody for cat";
         cat->addComponent(kin);
 
-        comp::collider_rect* test1 = new comp::collider_rect(Vector2(1, 1), Vector2(0, 0));
+        //comp::collider_rect* test1 = new comp::collider_rect(Vector2(1, 1), Vector2(0, 0));
+        comp::collider_circle* test1 = new comp::collider_circle(0.5, Vector2(0.5, 0.5));
         test1->alias = "Rect collider for cat";
         test1->bounciness = 0.8;
         cat->addComponent(test1);
@@ -57,6 +58,7 @@ public:
             object* h = new object(Vector2(-10 + i * 2, 2));
 
             comp::collider_rect* hc = new comp::collider_rect(Vector2(1, 1), Vector2(0, 0));
+            //comp::collider_circle* hc = new comp::collider_circle(0.5, Vector2(0.5, 0.5));
 
             h->addComponent(hc);
             obj_m::create(h);

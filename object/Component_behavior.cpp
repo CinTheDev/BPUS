@@ -41,9 +41,8 @@ namespace comp {
 
     class collider : public component {
         // General class used for colliders
-    protected:
-        dynamics* rigidbody;
     public:
+        dynamics* rigidbody;
         double bounciness = 1;
 
         virtual bool check_collision() { return false; }
@@ -205,8 +204,9 @@ namespace comp {
                     resolve_collision(c, overlap);
                 }
             }
+            // Go through circle colliders
             for (auto& c : obj_m::circle_colliders) {
-                // Go through circle colliders
+                // TODO
             }
             for (auto& c : obj_m::line_colliders) {
                 // Go through line colliders
@@ -233,7 +233,7 @@ namespace comp {
         }
 
         // Rect vs. circle
-        void resolve_collision(collider_circle* target) {
+        void resolve_collision(collider_circle* target, Vector2 close_dist) {
             // TODO: Static resolution
 
             // TODO: Dynamic resolution
@@ -271,6 +271,44 @@ namespace comp {
             debug::draw_ellipse(parent->position + offset, Vector2(radius, radius), parent->rotation, color);
         }
 
+        bool check_collision_circle(Vector2 pos, float r) {
+            double sqrlen = (pos - parent->position).sqrlen();
+            if (sqrlen <= (radius + r)*(radius + r)) {
+                return true;
+            }
+            return false;
+        }
+        bool check_collision_line(Vector2 p1, Vector2 p2, Vector2& closest_point) {
+            Vector2 segment = p2 - p1;
+            Vector2 d1 = parent->position + offset - p1;
+
+            double s_len = segment.sqrlen();
+
+            double t = clamp(0.0, segment.dot(d1), s_len) / s_len;
+
+            closest_point = p1 + segment * t;
+
+            double distance = (parent->position + offset - closest_point).len();
+
+            if (distance <= radius) {
+                return true;
+            }
+
+            return false;
+        }
+        bool check_collision_rect(Vector2* corners, Vector2& closest_point) {
+            for (int i = 0; i < 4; i++) {
+                Vector2 start = corners[i];
+                Vector2 end = corners[(i + 1) % 4];
+
+                if (check_collision_line(start, end, closest_point)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         bool check_collision() override {
             if (rigidbody == nullptr) return false;
 
@@ -280,31 +318,25 @@ namespace comp {
             for (auto& c : obj_m::circle_colliders) {
                 if (c == this) continue;
 
-                double sqrlen = (c->parent->position - parent->position).sqrlen();
-                if (sqrlen <= (radius + c->radius) * (radius + c->radius)) {
-                    resolve_collision(c);
+                if (check_collision_circle(c->parent->position, c->radius)) {
+                    resolve_collision_circle(c);
                     collision = true;
                 }
             }
             // Circle vs. rect
             for (auto& c : obj_m::rect_colliders) {
-                // TODO: this shit
+                Vector2* corners = c->getCorners();
+                Vector2 closest_point;
+                if(check_collision_rect(corners, closest_point)) {
+                    resolve_collision_rect(c, closest_point);
+                    collision = true;
+                }
             }
             // Circle vs. line
             for (auto& c : obj_m::line_colliders) {
-                Vector2 segment = c->p2 - c->p1;
-                Vector2 d1 = parent->position + offset - c->p1;
-
-                double s_len = segment.sqrlen();
-
-                double t = clamp(0.0, segment.dot(d1), s_len) / s_len;
-
-                Vector2 closest_point = c->p1 + segment * t;
-
-                double distance = (parent->position + offset - closest_point).len();
-
-                if (distance <= radius) {
-                    resolve_collision(closest_point);
+                Vector2 closest_point;
+                if (check_collision_line(c->p1, c->p2, closest_point)) {
+                    resolve_collision_line(closest_point);
                     collision = true;
                 }
             }
@@ -312,7 +344,7 @@ namespace comp {
         }
 
         // Circle vs. circle
-        void resolve_collision(comp::collider_circle* target) {
+        void resolve_collision_circle(comp::collider_circle* target) {
             Vector2 dist = target->parent->position - parent->position;
             double d = dist.len();
             dist.normalize();
@@ -346,15 +378,8 @@ namespace comp {
             target->rigidbody->speed += n * p * rigidbody->mass;
         }
 
-        // Circle vs. rect
-        void resolve_collision(collider_rect* target) {
-            // TODO: Static resolution
-
-            // TODO: Dynamic resolution
-        }
-
         // Circle vs. line
-        void resolve_collision(Vector2 close_dist) {
+        void resolve_collision_line(Vector2 close_dist) {
             Vector2 dist = close_dist - parent->position - offset;
             // Static resolution
             parent->position += dist.normalized() * (dist.len() - radius);
@@ -363,5 +388,21 @@ namespace comp {
             dist = dist.normalized() * bounciness;
             rigidbody->speed -= dist * dist.dot(rigidbody->speed) * (2 / bounciness);
         }
+
+        // Circle vs. rect
+        void resolve_collision_rect(collider_rect* target, Vector2 close_dist) {
+            if (target->rigidbody == nullptr) {
+                Vector2 dist = close_dist - parent->position - offset;
+
+                parent->position += dist.normalized() * (dist.len() - radius);
+
+                dist = dist.normalized() * bounciness;
+                rigidbody->speed -= dist * dist.dot(rigidbody->speed) * (2 / bounciness);
+            }
+
+            // TODO: Static resolution
+
+            // TODO: Dynamic resolution
+        }        
     };   
 }
