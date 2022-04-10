@@ -123,33 +123,41 @@ namespace comp {
             return edges;
         }
 
-        bool check_collision_rect(collider_rect* c, double& overlap) {
-            Vector2* edges1 = getCorners();
-            Vector2* edges2 = c->getCorners();
-
+        bool check_collision_rect(Vector2* corners1, Vector2* corners2, double& overlap) {
             overlap = INFINITY;
 
-            for (int a = 0; a < 4; a++) {
-                int b = (a + 1) % 4;
-                Vector2 axisProject = Vector2(-(edges1[b].y - edges1[a].y), edges1[b].x - edges1[a].x).normalized();
+            for (int i = 0; i < 2; i++) {
 
-                double min_r1 = INFINITY, max_r1 = -INFINITY;
-                for (int p = 0; p < 4; p++) {
-                    double q = edges1[p].dot(axisProject);
-                    min_r1 = std::min(min_r1, q);
-                    max_r1 = std::max(max_r1, q);
+                // Use SAT on both shapes
+                for (int a = 0; a < 4; a++) {
+                    int b = (a + 1) % 4;
+                    Vector2 axisProject = Vector2(-(corners1[b].y - corners1[a].y), corners1[b].x - corners1[a].x).normalized();
+
+                    double min_r1 = INFINITY, max_r1 = -INFINITY;
+                    for (int p = 0; p < 4; p++) {
+                        double q = corners1[p].dot(axisProject);
+                        min_r1 = std::min(min_r1, q);
+                        max_r1 = std::max(max_r1, q);
+                    }
+
+                    double min_r2 = INFINITY, max_r2 = -INFINITY;
+                    for (int p = 0; p < 4; p++) {
+                        double q = corners2[p].dot(axisProject);
+                        min_r2 = std::min(min_r2, q);
+                        max_r2 = std::max(max_r2, q);
+                    }
+
+                    overlap = std::min(std::min(max_r1, max_r2) - std::max(min_r1, min_r2), overlap);
+
+                    if (!(max_r2 >= min_r1 && max_r1 >= min_r2)) {
+                        return false;
+                    }
                 }
 
-                double min_r2 = INFINITY, max_r2 = -INFINITY;
-                for (int p = 0; p < 4; p++) {
-                    double q = edges2[p].dot(axisProject);
-                    min_r2 = std::min(min_r2, q);
-                    max_r2 = std::max(max_r2, q);
-                }
-
-                overlap = std::min(std::min(max_r1, max_r2) - std::max(min_r1, min_r2), overlap);
-
-                if (!(max_r2 >= min_r1 && max_r1 >= min_r2)) return false;
+                // Swap both shapes
+                Vector2* temp = corners1;
+                corners1 = corners2;
+                corners2 = temp;
             }
             return true;
         }
@@ -164,45 +172,16 @@ namespace comp {
                 if (c == this) continue;
 
                 // Check the other one against it
-                double overlap = INFINITY;
-                collision = c->check_collision_rect(this, overlap);
+                double overlap;
+                Vector2* corners1 = getCorners();
+                Vector2* corners2 = c->getCorners();
 
-                Vector2* edges1 = getCorners();
-                Vector2* edges2 = c->getCorners();
-
-                for (int a = 0; a < 4; a++) {
-                    int b = (a + 1) % 4;
-                    // This one here is kinda weird with its double negative, but I won't question it for now
-                    Vector2 axisProject = Vector2(-(edges1[b].y - edges1[a].y), edges1[b].x - edges1[a].x).normalized();
-
-                    double min_r1 = INFINITY, max_r1 = -INFINITY;
-                    for (int p = 0; p < 4; p++) {
-                        double q = edges1[p].dot(axisProject);
-                        min_r1 = std::min(min_r1, q);
-                        max_r1 = std::max(max_r1, q);
-                    }
-
-                    double min_r2 = INFINITY, max_r2 = -INFINITY;
-                    for (int p = 0; p < 4; p++) {
-                        double q = edges2[p].dot(axisProject);
-                        min_r2 = std::min(min_r2, q);
-                        max_r2 = std::max(max_r2, q);
-                    }
-
-                    overlap = std::min(std::min(max_r1, max_r2) - std::max(min_r1, min_r2), overlap);
-
-                    if (!(max_r2 >= min_r1 && max_r1 >= min_r2)) {
-                        collision = false;
-                        break;
-                    }
-                }
-
-                delete[] edges1;
-                delete[] edges2;
-
-                if (collision) {
+                if(check_collision_rect(corners1, corners2, overlap)) {
                     resolve_collision(c, overlap);
+                    collision = true;
                 }
+
+                delete[] corners1, corners2;
             }
             // Go through circle colliders
             for (auto& c : obj_m::circle_colliders) {
