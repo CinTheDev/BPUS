@@ -103,7 +103,7 @@ namespace comp {
             debug::draw_rect(parent->position + offset, size, parent->rotation, color);
         }
 
-        Vector2* getEdges() {
+        Vector2* getCorners() {
             Vector2 pivot = size*0.5;
 
 		    Vector2 pos0 = (Vector2(-pivot.x, -pivot.y)).rotate(parent->rotation);
@@ -125,8 +125,8 @@ namespace comp {
         }
 
         bool check_collision_rect(collider_rect* c, double& overlap) {
-            Vector2* edges1 = getEdges();
-            Vector2* edges2 = c->getEdges();
+            Vector2* edges1 = getCorners();
+            Vector2* edges2 = c->getCorners();
 
             overlap = INFINITY;
 
@@ -168,8 +168,8 @@ namespace comp {
                 double overlap = INFINITY;
                 collision = c->check_collision_rect(this, overlap);
 
-                Vector2* edges1 = getEdges();
-                Vector2* edges2 = c->getEdges();
+                Vector2* edges1 = getCorners();
+                Vector2* edges2 = c->getCorners();
 
                 for (int a = 0; a < 4; a++) {
                     int b = (a + 1) % 4;
