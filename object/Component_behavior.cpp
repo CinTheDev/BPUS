@@ -275,17 +275,35 @@ namespace comp {
 
             return false;
         }
-        bool check_collision_rect(Vector2* corners, Vector2& closest_point) {
+        bool check_collision_rect(comp::collider_rect* c, Vector2& closest_point) {
+            bool collision = false;
+
+            Vector2* corners = c->getCorners();
+
+            closest_point = parent->position.x < c->parent->position.x ? Vector2(0, 0) : Vector2(INFINITY, INFINITY);
+            Vector2 close_dist = Vector2();
+
             for (int i = 0; i < 4; i++) {
                 Vector2 start = corners[i];
                 Vector2 end = corners[(i + 1) % 4];
 
-                if (check_collision_line(start, end, closest_point)) {
-                    return true;
+                if (check_collision_line(start, end, close_dist)) {
+                    collision = true;
+
+                    // After 3 hours of testing and frustration I found out that the weird collision bug only affects one side
+                    // of the shape, the side depending on if I use min or max. So I cover both sides with this cheap solution.
+                    if (parent->position.x < c->parent->position.x) {
+                        if (closest_point.sqrlen() <= close_dist.sqrlen()) closest_point = close_dist;
+                    }
+                    else {
+                        if (closest_point.sqrlen() >= close_dist.sqrlen()) closest_point = close_dist;
+                    }
                 }
             }
 
-            return false;
+            delete[] corners;
+
+            return collision;
         }
 
         bool check_collision() override {
@@ -304,14 +322,11 @@ namespace comp {
             }
             // Circle vs. rect
             for (auto& c : obj_m::rect_colliders) {
-                Vector2* corners = c->getCorners();
                 Vector2 closest_point;
-                if(check_collision_rect(corners, closest_point)) {
+                if(check_collision_rect(c, closest_point)) {
                     resolve_collision_rect(c, closest_point);
                     collision = true;
                 }
-
-                delete[] corners;
             }
             // Circle vs. line
             for (auto& c : obj_m::line_colliders) {
@@ -380,6 +395,8 @@ namespace comp {
 
                 dist = dist.normalized() * bounciness;
                 rigidbody->speed -= dist * dist.dot(rigidbody->speed) * (2 / bounciness);
+
+                return;
             }
 
             Vector2 dist = close_dist - parent->position - offset;
@@ -394,13 +411,7 @@ namespace comp {
 
     // Definition for rect (it needs to know what a circle is)
     bool collider_rect::check_collision_circle(collider_circle* c, Vector2& closest_point) {
-        Vector2* corners = getCorners();
-        if (c->check_collision_rect(corners, closest_point)) {
-            delete[] corners;
-            return true;
-        }
-        delete[] corners;
-        return false;
+        return c->check_collision_rect(this, closest_point);
     }
 
     // Definition for rect (it needs to know what a circle is)
@@ -409,7 +420,7 @@ namespace comp {
             Vector2 dist = close_dist - target->parent->position - target->offset;
             Vector2 dist_o = dist.normalized() * (dist.len() - target->radius);
 
-            parent->position -= dist_o * 0.5;
+            parent->position -= dist_o;
 
             return;
         }
