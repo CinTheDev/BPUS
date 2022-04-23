@@ -78,6 +78,48 @@ namespace comp {
 
     class collider_rect : public collider {
         // Rectangle shaped collider, mostly used by other components
+    private:
+        bool SAT(Vector2* corners_1, int len_1, Vector2* corners_2, int len_2, double& overlap) {
+            for (int i = 0; i < 2; i++) {
+
+                // Use SAT on both shapes
+                for (int a = 0; a < len_1; a++) {
+                    int b = (a + 1) % len_1;
+                    Vector2 axisProject = Vector2(-(corners_1[b].y - corners_1[a].y), corners_1[b].x - corners_1[a].x).normalized();
+
+                    double min_r1 = INFINITY, max_r1 = -INFINITY;
+                    for (int p = 0; p < len_1; p++) {
+                        double q = corners_1[p].dot(axisProject);
+                        min_r1 = std::min(min_r1, q);
+                        max_r1 = std::max(max_r1, q);
+                    }
+
+                    double min_r2 = INFINITY, max_r2 = -INFINITY;
+                    for (int p = 0; p < len_2; p++) {
+                        double q = corners_2[p].dot(axisProject);
+                        min_r2 = std::min(min_r2, q);
+                        max_r2 = std::max(max_r2, q);
+                    }
+
+                    overlap = std::min(std::min(max_r1, max_r2) - std::max(min_r1, min_r2), overlap);
+
+                    if (!(max_r2 >= min_r1 && max_r1 >= min_r2)) {
+                        return false;
+                    }
+                }
+
+                // Swap both shapes
+                Vector2* temp_vec = corners_1;
+                corners_1 = corners_2;
+                corners_2 = temp_vec;
+
+                int temp_len = len_1;
+                len_1 = len_2;
+                len_2 = temp_len;
+            }
+            return true;
+        }
+
     public:
         Vector2 size;
         Vector2 offset;
@@ -123,8 +165,8 @@ namespace comp {
             return edges;
         }
 
-        bool check_collision_rect(Vector2* corners1, Vector2* corners2, double& overlap) {
-            for (int i = 0; i < 2; i++) {
+        bool check_collision_rect(Vector2* corners_1, Vector2* corners_2, double& overlap) {
+            /*for (int i = 0; i < 2; i++) {
 
                 // Use SAT on both shapes
                 for (int a = 0; a < 4; a++) {
@@ -157,9 +199,18 @@ namespace comp {
                 corners1 = corners2;
                 corners2 = temp;
             }
-            return true;
+            return true;*/
+            return SAT(corners_1, 4, corners_2, 4, overlap);
         }
         bool check_collision_circle(collider_circle* c, Vector2& closest_point); // Need to define later (after circle)
+
+        bool check_collision_line(collider_line* c, double& overlap) {
+            Vector2* lineCorners = new Vector2[2]{ c->p1, c->p2 };
+            Vector2* rectCorners = getCorners();
+            bool result = SAT(lineCorners, 2, rectCorners, 4, overlap);
+            delete[] lineCorners, rectCorners;
+            return result;
+        }
 
         bool check_collision() override {
             if (rigidbody == nullptr) return false;
@@ -193,6 +244,11 @@ namespace comp {
             }
             for (auto& c : obj_m::line_colliders) {
                 // Go through line colliders
+                double overlap = INFINITY;
+                if (check_collision_line(c, overlap)) {
+                    resolve_collision_line(c, overlap);
+                    collision = true;
+                }
             }
 
             return collision;
@@ -219,7 +275,7 @@ namespace comp {
         void resolve_collision_circle(collider_circle* target, Vector2 close_dist); // Algorithm is after cirlce definition
 
         // Rect vs. line
-        void resolve_collision_line(Vector2 close_dist) {
+        void resolve_collision_line(collider_line* target, double overlap) {
             // TODO: Static resolution
 
             // TODO: Dynamic resolution
