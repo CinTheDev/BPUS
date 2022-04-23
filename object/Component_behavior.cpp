@@ -216,11 +216,7 @@ namespace comp {
         }
 
         // Rect vs. circle
-        void resolve_collision_circle(collider_circle* target, Vector2 close_dist) {
-            // TODO: Static resolution
-
-            // TODO: Dynamic resolution
-        }
+        void resolve_collision_circle(collider_circle* target, Vector2 close_dist); // Algorithm is after cirlce definition
 
         // Rect vs. line
         void resolve_collision_line(Vector2 close_dist) {
@@ -378,14 +374,19 @@ namespace comp {
         void resolve_collision_rect(collider_rect* target, Vector2 close_dist) {
             if (target->rigidbody == nullptr) {
                 Vector2 dist = close_dist - parent->position - offset;
+                Vector2 dist_o = dist.normalized() * (dist.len() - radius);
 
-                parent->position += dist.normalized() * (dist.len() - radius);
+                parent->position += dist_o;
 
                 dist = dist.normalized() * bounciness;
                 rigidbody->speed -= dist * dist.dot(rigidbody->speed) * (2 / bounciness);
             }
 
-            // TODO: Static resolution
+            Vector2 dist = close_dist - parent->position - offset;
+            Vector2 dist_o = dist.normalized() * (dist.len() - radius);
+
+            parent->position += dist_o * 0.5;
+            target->parent->position -= dist_o * 0.5;
 
             // TODO: Dynamic resolution
         }        
@@ -400,5 +401,21 @@ namespace comp {
         }
         delete[] corners;
         return false;
-    }  
+    }
+
+    // Definition for rect (it needs to know what a circle is)
+    void collider_rect::resolve_collision_circle(collider_circle* target, Vector2 close_dist) {
+        if (target->rigidbody == nullptr) {
+            Vector2 dist = close_dist - target->parent->position - target->offset;
+            Vector2 dist_o = dist.normalized() * (dist.len() - target->radius);
+
+            parent->position -= dist_o * 0.5;
+
+            return;
+        }
+
+        target->resolve_collision_rect(this, close_dist);
+
+        // TODO: Implement dynamic resolution
+    }
 }
