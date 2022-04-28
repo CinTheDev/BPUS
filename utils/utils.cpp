@@ -51,10 +51,8 @@ inline T clamp(T min, T val, T max) {
 	return val;
 }
 template <class T>
-inline T sign(T val) {
-	if (val == 0) return 0;
-
-	return val / abs(val);
+inline int sign(T val) {
+	return (T(0) < val) - (val < T(0));
 }
 
 template <class T>
