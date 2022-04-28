@@ -129,7 +129,6 @@ namespace comp {
                 len_1 = len_2;
                 len_2 = temp_len;
             }
-            std::cout << overlap << std::endl;
             return true;
         }
 
@@ -157,6 +156,10 @@ namespace comp {
             debug::draw_rect(parent->position + offset, size, parent->rotation, color);
         }
 
+        Vector2 getCenter() {
+            return parent->position + offset + size*0.5;
+        }
+
         Vector2* getCorners() {
             Vector2 pivot = size*0.5;
 
@@ -165,10 +168,10 @@ namespace comp {
 		    Vector2 pos2 = (Vector2( pivot.x,  pivot.y)).rotate(parent->rotation);
 		    Vector2 pos3 = (Vector2( pivot.x, -pivot.y)).rotate(parent->rotation);
 
-		    pos0 += parent->position + size * 0.5;
-		    pos1 += parent->position + size * 0.5;
-		    pos2 += parent->position + size * 0.5;
-		    pos3 += parent->position + size * 0.5;
+		    pos0 += getCenter();
+		    pos1 += getCenter();
+		    pos2 += getCenter();
+		    pos3 += getCenter();
 
             Vector2* edges = new Vector2[4];
             edges[0] = pos0;
@@ -184,14 +187,12 @@ namespace comp {
         bool check_collision_circle(collider_circle* c, Vector2& closest_point); // Need to define later (after circle)
 
         bool check_collision_line(collider_line* c, double& overlap) {
-            //Vector2* lineCorners = new Vector2[4]{ c->p1, c->p2, c->p2 + Vector2(0, 0.1), c->p1 + Vector2(0, 0.1) };
             // Calculate make line like a big rect, but in a way that it still handles like a regular line
-            Vector2 rectCenter = parent->position + size*0.5;
             Vector2* lineCorners = new Vector2[4] {
                 c->p1,
                 c->p2,
-                c->p2 + c->normal * sign(c->normal.dot(rectCenter - c->p1)) * -1, // p3
-                c->p1 + c->normal * sign(c->normal.dot(rectCenter - c->p1)) * -1, // p4
+                c->p2 + c->normal * sign(c->normal.dot(getCenter() - c->p1)) * -1, // p3
+                c->p1 + c->normal * sign(c->normal.dot(getCenter() - c->p1)) * -1, // p4
             };
 
             for (int i = 0; i < 4; i++) {
@@ -249,14 +250,14 @@ namespace comp {
         // Rect vs. rect
         void resolve_collision_rect(collider_rect* target, double overlap) {
             if (target->rigidbody == nullptr) {
-                Vector2 d = ((target->parent->position + target->offset) - (parent->position + offset)).normalized();
+                Vector2 d = (target->getCenter() - getCenter()).normalized();
                 parent->position -= d * overlap;
                 return;
 
                 // TODO: Dynamic resolution with static
             }
 
-            Vector2 d = ((target->parent->position + target->offset) - (parent->position + offset)).normalized();
+            Vector2 d = (target->getCenter() - getCenter()).normalized();
             parent->position -= d * overlap * 0.5;
             target->parent->position += d * overlap * 0.5;
 
@@ -268,11 +269,12 @@ namespace comp {
 
         // Rect vs. line
         void resolve_collision_line(collider_line* target, double overlap) {
-            //Vector2 point = target->p1 + (target->p2 - target->p1) * 0.5;
+            // Project the center on the line and offset
             Vector2 l = target->p2 - target->p1;
-            float t = l.dot(parent->position + offset - target->p1) / l.sqrlen();
+            float t = l.dot(getCenter() - target->p1) / l.sqrlen();
             Vector2 point = target->p1 + l * t;
-            Vector2 d = (point - parent->position - offset).normalized();
+
+            Vector2 d = (point - getCenter()).normalized();
             parent->position -= d * overlap;
 
             // TODO: Dynamic resolution
