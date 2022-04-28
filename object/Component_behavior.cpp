@@ -195,10 +195,6 @@ namespace comp {
                 c->p1 + c->normal * sign(c->normal.dot(getCenter() - c->p1)) * -1, // p4
             };
 
-            for (int i = 0; i < 4; i++) {
-                debug::draw_line(lineCorners[i], lineCorners[(i + 1) % 4]);
-            }
-
             Vector2* rectCorners = getCorners();
             bool result = SAT(lineCorners, 4, rectCorners, 4, overlap);
             delete[] lineCorners, rectCorners;
