@@ -50,7 +50,7 @@ namespace comp {
 
         void init() override {}
 
-        ~collider() {}
+        virtual ~collider() override {}
     };
 
     class collider_line : public collider {
@@ -75,6 +75,9 @@ namespace comp {
         }
         collider_line(Vector2 p1, Vector2 p2) : p1(p1), p2(p2) {
             calculateNormal();
+        }
+        ~collider_line() override {
+            obj_m::removeLine(this);
         }
 
         void init() override {
@@ -143,6 +146,9 @@ namespace comp {
         collider_rect(Vector2 s, Vector2 o) {
             size = s;
             offset = o;
+        }
+        ~collider_rect() override {
+            obj_m::removeRect(this);
         }
 
         void init() override {
@@ -288,6 +294,9 @@ namespace comp {
             offset = Vector2();
         }
         collider_circle(float r, Vector2 off) : radius(r), offset(off) {}
+        ~collider_circle() override {
+            obj_m::removeCircle(this);
+        }
 
         void init() override {
             obj_m::registerCircle(this);

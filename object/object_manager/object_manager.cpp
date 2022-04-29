@@ -57,18 +57,16 @@ void obj_m::remove(object* obj) {
     remove_obj.push_back(obj);
 }
 
-void obj_m::destroy(object* obj, int index) {
-    remove_obj.erase(remove_obj.begin() + index);
-
-    // Remove object from actual objects list
-    for (unsigned int i = 0; i < objects.size(); i++) {
-        if (objects[i] == obj) {
-            objects.erase(objects.begin() + i);
-            break;
+void obj_m::clear() {
+    for (auto& obj : remove_obj) {
+        for (int i = 0; i < objects.size(); i++) {
+            if (objects[i] == obj) {
+                objects.erase(objects.begin() + i);
+                delete obj;
+            }
         }
     }
-
-    obj->~object();
+    remove_obj.clear();
 }
 
 void obj_m::objects_update(updateArguments args) {
@@ -80,9 +78,7 @@ void obj_m::objects_update(updateArguments args) {
     }
 
     // Destroy every object that has been flagged
-    for (unsigned int i = 0; i < remove_obj.size(); i++) {
-        destroy(remove_obj[i], i);
-    }
+    clear();
 }
 
 void obj_m::stop() {

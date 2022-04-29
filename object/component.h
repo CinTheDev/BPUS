@@ -8,6 +8,8 @@ public:
     object* parent;
     std::string alias;
 
+    virtual ~component() {}
+
     bool operator==(const component& c) { return this == &c; }
     bool operator!=(const component& c) { return this != &c; }
 

@@ -18,6 +18,11 @@ object::object() : object(Vector2(0, 0)) {}
 
 object::~object() {
     position.~Vector2();
+
+    for (auto& c : components) {
+        delete c;
+    }
+    components.clear();
 }
 
 bool object::operator==(const object& o) {

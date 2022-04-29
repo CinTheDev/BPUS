@@ -8,7 +8,7 @@ class obj_m {
 private:
     static std::vector<object*> remove_obj;
 
-    static void destroy(object* obj, int index);
+    static void clear();
 
     static void lstupdate();
 

@@ -62,6 +62,9 @@ public:
 
             h->addComponent(hc);
             obj_m::create(h);
+
+            // For testing purposes
+            obj_m::remove(h);
         }
 
         // Camera
