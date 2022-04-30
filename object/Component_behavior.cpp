@@ -49,6 +49,7 @@ namespace comp {
         virtual void resolve_collision(Vector2 collision) {}
 
         void init() override {}
+        void update(updateArguments args) override {}
 
         virtual ~collider() override {}
     };
@@ -156,7 +157,7 @@ namespace comp {
             rigidbody = parent->getComponent<dynamics>();
         }
 
-        void update(updateArguments args) {
+        void update(updateArguments args) override {
             Vector3 color = Vector3(0, 1, 0);
             if (check_collision()) color = Vector3(1, 0, 0);
             debug::draw_rect(parent->position + offset, size, parent->rotation, color);
