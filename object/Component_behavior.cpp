@@ -48,6 +48,9 @@ namespace comp {
         virtual bool check_collision() { return false; }
         virtual void resolve_collision(Vector2 collision) {}
 
+        // Gets the Moment of Inertia for the specific shape
+        virtual double get_MoI(double mass) { return 0; }
+
         void init() override {}
         void update(updateArguments args) override {}
 
@@ -79,6 +82,12 @@ namespace comp {
         }
         ~collider_line() override {
             obj_m::removeLine(this);
+        }
+
+        double get_MoI(double mass) {
+            // Uses I = 1/12 * m * l²
+            double len = (p2 - p1).len();
+            return 1/12 * mass * len*len;
         }
 
         void init() override {
@@ -150,6 +159,11 @@ namespace comp {
         }
         ~collider_rect() override {
             obj_m::removeRect(this);
+        }
+
+        double get_MoI(double mass) override {
+            // Uses I = 1/12 * m * (h² + w²)
+            return 1/12 * mass * (size.sqrlen());
         }
 
         void init() override {
@@ -297,6 +311,11 @@ namespace comp {
         collider_circle(float r, Vector2 off) : radius(r), offset(off) {}
         ~collider_circle() override {
             obj_m::removeCircle(this);
+        }
+
+        double get_MoI(double mass) override {
+            // Uses I = 1/2 * m * r²
+            return 1/2 * mass * radius*radius;
         }
 
         void init() override {
