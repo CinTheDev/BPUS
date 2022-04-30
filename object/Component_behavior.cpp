@@ -7,6 +7,9 @@ namespace comp {
     public:
         Vector2 speed = Vector2(); // Speed in m/s (actually units/second but lets use real units for the sake of physics)
         Vector2 acceleration = Vector2(); // in m/s²
+
+        double angularSpeed = 0;
+
         double mass = 1; // Mass in kg
 
         const double gravity = -9.81;
@@ -14,8 +17,8 @@ namespace comp {
         // Adds a certain amount of energy to the object (with direction)
         void addForce(Vector2 joules) {
             // using v = sqrt(2W / m)
-            speed.x += sqrt(2 * abs(joules.x) / mass) * sign(joules.x);
-            speed.y += sqrt(2 * abs(joules.y) / mass) * sign(joules.y);
+            speed.x += sqrt(abs(joules.x) / (0.5 * mass)) * sign(joules.x);
+            speed.y += sqrt(abs(joules.y) / (0.5 * mass)) * sign(joules.y);
         }
 
         // Sets the acceleration constant, so the force is applied continuously
@@ -50,6 +53,10 @@ namespace comp {
 
         // Gets the Moment of Inertia for the specific shape
         virtual double get_MoI(double mass) { return 0; }
+        virtual void addAngularSpeed(double joules) {
+            // Uses v = sqrt( W / (0.5 * I) )
+            rigidbody->angularSpeed += sqrt( abs(joules) / (0.5 * get_MoI(rigidbody->mass)) ) * sign(joules);
+        }
 
         void init() override {}
         void update(updateArguments args) override {}
