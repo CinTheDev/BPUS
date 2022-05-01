@@ -27,8 +27,8 @@ public:
         kin->alias = "Rigidbody for cat";
         cat->addComponent(kin);
 
-        //comp::collider_rect* test1 = new comp::collider_rect(Vector2(1, 1), Vector2(0, 0));
-        comp::collider_circle* test1 = new comp::collider_circle(0.5, Vector2(0.5, 0.5));
+        comp::collider_rect* test1 = new comp::collider_rect(Vector2(1, 1), Vector2(0, 0));
+        //comp::collider_circle* test1 = new comp::collider_circle(0.5, Vector2(0.5, 0.5));
         test1->alias = "Rect collider for cat";
         test1->bounciness = 0.8;
         cat->addComponent(test1);
@@ -84,7 +84,7 @@ public:
 
     void update(updateArguments args) {
         comp::dynamics* kin = cat->getComponent<comp::dynamics>();
-        comp::collider* col = cat->getComponent<comp::collider_circle>();
+        comp::collider* col = cat->getComponent<comp::collider>();
 
         if (glfwGetKey(args.window, GLFW_KEY_W)) {
             kin->addForce(Vector2(0, 0.5) * args.deltatime);

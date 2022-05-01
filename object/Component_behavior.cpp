@@ -175,7 +175,7 @@ namespace comp {
 
         void init() override {
             obj_m::registerRect(this);
-            rigidbody = parent->getComponent<dynamics>();
+            rigidbody = parent->getComponent<dynamics>(false);
         }
 
         void update(updateArguments args) override {
@@ -327,7 +327,7 @@ namespace comp {
 
         void init() override {
             obj_m::registerCircle(this);
-            rigidbody = parent->getComponent<dynamics>();
+            rigidbody = parent->getComponent<dynamics>(false);
         }
 
         void update(updateArguments args) override {
