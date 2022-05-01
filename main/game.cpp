@@ -84,6 +84,8 @@ public:
 
     void update(updateArguments args) {
         comp::dynamics* kin = cat->getComponent<comp::dynamics>();
+        comp::collider* col = cat->getComponent<comp::collider_circle>();
+
         if (glfwGetKey(args.window, GLFW_KEY_W)) {
             kin->addForce(Vector2(0, 0.5) * args.deltatime);
         }
@@ -101,11 +103,11 @@ public:
         }
 
         if (glfwGetKey(args.window, GLFW_KEY_Q)) {
-            cat->rotation += 0.5 * args.deltatime;
+            col->addAngularSpeed(0.5 * args.deltatime);
         }
 
         if (glfwGetKey(args.window, GLFW_KEY_E)) {
-            cat->rotation -= 0.5 * args.deltatime;
+            col->addAngularSpeed(-0.5 * args.deltatime);
         }
     }
 };

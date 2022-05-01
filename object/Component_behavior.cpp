@@ -31,13 +31,13 @@ namespace comp {
         }
 
         void update(updateArguments args) override {
-
             // using v = a * t
             speed.y += gravity * args.deltatime;
             speed += acceleration * args.deltatime;
 
             // I know Euler's method isn't great, but I'm not smart enough to use better stuff
             parent->position += speed * args.deltatime;
+            parent->rotation += angularSpeed * args.deltatime;
         }
     };
 
@@ -53,7 +53,7 @@ namespace comp {
 
         // Gets the Moment of Inertia for the specific shape
         virtual double get_MoI(double mass) { return 0; }
-        virtual void addAngularSpeed(double joules) {
+        void addAngularSpeed(double joules) {
             // Uses v = sqrt( W / (0.5 * I) )
             rigidbody->angularSpeed += sqrt( abs(joules) / (0.5 * get_MoI(rigidbody->mass)) ) * sign(joules);
         }
@@ -170,7 +170,7 @@ namespace comp {
 
         double get_MoI(double mass) override {
             // Uses I = 1/12 * m * (h² + w²)
-            return 1/12 * mass * (size.sqrlen());
+            return 1.0/12.0 * mass * (size.sqrlen());
         }
 
         void init() override {
@@ -322,7 +322,7 @@ namespace comp {
 
         double get_MoI(double mass) override {
             // Uses I = 1/2 * m * r²
-            return 1/2 * mass * radius*radius;
+            return 1.0/2.0 * mass * radius*radius;
         }
 
         void init() override {
