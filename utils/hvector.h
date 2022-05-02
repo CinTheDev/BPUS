@@ -46,6 +46,13 @@ struct Vector2 {
 		return(Vector2(x * cos(angle) - y * sin(angle),
 					   x * sin(angle) + y * cos(angle)));
 	}
+	Vector2 rotate(float angle, Vector2 pivot) {
+		Vector2 result = Vector2(x, y);
+		result -= pivot;
+		result = result.rotate(angle);
+		result += pivot;
+		return result;
+	}
 };
 
 struct Vector2Int {

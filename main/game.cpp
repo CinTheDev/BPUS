@@ -22,7 +22,6 @@ public:
         cat->z = 1;
         comp::dynamics* kin = new comp::dynamics();
         kin->speed = Vector2(0, 0);
-        kin->acceleration = Vector2(0, 9.81);
         kin->mass = 1;
         kin->alias = "Rigidbody for cat";
         cat->addComponent(kin);
@@ -37,7 +36,6 @@ public:
 
         comp::dynamics* kin2 = new comp::dynamics();
         kin2->speed = Vector2(0, 0);
-        kin2->acceleration = Vector2(0, 9.81);
         kin2->mass = 1;
         kin2->alias = "Rigidbody for bso2";
         bso2->addComponent(kin2);
@@ -87,7 +85,12 @@ public:
         comp::collider* col = cat->getComponent<comp::collider>();
 
         if (glfwGetKey(args.window, GLFW_KEY_W)) {
-            kin->addForce(Vector2(0, 0.5) * args.deltatime);
+            //kin->addForce(Vector2(0, 1) * args.deltatime);
+
+            comp::collider_rect* collider = static_cast<comp::collider_rect*>(col);
+            Vector2 forcepoint = Vector2(0.1, 0);
+            col->addForce(forcepoint, Vector2(0, 10));
+            debug::draw_ray(collider->getCenter(), forcepoint);
         }
 
         if (glfwGetKey(args.window, GLFW_KEY_A)) {
@@ -103,11 +106,11 @@ public:
         }
 
         if (glfwGetKey(args.window, GLFW_KEY_Q)) {
-            col->addAngularSpeed(0.5 * args.deltatime);
+            kin->angularSpeed += 1 * args.deltatime;
         }
 
         if (glfwGetKey(args.window, GLFW_KEY_E)) {
-            col->addAngularSpeed(-0.5 * args.deltatime);
+            kin->angularSpeed -= 1 * args.deltatime;
         }
     }
 };

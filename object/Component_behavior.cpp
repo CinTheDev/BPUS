@@ -9,6 +9,7 @@ namespace comp {
         Vector2 acceleration = Vector2(); // in m/s²
 
         double angularSpeed = 0;
+        double angularAcceleration = 0;
 
         double mass = 1; // Mass in kg
 
@@ -35,9 +36,14 @@ namespace comp {
             speed.y += gravity * args.deltatime;
             speed += acceleration * args.deltatime;
 
+            angularSpeed += angularAcceleration * args.deltatime;
+
             // I know Euler's method isn't great, but I'm not smart enough to use better stuff
             parent->position += speed * args.deltatime;
             parent->rotation += angularSpeed * args.deltatime;
+
+            acceleration = Vector2();
+            angularAcceleration = 0;
         }
     };
 
@@ -46,16 +52,30 @@ namespace comp {
         // General class used for colliders
     public:
         dynamics* rigidbody;
-        double bounciness = 1;
+        double bounciness = 0.9;
 
         virtual bool check_collision() { return false; }
         virtual void resolve_collision(Vector2 collision) {}
 
         // Gets the Moment of Inertia for the specific shape
-        virtual double get_MoI(double mass) { return 0; }
+        virtual double get_MoI() { return 0; }
         void addAngularSpeed(double joules) {
             // Uses v = sqrt( W / (0.5 * I) )
-            rigidbody->angularSpeed += sqrt( abs(joules) / (0.5 * get_MoI(rigidbody->mass)) ) * sign(joules);
+            rigidbody->angularSpeed += sqrt( abs(joules) / (0.5 * get_MoI()) ) * sign(joules);
+        }
+
+        void addForce(Vector2 point, Vector2 force) {
+            // https://www.toptal.com/game/video-game-physics-part-i-an-introduction-to-rigid-body-dynamics modified
+            // r is the offset (point)
+            // f is the force (force)
+
+            double t = point.x * force.y - point.y * force.x;
+
+            rigidbody->acceleration += force / rigidbody->mass;
+            rigidbody->angularAcceleration += t / get_MoI();
+
+            //rigidbody->angularSpeed += t / get_MoI(rigidbody->mass);
+            //rigidbody->speed += force / rigidbody->mass;
         }
 
         void init() override {}
@@ -168,9 +188,9 @@ namespace comp {
             obj_m::removeRect(this);
         }
 
-        double get_MoI(double mass) override {
+        double get_MoI() override {
             // Uses I = 1/12 * m * (h² + w²)
-            return 1.0/12.0 * mass * (size.sqrlen());
+            return 1.0/12.0 * rigidbody->mass * (size.sqrlen());
         }
 
         void init() override {
@@ -302,6 +322,9 @@ namespace comp {
             parent->position -= d * overlap;
 
             // TODO: Dynamic resolution
+            Vector2 forcepoint = point.rotate(remainder(parent->rotation - 0.25*PI, 0.5*PI), getCenter()) - getCenter();
+            addForce(forcepoint, target->normal * -rigidbody->speed.y * rigidbody->mass * bounciness * 100);
+            debug::draw_ray(getCenter(), forcepoint);
         }
     };
 
@@ -320,9 +343,9 @@ namespace comp {
             obj_m::removeCircle(this);
         }
 
-        double get_MoI(double mass) override {
+        double get_MoI() override {
             // Uses I = 1/2 * m * r²
-            return 1.0/2.0 * mass * radius*radius;
+            return 1.0/2.0 * rigidbody->mass * radius*radius;
         }
 
         void init() override {
