@@ -52,7 +52,7 @@ namespace comp {
         // General class used for colliders
     public:
         dynamics* rigidbody;
-        double bounciness = 0.9;
+        double bounciness = 0.8;
 
         virtual bool check_collision() { return false; }
         virtual void resolve_collision(Vector2 collision) {}
@@ -322,9 +322,26 @@ namespace comp {
             parent->position -= d * overlap;
 
             // TODO: Dynamic resolution
-            Vector2 forcepoint = point.rotate(remainder(parent->rotation - 0.25*PI, 0.5*PI), getCenter()) - getCenter();
+            /*Vector2 forcepoint = point.rotate(remainder(parent->rotation - 0.25*PI, 0.5*PI), getCenter()) - getCenter();
             addForce(forcepoint, target->normal * -rigidbody->speed.y * rigidbody->mass * bounciness * 100);
-            debug::draw_ray(getCenter(), forcepoint);
+            debug::draw_ray(getCenter(), forcepoint);*/
+
+
+            // Linear impulse
+            Vector2 coll_norm = point - getCenter();
+            Vector2 coll_point = point.rotate(remainder(parent->rotation - 0.25*PI, 0.5*PI), getCenter()) - getCenter();
+
+            double inverted_mass = 1 / rigidbody->mass;
+
+            Vector3 c_n_3 = Vector3(coll_norm.x, coll_norm.y, 0);
+            Vector3 c_p_3 = Vector3(coll_point.x, coll_point.y, 0);
+            Vector3 theta = c_p_3.cross(c_n_3).cross(c_p_3) / get_MoI();
+            double J = (coll_norm.dot(rigidbody->speed * -(1 + bounciness)))/(inverted_mass + c_n_3.dot(theta));
+
+            double vj = coll_norm.normalized().dot(rigidbody->speed * -(1 + bounciness));
+            rigidbody->speed += coll_norm.normalized() * J * inverted_mass;
+
+            rigidbody->angularSpeed += coll_point.cross(coll_norm * J) / get_MoI();
         }
     };
 

@@ -30,7 +30,8 @@ struct Vector2 {
 	double sqrlen() { return x * x + y * y; }
 
 	static double dot(Vector2 v1, Vector2 v2) { return v1.x * v2.x + v1.y * v2.y; }
-	double dot(Vector2 v) {return x * v.x + y * v.y; }
+	double dot(Vector2 v) { return x * v.x + y * v.y; }
+	double cross(Vector2 v) { return x * v.y - y * v.x; }
 
 	Vector2 normalized() {
 		double X = x / len();
@@ -101,8 +102,18 @@ struct Vector3 {
 	}
 	~Vector3() {}
 
+	Vector3 operator*(const double& c) { return Vector3(x * c, y * c, z * c); }
+	Vector3 operator/(const double& c) { return Vector3(x / c, y / c, z / c); }
+
 	double len() { return sqrt(x * x + y * y + z * z); }
 	double sqrlen() { return x * x + y * y + z * z; }
+	double dot(Vector3 v) { return x*v.x + y*v.y + z*v.z; }
+	Vector3 cross(Vector3 v) {
+		return Vector3(y * v.z - z * v.y,
+					   x * v.z - z * v.x,
+					   x * v.y - y * v.x);
+	}
+
 	Vector3 normalized() {
 		double X = x / len();
 		double Y = y / len();

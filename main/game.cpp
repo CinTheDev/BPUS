@@ -85,12 +85,12 @@ public:
         comp::collider* col = cat->getComponent<comp::collider>();
 
         if (glfwGetKey(args.window, GLFW_KEY_W)) {
-            //kin->addForce(Vector2(0, 1) * args.deltatime);
+            kin->addForce(Vector2(0, 1) * args.deltatime);
 
-            comp::collider_rect* collider = static_cast<comp::collider_rect*>(col);
-            Vector2 forcepoint = Vector2(0.1, 0);
-            col->addForce(forcepoint, Vector2(0, 10));
-            debug::draw_ray(collider->getCenter(), forcepoint);
+            //comp::collider_rect* collider = static_cast<comp::collider_rect*>(col);
+            //Vector2 forcepoint = Vector2(0.1, 0);
+            //col->addForce(forcepoint, Vector2(0, 10));
+            //debug::draw_ray(collider->getCenter(), forcepoint);
         }
 
         if (glfwGetKey(args.window, GLFW_KEY_A)) {
