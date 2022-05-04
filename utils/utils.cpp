@@ -36,11 +36,15 @@ inline T* join_array(T* array1, int size1, T* array2, int size2) {
 }
 
 template <class T>
-inline bool outside(T min, T val, T max) {
-	return (val < min || val > max);
+inline bool outside(T a, T val, T b) {
+	return (val < std::min(a, b) || val > std::max(a, b));
 }
 
 inline bool outside(Vector2Int p, Vector2Int bound1, Vector2Int bound2) {
+	return (outside(bound1.x, p.x, bound2.x) || outside(bound1.y, p.y, bound2.y));
+}
+
+inline bool outside(Vector2 p, Vector2 bound1, Vector2 bound2) {
 	return (outside(bound1.x, p.x, bound2.x) || outside(bound1.y, p.y, bound2.y));
 }
 

@@ -97,6 +97,9 @@ namespace comp {
             normal = p2 - p1;
             normal = Vector2(-normal.y, normal.x).normalized();
         }
+        Vector2 getMiddle() {
+            return p1 + (p2 - p1) * 0.5;
+        }
 
         collider_line() {
             p1 = Vector2();
@@ -130,30 +133,53 @@ namespace comp {
     class collider_rect : public collider {
         // Rectangle shaped collider, mostly used by other components
     private:
-        bool SAT(Vector2* corners_1, int len_1, Vector2* corners_2, int len_2, double& overlap) {
+        bool inside_rect(Vector2 point, Vector2* corners) {
+            Vector2 debug0 = corners[0];
+            Vector2 debug1 = corners[1];
+            Vector2 debug2 = corners[2];
+            Vector2 debug3 = corners[3];
+
+            Vector2 AM = point - corners[0];
+            Vector2 AB = corners[1] - corners[0];
+            Vector2 AD = corners[3] - corners[0];
+            return (0 < AM.dot(AB) < AB.dot(AB)) && (0 < AM.dot(AD) < AD.dot(AD));
+        }
+
+        bool SAT(Vector2* corners_1, Vector2 center_1, Vector2* corners_2, Vector2 center_2, double& overlap, Vector2& point, Vector2& axis) {
             for (int i = 0; i < 2; i++) {
 
                 // Use SAT on both shapes
-                for (int a = 0; a < len_1; a++) {
-                    int b = (a + 1) % len_1;
+                for (int a = 0; a < 4; a++) {
+                    int b = (a + 1) % 4;
                     Vector2 axisProject = Vector2(-(corners_1[b].y - corners_1[a].y), corners_1[b].x - corners_1[a].x).normalized();
 
                     double min_r1 = INFINITY, max_r1 = -INFINITY;
-                    for (int p = 0; p < len_1; p++) {
+                    for (int p = 0; p < 4; p++) {
                         double q = corners_1[p].dot(axisProject);
+                        
+                        if (!inside_rect(corners_1[p], corners_2)) {
+                            point = corners_1[p];
+                        }
+
                         min_r1 = std::min(min_r1, q);
                         max_r1 = std::max(max_r1, q);
                     }
 
                     double min_r2 = INFINITY, max_r2 = -INFINITY;
-                    for (int p = 0; p < len_2; p++) {
+                    for (int p = 0; p < 4; p++) {
                         double q = corners_2[p].dot(axisProject);
+
                         min_r2 = std::min(min_r2, q);
                         max_r2 = std::max(max_r2, q);
                     }
 
                     double new_overlap = std::min(max_r1, max_r2) - std::max(min_r1, min_r2);
-                    overlap = std::min(new_overlap, overlap);
+
+                    if (new_overlap < overlap) {
+                        overlap = new_overlap;
+
+                        axis = i==0 ? axisProject : axisProject * -1;
+                    }
 
                     if (!(max_r2 >= min_r1 && max_r1 >= min_r2)) {
                         return false;
@@ -165,10 +191,11 @@ namespace comp {
                 corners_1 = corners_2;
                 corners_2 = temp_vec;
 
-                int temp_len = len_1;
-                len_1 = len_2;
-                len_2 = temp_len;
+                Vector2 temp_cen = center_1;
+                center_1 = center_2;
+                center_2 = temp_cen;
             }
+
             return true;
         }
 
@@ -229,12 +256,18 @@ namespace comp {
             return edges;
         }
 
-        bool check_collision_rect(Vector2* corners_1, Vector2* corners_2, double& overlap) {
-            return SAT(corners_1, 4, corners_2, 4, overlap);
+        bool check_collision_rect(collider_rect* c1, collider_rect* c2, double& overlap, Vector2& coll_point, Vector2& axis) {
+            Vector2* corners_1 = c1->getCorners();
+            Vector2* corners_2 = c2->getCorners();
+            Vector2 center_1 = c1->getCenter();
+            Vector2 center_2 = c2->getCenter();
+            bool result = SAT(corners_1, center_1, corners_2, center_2, overlap, coll_point, axis);
+            delete[] corners_1, corners_2;
+            return result;
         }
         bool check_collision_circle(collider_circle* c, Vector2& closest_point); // Need to define later (after circle)
 
-        bool check_collision_line(collider_line* c, double& overlap) {
+        bool check_collision_line(collider_line* c, double& overlap, Vector2& coll_point, Vector2& axis) {
             // Calculate make line like a big rect, but in a way that it still handles like a regular line
             Vector2* lineCorners = new Vector2[4] {
                 c->p1,
@@ -244,7 +277,7 @@ namespace comp {
             };
 
             Vector2* rectCorners = getCorners();
-            bool result = SAT(lineCorners, 4, rectCorners, 4, overlap);
+            bool result = SAT(lineCorners, c->getMiddle(), rectCorners, getCenter(), overlap, coll_point, axis);
             delete[] lineCorners, rectCorners;
             return result;
         }
@@ -260,15 +293,13 @@ namespace comp {
 
                 // Check the other one against it
                 double overlap = INFINITY;
-                Vector2* corners1 = getCorners();
-                Vector2* corners2 = c->getCorners();
+                Vector2 coll_point = Vector2();
+                Vector2 axis = Vector2();
 
-                if(check_collision_rect(corners1, corners2, overlap)) {
+                if(check_collision_rect(this, c, overlap, coll_point, axis)) {
                     resolve_collision_rect(c, overlap);
                     collision = true;
                 }
-
-                delete[] corners1, corners2;
             }
             // Go through circle colliders
             for (auto& c : obj_m::circle_colliders) {
@@ -282,8 +313,11 @@ namespace comp {
             for (auto& c : obj_m::line_colliders) {
                 // Go through line colliders
                 double overlap = INFINITY;
-                if (check_collision_line(c, overlap)) {
-                    resolve_collision_line(c, overlap);
+                Vector2 coll_point = Vector2();
+                Vector2 axis = Vector2();
+
+                if (check_collision_line(c, overlap, coll_point, axis)) {
+                    resolve_collision_line(c, overlap, coll_point, axis);
                     collision = true;
                 }
             }
@@ -312,7 +346,7 @@ namespace comp {
         void resolve_collision_circle(collider_circle* target, Vector2 close_dist); // Algorithm is after cirlce definition
 
         // Rect vs. line
-        void resolve_collision_line(collider_line* target, double overlap) {
+        void resolve_collision_line(collider_line* target, double overlap, Vector2 coll_point, Vector2 axis) {
             // Project the center on the line and offset
             Vector2 l = target->p2 - target->p1;
             float t = l.dot(getCenter() - target->p1) / l.sqrlen();
@@ -321,15 +355,10 @@ namespace comp {
             Vector2 d = (point - getCenter()).normalized();
             parent->position -= d * overlap;
 
-            // TODO: Dynamic resolution
-            /*Vector2 forcepoint = point.rotate(remainder(parent->rotation - 0.25*PI, 0.5*PI), getCenter()) - getCenter();
-            addForce(forcepoint, target->normal * -rigidbody->speed.y * rigidbody->mass * bounciness * 100);
-            debug::draw_ray(getCenter(), forcepoint);*/
-
-
             // Linear impulse
             Vector2 coll_norm = point - getCenter();
-            Vector2 coll_point = point.rotate(remainder(parent->rotation - 0.25*PI, 0.5*PI), getCenter()) - getCenter();
+            coll_point -= getCenter();
+            debug::draw_ray(getCenter(), coll_point);
 
             double inverted_mass = 1 / rigidbody->mass;
 
