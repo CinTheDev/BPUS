@@ -145,7 +145,7 @@ namespace comp {
             return (0 < AM.dot(AB) < AB.dot(AB)) && (0 < AM.dot(AD) < AD.dot(AD));
         }
 
-        bool SAT(Vector2* corners_1, Vector2 center_1, Vector2* corners_2, Vector2 center_2, double& overlap, Vector2& point, Vector2& axis) {
+        bool SAT(Vector2* corners_1, Vector2* corners_2, double& overlap, Vector2& point) {
             for (int i = 0; i < 2; i++) {
 
                 // Use SAT on both shapes
@@ -174,12 +174,7 @@ namespace comp {
                     }
 
                     double new_overlap = std::min(max_r1, max_r2) - std::max(min_r1, min_r2);
-
-                    if (new_overlap < overlap) {
-                        overlap = new_overlap;
-
-                        axis = i==0 ? axisProject : axisProject * -1;
-                    }
+                    overlap = std::min(overlap, new_overlap);
 
                     if (!(max_r2 >= min_r1 && max_r1 >= min_r2)) {
                         return false;
@@ -190,10 +185,6 @@ namespace comp {
                 Vector2* temp_vec = corners_1;
                 corners_1 = corners_2;
                 corners_2 = temp_vec;
-
-                Vector2 temp_cen = center_1;
-                center_1 = center_2;
-                center_2 = temp_cen;
             }
 
             return true;
@@ -256,18 +247,16 @@ namespace comp {
             return edges;
         }
 
-        bool check_collision_rect(collider_rect* c1, collider_rect* c2, double& overlap, Vector2& coll_point, Vector2& axis) {
+        bool check_collision_rect(collider_rect* c1, collider_rect* c2, double& overlap, Vector2& coll_point) {
             Vector2* corners_1 = c1->getCorners();
             Vector2* corners_2 = c2->getCorners();
-            Vector2 center_1 = c1->getCenter();
-            Vector2 center_2 = c2->getCenter();
-            bool result = SAT(corners_1, center_1, corners_2, center_2, overlap, coll_point, axis);
+            bool result = SAT(corners_1, corners_2, overlap, coll_point);
             delete[] corners_1, corners_2;
             return result;
         }
         bool check_collision_circle(collider_circle* c, Vector2& closest_point); // Need to define later (after circle)
 
-        bool check_collision_line(collider_line* c, double& overlap, Vector2& coll_point, Vector2& axis) {
+        bool check_collision_line(collider_line* c, double& overlap, Vector2& coll_point) {
             // Calculate make line like a big rect, but in a way that it still handles like a regular line
             Vector2* lineCorners = new Vector2[4] {
                 c->p1,
@@ -277,7 +266,7 @@ namespace comp {
             };
 
             Vector2* rectCorners = getCorners();
-            bool result = SAT(lineCorners, c->getMiddle(), rectCorners, getCenter(), overlap, coll_point, axis);
+            bool result = SAT(lineCorners, rectCorners, overlap, coll_point);
             delete[] lineCorners, rectCorners;
             return result;
         }
@@ -294,9 +283,8 @@ namespace comp {
                 // Check the other one against it
                 double overlap = INFINITY;
                 Vector2 coll_point = Vector2();
-                Vector2 axis = Vector2();
 
-                if(check_collision_rect(this, c, overlap, coll_point, axis)) {
+                if(check_collision_rect(this, c, overlap, coll_point)) {
                     resolve_collision_rect(c, overlap);
                     collision = true;
                 }
@@ -314,10 +302,9 @@ namespace comp {
                 // Go through line colliders
                 double overlap = INFINITY;
                 Vector2 coll_point = Vector2();
-                Vector2 axis = Vector2();
 
-                if (check_collision_line(c, overlap, coll_point, axis)) {
-                    resolve_collision_line(c, overlap, coll_point, axis);
+                if (check_collision_line(c, overlap, coll_point)) {
+                    resolve_collision_line(c, overlap, coll_point);
                     collision = true;
                 }
             }
@@ -346,7 +333,7 @@ namespace comp {
         void resolve_collision_circle(collider_circle* target, Vector2 close_dist); // Algorithm is after cirlce definition
 
         // Rect vs. line
-        void resolve_collision_line(collider_line* target, double overlap, Vector2 coll_point, Vector2 axis) {
+        void resolve_collision_line(collider_line* target, double overlap, Vector2 coll_point) {
             // Project the center on the line and offset
             Vector2 l = target->p2 - target->p1;
             float t = l.dot(getCenter() - target->p1) / l.sqrlen();
