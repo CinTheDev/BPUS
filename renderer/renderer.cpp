@@ -1,6 +1,6 @@
 #include "../object/object_manager/object_manager.h"
-#include "../object/Object_behavior.cpp"
 #include "../object/Component_behavior.cpp"
+#include "../object/Object_behavior.cpp"
 
 obj::Camera* camera;
 
@@ -305,7 +305,6 @@ static void render(renderArguments args) {
 		vbo.Unbind();
 		ebo.Unbind();
 
-		obj_m::objects[0]->image->Bind();
 		vao.Bind();
 		glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
 

@@ -5,8 +5,10 @@ private:
     texture box = texture("assets/images/Box.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 #pragma endregion
 #pragma region Objects
-    object* cat;
-    object* bso2;
+    //object* cat;
+    //object* bso2;
+    object* player1;
+    object* player2;
 #pragma endregion
 
     void loadTextures(shader shdr) {
@@ -18,7 +20,7 @@ public:
     BPUS_game(GLFWwindow* window, shader shdr) {
         loadTextures(shdr);
 
-        cat = new object(Vector2(0, 0), &popCat);
+        /*cat = new object(Vector2(0, 0), &popCat);
         cat->z = 1;
         comp::dynamics* kin = new comp::dynamics();
         kin->speed = Vector2(0, 0);
@@ -60,28 +62,68 @@ public:
 
             h->addComponent(hc);
             obj_m::create(h);
-        }
+        }*/
+
+        // Basketball game test
+
+        // Floor
+        object* floor = new object();
+        floor->addComponent(new comp::collider_line(Vector2(-5, -1.5), Vector2(5, -1.5))); // Ground
+        floor->addComponent(new comp::collider_line(Vector2(0, -1.5), Vector2(0, 1.25))); // Net
+        floor->addComponent(new comp::collider_line(Vector2(-5, -1.5), Vector2(-5, 4))); // Left wall
+        floor->addComponent(new comp::collider_line(Vector2(5, -1.5), Vector2(5, 4))); // Right wall
+        floor->addComponent(new comp::collider_line(Vector2(-5, 4), Vector2(5, 4))); // Ceiling
+        obj_m::create(floor);
+
+        // Players
+        player1 = new obj::Player_1(Vector2(-2, 0), &popCat);
+
+        comp::dynamics* rb = new comp::dynamics();
+        rb->alias = "Rigidbody for Player1";
+        rb->mass = 1;
+        player1->addComponent(rb);
+
+        comp::collider_circle* collider = new comp::collider_circle(0.5, Vector2(0.5, 0.5));
+        collider->alias = "Collider for Player1";
+        collider->bounciness = 0.6;
+        player1->addComponent(collider);
+
+
+        player2 = new obj::Player_2(Vector2(2, 0), &box);
+
+        rb = new comp::dynamics();
+        rb->alias = "Rigidbody for Player2";
+        rb->mass = 1;
+        player2->addComponent(rb);
+
+        collider = new comp::collider_circle(0.5, Vector2(0.5, 0.5));
+        collider->alias = "Collider for Player2";
+        collider->bounciness = 0.6;
+        player2->addComponent(collider);
+
+        obj_m::create(player1);
+        obj_m::create(player2);
 
         // Camera
-        camera = new obj::Camera(Vector2(0, 0), NULL);
+        camera = new obj::Camera(Vector2(0, 1.25), NULL);
         camera->setZoom(3);
         camera->setWindow(window);
         obj_m::create(camera);
 
-        obj_m::create(cat);
-        obj_m::create(bso2);
+        //obj_m::create(cat);
+        //obj_m::create(bso2);
     }
 
     ~BPUS_game() {
         obj_m::stop();
         popCat.Delete();
         box.Delete();
-        delete cat;
-        delete bso2;
+        delete player1;
+        delete player2;
     }
 
     void update(updateArguments args) {
-        comp::dynamics* kin = cat->getComponent<comp::dynamics>();
+        /*comp::dynamics* kin = cat->getComponent<comp::dynamics>();
         comp::collider* col = cat->getComponent<comp::collider>();
 
         if (glfwGetKey(args.window, GLFW_KEY_W)) {
@@ -111,6 +153,6 @@ public:
 
         if (glfwGetKey(args.window, GLFW_KEY_E)) {
             kin->angularSpeed -= 1 * args.deltatime;
-        }
+        }*/
     }
 };

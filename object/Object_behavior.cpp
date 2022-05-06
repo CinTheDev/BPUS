@@ -78,6 +78,41 @@ namespace obj {
 		}
 	};
 
+	class Player_1 : public object {
+		using object::object;
+
+		comp::dynamics* rb;
+		const double jumpforce = 10;
+
+		void init() {
+			rb = getComponent<comp::dynamics>();
+		}
+
+		void update(updateArguments args) {
+			if (glfwGetKey(args.window, GLFW_KEY_W) == GLFW_PRESS) rb->addForce(Vector2(0, 1) * jumpforce * args.deltatime);
+			if (glfwGetKey(args.window, GLFW_KEY_A) == GLFW_PRESS) rb->addForce(Vector2(-0.5, 0) * jumpforce * args.deltatime);
+			if (glfwGetKey(args.window, GLFW_KEY_S) == GLFW_PRESS) rb->addForce(Vector2(0, -0.5) * jumpforce * args.deltatime);
+			if (glfwGetKey(args.window, GLFW_KEY_D) == GLFW_PRESS) rb->addForce(Vector2(0.5, 0) * jumpforce * args.deltatime);
+		}
+	};
+	class Player_2 : public object {
+		using object::object;
+
+		comp::dynamics* rb;
+		const double jumpforce = 10;
+
+		void init() {
+			rb = getComponent<comp::dynamics>();
+		}
+
+		void update(updateArguments args) {
+			if (glfwGetKey(args.window, GLFW_KEY_UP) == GLFW_PRESS) rb->addForce(Vector2(0, 1) * jumpforce * args.deltatime);
+			if (glfwGetKey(args.window, GLFW_KEY_LEFT) == GLFW_PRESS) rb->addForce(Vector2(-0.5, 0) * jumpforce * args.deltatime);
+			if (glfwGetKey(args.window, GLFW_KEY_DOWN) == GLFW_PRESS) rb->addForce(Vector2(0, -0.5) * jumpforce * args.deltatime);
+			if (glfwGetKey(args.window, GLFW_KEY_RIGHT) == GLFW_PRESS) rb->addForce(Vector2(0.5, 0) * jumpforce * args.deltatime);
+		}
+	};
+
 #pragma endregion
 #pragma region Functions
 
