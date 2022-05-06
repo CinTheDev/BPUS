@@ -29,7 +29,7 @@ public:
         comp::collider_rect* test1 = new comp::collider_rect(Vector2(1, 1), Vector2(0, 0));
         //comp::collider_circle* test1 = new comp::collider_circle(0.5, Vector2(0.5, 0.5));
         test1->alias = "Rect collider for cat";
-        test1->bounciness = 0.5;
+        test1->bounciness = 0.8;
         cat->addComponent(test1);
 
         bso2 = new object(Vector2(3, -0.75), &box);
@@ -40,10 +40,10 @@ public:
         kin2->alias = "Rigidbody for bso2";
         bso2->addComponent(kin2);
 
-        comp::collider_rect* test2 = new comp::collider_rect(Vector2(1, 1), Vector2(0, 0));
-        //comp::collider_circle* test2 = new comp::collider_circle(0.5, Vector2(0.5, 0.5));
+        //comp::collider_rect* test2 = new comp::collider_rect(Vector2(1, 1), Vector2(0, 0));
+        comp::collider_circle* test2 = new comp::collider_circle(0.5, Vector2(0.5, 0.5));
         test2->alias = "Rect collider for bso2";
-        test2->bounciness = 0.0;
+        test2->bounciness = 0.8;
         bso2->addComponent(test2);
         bso2->z = 0;
 

@@ -285,7 +285,7 @@ namespace comp {
                 Vector2 coll_point = Vector2();
 
                 if(check_collision_rect(this, c, overlap, coll_point)) {
-                    resolve_collision_rect(c, overlap);
+                    resolve_collision_rect(c, overlap, coll_point);
                     collision = true;
                 }
             }
@@ -312,14 +312,38 @@ namespace comp {
             return collision;
         }
 
+        void rect_collide_static(Vector2 point, Vector2 normal) {
+            debug::draw_ray(getCenter(), point);
+
+            double inverted_mass = 1 / rigidbody->mass;
+
+            Vector3 c_n_3 = Vector3(normal.x, normal.y, 0);
+            Vector3 c_p_3 = Vector3(point.x, point.y, 0);
+            Vector3 theta = c_p_3.cross(c_n_3).cross(c_p_3) / get_MoI();
+            double J = (normal.dot(rigidbody->speed * -(1 + bounciness)))/(inverted_mass + c_n_3.dot(theta));
+
+            double vj = normal.normalized().dot(rigidbody->speed * -(1 + bounciness));
+            rigidbody->speed += normal.normalized() * J * inverted_mass;
+
+            rigidbody->angularSpeed += point.cross(normal * J) / get_MoI();
+        }
+
+        void rect_collide_dynamic(Vector2 point, Vector2 normal, collider_rect c) {
+            // TODO: this
+        }
+
         // Rect vs. rect
-        void resolve_collision_rect(collider_rect* target, double overlap) {
+        void resolve_collision_rect(collider_rect* target, double overlap, Vector2 coll_point) {
             if (target->rigidbody == nullptr) {
                 Vector2 d = (target->getCenter() - getCenter()).normalized();
                 parent->position -= d * overlap;
-                return;
 
                 // TODO: Dynamic resolution with static
+                coll_point -= getCenter();
+                Vector2 coll_norm = d - getCenter();
+                rect_collide_static(coll_point, coll_norm);
+
+                return;
             }
 
             Vector2 d = (target->getCenter() - getCenter()).normalized();
@@ -345,19 +369,8 @@ namespace comp {
             // Linear impulse
             Vector2 coll_norm = point - getCenter();
             coll_point -= getCenter();
-            debug::draw_ray(getCenter(), coll_point);
 
-            double inverted_mass = 1 / rigidbody->mass;
-
-            Vector3 c_n_3 = Vector3(coll_norm.x, coll_norm.y, 0);
-            Vector3 c_p_3 = Vector3(coll_point.x, coll_point.y, 0);
-            Vector3 theta = c_p_3.cross(c_n_3).cross(c_p_3) / get_MoI();
-            double J = (coll_norm.dot(rigidbody->speed * -(1 + bounciness)))/(inverted_mass + c_n_3.dot(theta));
-
-            double vj = coll_norm.normalized().dot(rigidbody->speed * -(1 + bounciness));
-            rigidbody->speed += coll_norm.normalized() * J * inverted_mass;
-
-            rigidbody->angularSpeed += coll_point.cross(coll_norm * J) / get_MoI();
+            rect_collide_static(coll_point, coll_norm);
         }
     };
 
