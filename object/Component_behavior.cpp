@@ -389,6 +389,10 @@ namespace comp {
             obj_m::removeCircle(this);
         }
 
+        Vector2 getPos() {
+            return parent->position + offset;
+        }
+
         double get_MoI() override {
             // Uses I = 1/2 * m * r²
             return 1.0/2.0 * rigidbody->mass * radius*radius;
@@ -407,7 +411,7 @@ namespace comp {
         }
 
         bool check_collision_circle(Vector2 pos, float r) {
-            double sqrlen = (pos - parent->position).sqrlen();
+            double sqrlen = (pos - getPos()).sqrlen();
             if (sqrlen <= (radius + r)*(radius + r)) {
                 return true;
             }
@@ -415,7 +419,7 @@ namespace comp {
         }
         bool check_collision_line(Vector2 p1, Vector2 p2, Vector2& closest_point) {
             Vector2 segment = p2 - p1;
-            Vector2 d1 = parent->position + offset - p1;
+            Vector2 d1 = getPos() - p1;
 
             double s_len = segment.sqrlen();
 
@@ -423,7 +427,7 @@ namespace comp {
 
             closest_point = p1 + segment * t;
 
-            double distance = (parent->position + offset - closest_point).len();
+            double distance = (getPos() - closest_point).len();
 
             if (distance <= radius) {
                 return true;
@@ -436,7 +440,7 @@ namespace comp {
 
             Vector2* corners = c->getCorners();
 
-            closest_point = parent->position.x < c->parent->position.x ? Vector2(0, 0) : Vector2(INFINITY, INFINITY);
+            closest_point = getPos().x < c->getCenter().x ? Vector2(0, 0) : Vector2(INFINITY, INFINITY);
             Vector2 close_dist = Vector2();
 
             for (int i = 0; i < 4; i++) {
@@ -471,7 +475,7 @@ namespace comp {
             for (auto& c : obj_m::circle_colliders) {
                 if (c == this) continue;
 
-                if (check_collision_circle(c->parent->position, c->radius)) {
+                if (check_collision_circle(c->getPos(), c->radius)) {
                     resolve_collision_circle(c);
                     collision = true;
                 }
@@ -497,13 +501,13 @@ namespace comp {
 
         // Circle vs. circle
         void resolve_collision_circle(comp::collider_circle* target) {
-            Vector2 dist = target->parent->position - parent->position;
+            Vector2 dist = target->getPos() - getPos();
             double d = dist.len();
             dist.normalize();
             Vector2 point = dist * (radius + 0.5*(d - radius - target->radius));
 
             // Debug
-            debug::draw_ray(parent->position + parent->size * 0.5, point * 0.95, Vector3(0, 1, 0));
+            debug::draw_ray(getPos(), point * 0.95, Vector3(0, 1, 0));
 
             // Special case: Other object is static
             if (target->rigidbody == nullptr) {
@@ -532,7 +536,7 @@ namespace comp {
 
         // Circle vs. line
         void resolve_collision_line(Vector2 close_dist) {
-            Vector2 dist = close_dist - parent->position - offset;
+            Vector2 dist = close_dist - getPos();
             // Static resolution
             parent->position += dist.normalized() * (dist.len() - radius);
 
@@ -544,7 +548,7 @@ namespace comp {
         // Circle vs. rect
         void resolve_collision_rect(collider_rect* target, Vector2 close_dist) {
             if (target->rigidbody == nullptr) {
-                Vector2 dist = close_dist - parent->position - offset;
+                Vector2 dist = close_dist - getPos();
                 Vector2 dist_o = dist.normalized() * (dist.len() - radius);
 
                 parent->position += dist_o;
@@ -555,7 +559,7 @@ namespace comp {
                 return;
             }
 
-            Vector2 dist = close_dist - parent->position - offset;
+            Vector2 dist = close_dist - getPos();
             Vector2 dist_o = dist.normalized() * (dist.len() - radius);
 
             parent->position += dist_o * 0.5;

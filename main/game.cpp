@@ -9,6 +9,7 @@ private:
     //object* bso2;
     object* player1;
     object* player2;
+    object* ball;
 #pragma endregion
 
     void loadTextures(shader shdr) {
@@ -103,6 +104,21 @@ public:
 
         obj_m::create(player1);
         obj_m::create(player2);
+
+        // Ball
+        ball = new obj::Basketball(Vector2(0, 2), NULL);
+
+        rb = new comp::dynamics();
+        rb->alias = "Rigidbody for Ball";
+        rb->mass = 0.1;
+        ball->addComponent(rb);
+
+        collider = new comp::collider_circle(0.3, Vector2(0, 0));
+        collider->alias = "Collider for Ball";
+        collider->bounciness = 0.9;
+        ball->addComponent(collider);
+
+        obj_m::create(ball);
 
         // Camera
         camera = new obj::Camera(Vector2(0, 1.25), NULL);

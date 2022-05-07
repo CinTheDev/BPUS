@@ -32,10 +32,10 @@ namespace obj {
 
 	public:
 		void update(updateArguments args) override {
-			if (glfwGetKey(args.window, GLFW_KEY_UP) == GLFW_PRESS) position.y += 2. * args.deltatime;
-			if (glfwGetKey(args.window, GLFW_KEY_DOWN) == GLFW_PRESS) position.y -= 2. * args.deltatime;
-			if (glfwGetKey(args.window, GLFW_KEY_LEFT) == GLFW_PRESS) position.x -= 2. * args.deltatime;
-			if (glfwGetKey(args.window, GLFW_KEY_RIGHT) == GLFW_PRESS) position.x += 2. * args.deltatime;
+			if (glfwGetKey(args.window, GLFW_KEY_I) == GLFW_PRESS) position.y += 2. * args.deltatime;
+			if (glfwGetKey(args.window, GLFW_KEY_K) == GLFW_PRESS) position.y -= 2. * args.deltatime;
+			if (glfwGetKey(args.window, GLFW_KEY_J) == GLFW_PRESS) position.x -= 2. * args.deltatime;
+			if (glfwGetKey(args.window, GLFW_KEY_L) == GLFW_PRESS) position.x += 2. * args.deltatime;
 
 			if (glfwGetKey(args.window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) setZoom(zoom - 1 * args.deltatime);
 			if (glfwGetKey(args.window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) setZoom(zoom + 1 * args.deltatime);
@@ -110,6 +110,18 @@ namespace obj {
 			if (glfwGetKey(args.window, GLFW_KEY_LEFT) == GLFW_PRESS) rb->addForce(Vector2(-0.5, 0) * jumpforce * args.deltatime);
 			if (glfwGetKey(args.window, GLFW_KEY_DOWN) == GLFW_PRESS) rb->addForce(Vector2(0, -0.5) * jumpforce * args.deltatime);
 			if (glfwGetKey(args.window, GLFW_KEY_RIGHT) == GLFW_PRESS) rb->addForce(Vector2(0.5, 0) * jumpforce * args.deltatime);
+		}
+	};
+
+	class Basketball : public object {
+		using object::object;
+
+		void init() {
+			// Some cool stuff
+		}
+
+		void update(updateArguments args) {
+			// More cool stuff
 		}
 	};
 
